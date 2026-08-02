@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python syntax (ronin CLI + advisor)
+        run: python3 -m py_compile ronin adapters/local/ronin-advisor.py
+
+      - name: Shell syntax
+        run: bash -n adapters/build.sh bin/lock.sh bin/unlock.sh setup.sh
+
+      - name: Build entry files from the core
+        run: ./adapters/build.sh all
+
+      - name: No drift — generated files are committed & up to date
+        run: |
+          if ! git diff --quiet -- CLAUDE.md AGENTS.md GEMINI.md; then
+            echo "::error::Generated entry files are stale. Run ./adapters/build.sh all and commit."
+            git --no-pager diff -- CLAUDE.md AGENTS.md GEMINI.md
+            exit 1
+          fi
+
+      - name: Scope rule present in every entry file
+        run: |
+          for f in CLAUDE.md AGENTS.md GEMINI.md; do
+            grep -q "hard rule — scope" "$f" || { echo "::error::$f missing scope rule"; exit 1; }
+          done
+
+      - name: Skills have valid frontmatter
+        run: |
+          for s in framework/skills/*/SKILL.md; do
+            grep -q "^name:" "$s" || { echo "::error::$s missing name:"; exit 1; }
+          done
+
+      - name: ronin CLI smoke test
+        run: |
+          ./ronin --help >/dev/null
+          ./ronin doctor >/dev/null
+          echo "ronin CLI OK"

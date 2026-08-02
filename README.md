@@ -6,6 +6,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="scope" src="https://img.shields.io/badge/scope-authorized_labs_only-red">
   <img alt="tools" src="https://img.shields.io/badge/works_with-Claude_Code_·_Codex_·_Gemini_·_local-6E56CF">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
@@ -106,6 +107,31 @@ A normal CLI front door — `ronin --help` and `ronin <cmd> --help` everywhere:
 `ronin install` reads what `ronin doctor` found missing and installs it the right way for
 your system — no hand-copying setup commands.
 
+## See it in action
+
+`ronin doctor` tells you exactly what your box is missing before you start:
+
+```text
+Ronin doctor  ·  Linux x86_64  ·  package manager: apt
+
+AI backends
+  ✓ claude   Claude Code (full multi-agent)
+  ✗ codex    Codex CLI
+  ✗ gemini   Gemini CLI
+  ✗ ollama   Ollama (local models)
+
+recon tools
+  ✓ nmap                   port/service scanner
+  ✗ gobuster               dir/dns/vhost brute
+  ✓ ffuf                   web fuzzer
+  ...
+web tools
+  ✗ nuclei                 template vuln scanner
+  ✗ katana                 crawler
+  ...
+7 tool(s) missing.  Install them with:  ronin install
+```
+
 ## It sharpens itself
 
 When a box teaches a reusable trick, the **learn** role captures it as a new
@@ -151,9 +177,11 @@ The framework improves without ever corrupting what makes it reliable — it's s
 
 ## Contributing
 
-Add a technique: `cp framework/skills/TECHNIQUE-TEMPLATE.md framework/skills/tech-<slug>/SKILL.md`,
-fill it in, list it in `framework/skills/README.md`, run `./adapters/build.sh all`, open a PR.
-Keep everything authorized-lab-framed.
+PRs welcome — especially new `tech-*` techniques from boxes you've rooted. The quickest
+contribution: `cp framework/skills/TECHNIQUE-TEMPLATE.md framework/skills/tech-<slug>/SKILL.md`,
+fill it in, index it, `ronin build all`, open a PR. Full guide + PR checklist in
+**[CONTRIBUTING.md](CONTRIBUTING.md)**. CI checks build-drift, the scope rule, and CLI health
+on every push. Keep everything authorized-lab-framed.
 
 ## License
 
