@@ -98,7 +98,7 @@ A normal CLI front door — `ronin --help` and `ronin <cmd> --help` everywhere:
 |---|---|
 | `ronin doctor` | Detect your OS + list which AI backends and pentest tools are installed |
 | `ronin install [--group recon\|web\|ad] [--yes]` | Install the missing tools via your OS package manager (apt/brew/pacman/dnf), with pipx/go fallbacks |
-| `ronin start claude\|codex\|gemini` | Launch that AI backend inside the repo |
+| `ronin start claude\|codex\|gemini [--auto]` | Launch that AI backend in the repo. `--auto` skips per-command approvals for hands-off box runs — maps to each tool's YOLO flag (`--dangerously-skip-permissions` / bypass / `--yolo`). **Authorized labs only; VPN in first.** |
 | `ronin local --provider ollama\|lmstudio --model <m>` | Start the offline advisor against a local model |
 | `ronin new <box> --target <ip>` | Scaffold an engagement dir (`scope.txt`, `notes.md`, `state.md`, `recon/` …) |
 | `ronin build [all\|claude-code\|codex\|gemini]` | Regenerate the entry files after editing `framework/` |

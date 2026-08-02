@@ -66,6 +66,10 @@ TOOLS = [
 ]
 BACKENDS = [("claude", "Claude Code (full multi-agent)"), ("codex", "Codex CLI"),
             ("gemini", "Gemini CLI"), ("ollama", "Ollama (local models)")]
+# --auto → each backend's "skip per-command approvals" flag (authorized labs only)
+AUTO_FLAG = {"claude": "--dangerously-skip-permissions",
+             "codex":  "--dangerously-bypass-approvals-and-sandbox",
+             "gemini": "--yolo"}
 
 def present(check):
     if check.startswith("path:"):
@@ -158,9 +162,19 @@ def cmd_unlock(a): _sh("bin/unlock.sh")
 def cmd_start(a):
     if not which(a.backend):
         sys.exit(col("r", f"'{a.backend}' is not installed. See: ronin doctor  ·  docs/SETUP.md"))
+    extra = [x for x in a.rest if x not in ("--auto", "--yolo")]      # strip our convenience tokens
+    auto = a.auto or any(x in ("--auto", "--yolo") for x in a.rest)
+    if auto:
+        flag = AUTO_FLAG[a.backend]
+        print(col("y", f"\n⚠  --auto: launching {a.backend} with {flag}"))
+        print(col("y", "   Removes the per-command approval prompt so the agent runs tools unattended."))
+        print(col("y", "   Use ONLY on an authorized lab you've VPN'd into (HTB/THM). In this mode the"))
+        print(col("y", "   scope rule is guidance, not a hard gate — keep the blast radius to the lab.\n"))
+        if flag not in extra:
+            extra = [flag] + extra
     os.chdir(ROOT)
     print(col("d", f"launching {a.backend} in {ROOT} …"))
-    os.execvp(a.backend, [a.backend, *a.rest])
+    os.execvp(a.backend, [a.backend, *extra])
 
 def cmd_local(a):
     adv = os.path.join(ROOT, "adapters/local/ronin-advisor.py")
@@ -202,7 +216,9 @@ def main():
 
     ps = sub.add_parser("start", help="launch an AI backend in the repo")
     ps.add_argument("backend", choices=["claude", "codex", "gemini"])
-    ps.add_argument("rest", nargs=argparse.REMAINDER, help="extra args passed to the backend")
+    ps.add_argument("--auto", action="store_true",
+                    help="skip per-command approvals (authorized labs only) — maps to each tool's YOLO flag")
+    ps.add_argument("rest", nargs=argparse.REMAINDER, help="extra args passed straight to the backend")
     ps.set_defaults(fn=cmd_start)
 
     pl = sub.add_parser("local", help="run the offline advisor against a local model")
