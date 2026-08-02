@@ -1,0 +1,38 @@
+# Ronin ships the framework, not your engagement data.
+# If you work boxes inside this repo, their loot/flags/notes stay local.
+
+# --- Engagement working data (any <box>/ dir you create here) ---
+**/loot/
+**/recon/
+**/web/
+**/exploit-dev/
+**/screenshots/
+**/pivots/
+**/chains/
+scope.txt
+notes.md
+state.md
+rabbitholes.md
+report.md
+report.json
+*.pcap
+*.hashes
+*.creds
+*.ccache
+*.kirbi
+*.nmap
+*.gnmap
+
+# --- Secrets / local config ---
+.env
+.env.*
+*.pem
+*.key
+*_id_rsa*
+
+# --- OS / editor junk ---
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.py[cod]
