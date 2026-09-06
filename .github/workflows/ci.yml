@@ -10,35 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Python syntax (ronin CLI + advisor)
-        run: python3 -m py_compile ronin adapters/local/ronin-advisor.py
+      - name: Maintenance script compiles
+        run: python3 -m py_compile tools/catalog.py
 
-      - name: Shell syntax
-        run: bash -n adapters/build.sh bin/lock.sh bin/unlock.sh setup.sh
+      - name: Skill schema is valid JSON
+        run: python3 -c "import json; json.load(open('schemas/skill.schema.json'))"
 
-      - name: Build entry files from the core
-        run: ./adapters/build.sh all
+      - name: Every skill passes schema validation
+        run: python3 tools/catalog.py validate
 
-      - name: No drift — generated files are committed & up to date
+      - name: Scope rule is present
         run: |
-          if ! git diff --quiet -- CLAUDE.md AGENTS.md GEMINI.md CATALOG.md; then
-            echo "::error::Generated files are stale. Run ./adapters/build.sh all and commit."
-            git --no-pager diff -- CLAUDE.md AGENTS.md GEMINI.md CATALOG.md
+          grep -q "hard rule — scope" methodology.md || { echo "::error::methodology.md missing scope rule"; exit 1; }
+          test -f skills/tradecraft/tradecraft-scope-roe/SKILL.md || { echo "::error::scope-roe skill missing"; exit 1; }
+
+      - name: CATALOG.md is up to date
+        run: |
+          python3 tools/catalog.py catalog >/dev/null
+          if ! git diff --quiet -- CATALOG.md; then
+            echo "::error::CATALOG.md is stale. Run: python3 tools/catalog.py"
+            git --no-pager diff -- CATALOG.md
             exit 1
           fi
-
-      - name: Scope rule present in every entry file
-        run: |
-          for f in CLAUDE.md AGENTS.md GEMINI.md; do
-            grep -q "hard rule — scope" "$f" || { echo "::error::$f missing scope rule"; exit 1; }
-          done
-
-      - name: Skills pass schema validation
-        run: python3 adapters/gen_index.py validate
-
-      - name: ronin CLI smoke test
-        run: |
-          ./ronin --help >/dev/null
-          ./ronin doctor >/dev/null
-          ./ronin validate >/dev/null
-          echo "ronin CLI OK"
