@@ -46,6 +46,24 @@ Fill it in:
 `CATALOG.md` and `data/skills_index.json` are **generated** — don't hand-edit them; run
 `tools/catalog.py` and commit the regenerated `CATALOG.md`.
 
+## Sourcing skills from writeups & real engagements
+
+The best skills come from techniques that actually worked — CTF/HTB writeups, disclosed bug-bounty
+reports, and your own authorized engagements are all fair game as *source material*. The rule is to
+mine the **transferable technique**, never to copy the walkthrough. Process:
+
+1. **Extract the technique, not the box.** From a writeup, isolate the generalizable mechanism
+   ("attacker-controlled JDBC URL → DB-driver RCE", "coercion → NTLM relay to LDAP → RBCD"), not the
+   machine's specific chain.
+2. **Generalize hard.** Strip box names, flags, target IPs, and one-off CVE numbers down to the
+   underlying class. A CVE can be an *example* inside a skill; it is not the skill.
+3. **Enrich before you add.** If an existing skill already covers the class, add the new trick to its
+   Method/Gotchas instead of creating a near-duplicate. Add a new skill only for a genuinely new class.
+4. **Keep the framing.** Everything stays authorized-use, correctly `modes:`-tagged, and in the house
+   format — no CTF/HTB branding, no `ctf` mode, no flags or box-specific artifacts in the library.
+5. **Attribute in the PR, not the skill.** Credit the source writeup/report in your pull request
+   description; the `SKILL.md` itself teaches the mechanism generically.
+
 ## Locked core vs learning library
 - 🔒 **Locked core** — `methodology.md`, the `*-arsenal` skills, and the tradecraft/scope skills
   (`stability: locked`). Changing these changes behaviour; do it deliberately and explain *why* in

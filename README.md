@@ -5,7 +5,7 @@
 **A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-113-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-116-334155?style=flat-square)
 ![domains](https://img.shields.io/badge/domains-18-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
@@ -20,7 +20,7 @@
 
 ## Overview
 
-SploitAgent is a portable library of **113 security skills** an AI agent loads on demand. It is not a
+SploitAgent is a portable library of **116 security skills** an AI agent loads on demand. It is not a
 scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
 impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
 standard Agent-Skills format.
@@ -35,6 +35,8 @@ no lock-in. Each is mapped to OWASP, MITRE ATT&CK, and CWE, so coverage is measu
   failure modes — which outlasts any individual tool or model version.
 - **Offense and defense.** Every offensive class has its defensive counterpart: detection, hardening, DFIR.
 - **Consistency by contract.** A JSON schema (`schemas/skill.schema.json`) validates every skill in CI.
+- **Distilled from real work.** Techniques are mined from write-ups, disclosed reports, and authorized
+  engagements — generalized to the underlying class, never copied as walkthroughs ([CONTRIBUTING.md](CONTRIBUTING.md)).
 - **Authorized use, enforced first.** Every engagement begins with scope confirmation.
 
 ## Quick start
@@ -99,20 +101,20 @@ engagements/<target>/
 
 ## Skill coverage
 
-113 skills across 18 domains. The complete index is in [CATALOG.md](CATALOG.md).
+116 skills across 18 domains. The complete index is in [CATALOG.md](CATALOG.md).
 
 | Domain | Skills | Coverage |
 |---|:--:|---|
 | [`web`](skills/web) | 33 | XSS, SQLi, SSRF, SSTI, IDOR, XXE, CSRF, CORS, LFI, deserialization, OAuth, SAML, request smuggling, prototype pollution, cache poisoning, host-header, clickjacking, WebSocket, race conditions, business logic, file upload, JWT, account takeover, dependency confusion, client-side signing reversal, authenticated session handling |
 | [`ai-ml`](skills/ai-ml) | 9 | Prompt injection, jailbreaks, RAG poisoning, model extraction, agent/tool and MCP abuse, insecure output handling, supply chain, unbounded consumption |
-| [`cloud`](skills/cloud) | 8 | IMDS credential theft, object-storage exposure, Kubernetes, container escape, IAM privilege escalation, registries, GCP, Azure / Entra ID |
+| [`cloud`](skills/cloud) | 9 | IMDS credential theft, object-storage exposure, Kubernetes, container escape, exposed Docker/daemon API abuse, IAM privilege escalation, registries, GCP, Azure / Entra ID |
 | [`api`](skills/api) | 8 | BOLA/BFLA, GraphQL, gRPC, mass assignment, authentication attacks, fuzzing, version drift, NoSQL injection |
 | [`recon`](skills/recon) | 8 | Subdomain enumeration, DNS analysis, content and JS discovery, OSINT, cloud-asset discovery, service enumeration, tech-stack fingerprinting |
 | [`defense`](skills/defense) | 6 | Detection engineering (Sigma/ATT&CK), hardening baselines, DFIR triage, threat modeling, log analysis, purple teaming |
 | [`code-review`](skills/code-review) | 6 | Methodology, dangerous-sink catalog, secrets detection, CI/CD security, Python, Node.js |
 | [`mobile`](skills/mobile) | 5 | Android and iOS assessment, certificate-pinning bypass, deep-link abuse, WebView abuse |
-| [`ad`](skills/ad) | 4 | Kerberoasting / AS-REP, ADCS (ESC1–8), ACL/DACL abuse, pivoting arsenal |
-| [`network`](skills/network) | 5 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing, perimeter appliance and VPN offensive |
+| [`ad`](skills/ad) | 5 | Kerberoasting / AS-REP, ADCS (ESC1–8), ACL/DACL abuse, Kerberos delegation abuse (RBCD / S4U / coercion→relay), pivoting arsenal |
+| [`network`](skills/network) | 6 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing, perimeter appliance and VPN offensive, hash and credential cracking |
 | [`privesc`](skills/privesc) | 3 | Linux arsenal, GTFOBins (sudo/SUID/capabilities), Windows token impersonation |
 | [`exploit-dev`](skills/exploit-dev) | 2 | Exploit chaining and impact amplification, PoC development |
 | [`reverse-engineering`](skills/reverse-engineering) | 3 | Native binary triage, deobfuscation (packed/JS/WASM/JSVMP), firmware extraction and analysis |
