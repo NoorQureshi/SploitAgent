@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contribute — SploitAgent</title>
+<meta name="description" content="A SploitAgent contribution is a single Markdown file — no code. See what's wanted and how to add a skill.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Sploit<span class="a">Agent</span></a>
+  <a class="link" href="index.html">Home</a>
+  <a class="link" href="start.html">Getting Started</a>
+  <a class="link" href="skills.html">Skills</a>
+  <a class="link" href="safety.html">Authorized Use</a>
+  <a class="link active" href="contributing.html">Contribute</a>
+  <a class="gh" href="https://github.com/NoorQureshi/SploitAgent">GitHub ★</a>
+</div></nav>
+
+<main class="wrap page">
+  <p class="kicker">JOIN IN</p>
+  <h1 class="title">Contribute a skill</h1>
+  <p class="lead">SploitAgent gets sharper with every skill added — and a contribution is a single Markdown
+    file, no code. If you've got a technique you reach for on real (authorized) engagements, a cleaner way
+    to explain a bug, or a defensive counterpart to an attack, it belongs here.</p>
+  <div class="cta left">
+    <a class="btn primary" href="https://github.com/NoorQureshi/SploitAgent/blob/main/ROADMAP.md">Pick a wanted skill</a>
+    <a class="btn ghost" href="https://github.com/NoorQureshi/SploitAgent/blob/main/CONTRIBUTING.md">Full guide</a>
+  </div>
+
+  <section>
+    <h2><span class="hash">#</span> Add a skill in three steps</h2>
+    <div class="step"><div class="num">1</div><div class="body">
+      <p>Copy a template into the right domain folder.</p>
+<pre>cp skills/_templates/technique.md skills/&lt;domain&gt;/&lt;slug&gt;/SKILL.md
+<span class="c"># arsenal.md and methodology.md templates also exist</span></pre>
+    </div></div>
+    <div class="step"><div class="num">2</div><div class="body">
+      <p>Fill in the frontmatter and body. Pack concrete trigger signals into <code>description</code>,
+        and teach the mechanism — when it applies, why it works, exact commands, gotchas, how to verify.</p>
+    </div></div>
+    <div class="step"><div class="num">3</div><div class="body">
+      <p>Validate and regenerate the indexes, then open a pull request. CI schema-checks every skill.</p>
+<pre>python3 tools/catalog.py            <span class="c"># validate + regenerate CATALOG.md &amp; COVERAGE.md</span></pre>
+    </div></div>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> What makes a good skill</h2>
+    <ul>
+      <li><b>Authorized-use framing</b> — no real targets, no live credentials or secrets, nothing aimed
+        at systems you aren't authorized to test.</li>
+      <li><b>Strong trigger line</b> — the <code>description</code> is how an agent decides to load it, so
+        pack it with service/version names, vuln class, error strings, tool-output patterns, ports.</li>
+      <li><b>Teach the mechanism</b> — tool, why over the alternatives, the exact command with a flag
+        gloss, and the gotcha. Explain the reasoning, not just the payload.</li>
+      <li><b>Correct <code>modes</code></b> — <code>pentest</code>, <code>bugbounty</code>, or
+        <code>defense</code> — and the OWASP / MITRE / CWE tags where they apply.</li>
+      <li><b>Small and focused</b> — one tight skill beats one giant file.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> New here?</h2>
+    <p class="note">You don't need to write ten of them — one solid skill is a great contribution, and your
+      name is on it in the git history. The
+      <a href="https://github.com/NoorQureshi/SploitAgent/blob/main/ROADMAP.md">roadmap</a> marks the 🟢 items
+      as good first contributions.</p>
+  </section>
+
+  <div class="pager">
+    <a href="safety.html"><span class="lbl">← Back</span>Authorized Use</a>
+    <a href="index.html"><span class="lbl">Home →</span>Start over</a>
+  </div>
+</main>
+
+<footer>
+  <p>SploitAgent · MIT · for authorized security work only.<br>
+  <a href="https://github.com/NoorQureshi/SploitAgent">github.com/NoorQureshi/SploitAgent</a></p>
+</footer>
+
+</body>
+</html>

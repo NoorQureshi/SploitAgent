@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting Started — SploitAgent</title>
+<meta name="description" content="Install SploitAgent and use it with Claude Code, Codex, Gemini, or a local model in under a minute.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Sploit<span class="a">Agent</span></a>
+  <a class="link" href="index.html">Home</a>
+  <a class="link active" href="start.html">Getting Started</a>
+  <a class="link" href="skills.html">Skills</a>
+  <a class="link" href="safety.html">Authorized Use</a>
+  <a class="link" href="contributing.html">Contribute</a>
+  <a class="gh" href="https://github.com/NoorQureshi/SploitAgent">GitHub ★</a>
+</div></nav>
+
+<main class="wrap page">
+  <p class="kicker">GETTING STARTED</p>
+  <h1 class="title">Use it with any agent</h1>
+  <p class="lead">SploitAgent is plain Markdown — there is no runtime to install. You give an agent read
+    access to the <code>skills/</code> folder and its operating guide, and it loads the right skill for
+    each task on its own. Below is the one-minute setup for the common agents.</p>
+
+  <section>
+    <h2><span class="hash">#</span> Step 1 — get the library</h2>
+    <div class="step"><div class="num">1</div><div class="body">
+      <p>Clone the repository anywhere on your machine.</p>
+<pre>git clone https://github.com/NoorQureshi/SploitAgent
+cd SploitAgent</pre>
+    </div></div>
+    <div class="step"><div class="num">2</div><div class="body">
+      <p>Open your agent <b>inside that folder</b>. It reads the operating guide
+        (<code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for everyone else),
+        which tells it how to pick skills and to confirm scope first.</p>
+    </div></div>
+    <div class="step"><div class="num">3</div><div class="body">
+      <p>Give it a target you are authorized to test, and it works the loop — recon, attack, report.
+        That's it.</p>
+    </div></div>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Per-agent setup</h2>
+    <div class="grid cols2">
+      <div class="card">
+        <h3>Claude Code</h3>
+<pre>git clone https://github.com/NoorQureshi/SploitAgent
+cd SploitAgent
+claude</pre>
+        <p style="margin-top:10px">Or expose the skills to <b>every</b> project once:</p>
+<pre>ln -s "$PWD/skills" \
+  ~/.claude/skills/sploitagent</pre>
+      </div>
+      <div class="card">
+        <h3>Codex / Gemini / other CLI agents</h3>
+<pre>git clone https://github.com/NoorQureshi/SploitAgent
+cd SploitAgent
+codex        <span class="c"># or: gemini</span></pre>
+        <p style="margin-top:10px">They read <code>AGENTS.md</code> automatically. For a one-off, paste a single
+          <code>SKILL.md</code> into the chat.</p>
+      </div>
+      <div class="card">
+        <h3>Local models (Ollama)</h3>
+        <p style="margin-bottom:10px">Bake the operating guide into a model so it always knows the method:</p>
+<pre>printf 'FROM qwen2.5-coder:14b\nSYSTEM """%s"""' \
+  "$(cat AGENTS.md)" &gt; Modelfile
+ollama create sploitagent -f Modelfile
+ollama run sploitagent</pre>
+      </div>
+      <div class="card">
+        <h3>Any other agent / framework</h3>
+        <p>Point it at the repo with read access to <code>skills/</code> and <code>AGENTS.md</code>,
+          or load the one <code>SKILL.md</code> for the task at hand. There is nothing else to wire up.</p>
+        <a class="more" href="https://github.com/NoorQureshi/SploitAgent/blob/main/docs/USING.md">Full per-agent guide (USING.md) →</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Before you run it</h2>
+    <p class="warn"><b>Authorized use only.</b> The first skill every engagement loads is
+      <code>tradecraft-scope-roe</code>. SploitAgent acts only inside a confirmed envelope — a signed
+      pentest scope, a bug-bounty program you are in scope for, or systems you own. If scope is unclear
+      it stops and asks. <a href="safety.html" style="color:#ffd0cc">Read the full rule →</a></p>
+  </section>
+
+  <div class="pager">
+    <a href="index.html"><span class="lbl">← Back</span>Home</a>
+    <a href="skills.html"><span class="lbl">Next →</span>Skills</a>
+  </div>
+</main>
+
+<footer>
+  <p>SploitAgent · MIT · for authorized security work only.<br>
+  <a href="https://github.com/NoorQureshi/SploitAgent">github.com/NoorQureshi/SploitAgent</a></p>
+</footer>
+
+</body>
+</html>

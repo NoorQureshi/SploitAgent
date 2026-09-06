@@ -8,70 +8,19 @@
 <meta property="og:title" content="SploitAgent — security skills for AI agents">
 <meta property="og:description" content="100 trigger-loaded security skills across 16 domains. Load into any AI agent. Recon → exploit → report → defend.">
 <meta property="og:type" content="website">
-<style>
-  :root{
-    --bg:#0d1117; --panel:#131a24; --panel2:#161b22; --border:#2a3038;
-    --text:#e6edf3; --muted:#9aa4b2; --green:#39d353; --purple:#a371f7;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--text);
-    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased}
-  a{color:var(--green);text-decoration:none}
-  a:hover{text-decoration:underline}
-  code,kbd,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-
-  header.hero{text-align:center;padding:76px 20px 44px;
-    background:radial-gradient(60% 120% at 50% 0%, rgba(163,124,247,.12), transparent 60%),
-               radial-gradient(50% 100% at 50% 0%, rgba(57,211,83,.10), transparent 60%)}
-  .mask{font-size:44px;line-height:1}
-  h1{font-size:44px;margin:.2em 0 .12em;letter-spacing:-.5px}
-  h1 .a{color:var(--green)}
-  .tagline{font-size:19px;margin:0 auto 6px;max-width:640px}
-  .sub{color:var(--muted);max-width:600px;margin:6px auto 24px}
-  .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
-  .badge{font-size:12.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--border);
-    border-radius:999px;padding:5px 12px}
-  .badge b{color:var(--green)}
-  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{display:inline-block;padding:11px 20px;border-radius:8px;font-weight:600;font-size:15px;border:1px solid var(--border)}
-  .btn.primary{background:var(--green);color:#08130a;border-color:var(--green)}
-  .btn.primary:hover{filter:brightness(1.08);text-decoration:none}
-  .btn.ghost{background:var(--panel2);color:var(--text)}
-  .btn.ghost:hover{border-color:var(--green);text-decoration:none}
-
-  section{padding:40px 0;border-top:1px solid var(--border)}
-  h2{font-size:24px;margin:0 0 6px}
-  h2 .hash{color:var(--purple)}
-  .lead{color:var(--muted);margin:0 0 20px;max-width:720px}
-
-  .demo{display:block;width:100%;max-width:820px;margin:6px auto 0;border-radius:10px}
-
-  .grid{display:grid;gap:12px}
-  .cols3{grid-template-columns:repeat(3,1fr)}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
-  .card h3{margin:0 0 10px;font-size:15px}
-
-  .doms{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-  .chip{font-family:ui-monospace,monospace;font-size:13px;color:var(--text);
-    background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 11px}
-  .chip b{color:var(--purple)}
-  .chip .n{color:var(--muted)}
-
-  pre{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;
-    overflow-x:auto;font-size:13px;color:var(--text)}
-  pre .c{color:var(--muted)}
-
-  .warn{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.35);border-radius:10px;
-    padding:13px 16px;color:#ffb4ae;font-size:14px}
-  footer{padding:34px 0 56px;border-top:1px solid var(--border);color:var(--muted);text-align:center;font-size:14px}
-  @media(max-width:720px){.cols3{grid-template-columns:1fr}h1{font-size:34px}}
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Sploit<span class="a">Agent</span></a>
+  <a class="link active" href="index.html">Home</a>
+  <a class="link" href="start.html">Getting Started</a>
+  <a class="link" href="skills.html">Skills</a>
+  <a class="link" href="safety.html">Authorized Use</a>
+  <a class="link" href="contributing.html">Contribute</a>
+  <a class="gh" href="https://github.com/NoorQureshi/SploitAgent">GitHub ★</a>
+</div></nav>
 
 <header class="hero">
   <div class="mask">🥷</div>
@@ -87,9 +36,9 @@
     <span class="badge">MIT</span>
   </div>
   <div class="cta">
-    <a class="btn primary" href="https://github.com/NoorQureshi/SploitAgent">★ Star on GitHub</a>
-    <a class="btn ghost" href="#use">Get started</a>
-    <a class="btn ghost" href="https://github.com/NoorQureshi/SploitAgent/blob/main/CATALOG.md">Catalog</a>
+    <a class="btn primary" href="start.html">Get started</a>
+    <a class="btn ghost" href="skills.html">Browse skills</a>
+    <a class="btn ghost" href="https://github.com/NoorQureshi/SploitAgent">View on GitHub</a>
   </div>
 </header>
 
@@ -103,69 +52,53 @@
       no runtime, no build step, no lock-in.</p>
   </section>
 
-  <section id="use">
-    <h2><span class="hash">#</span> Use it with any agent</h2>
-    <p class="lead">Clone the repo and open your agent inside it — <code>CLAUDE.md</code> / <code>AGENTS.md</code>
-      tell it how to work and to confirm scope first.
-      <a href="https://github.com/NoorQureshi/SploitAgent/blob/main/docs/USING.md">Full setup for every agent →</a></p>
+  <section>
+    <h2><span class="hash">#</span> Start here</h2>
+    <p class="lead">Pick the page that matches what you want to do.</p>
     <div class="grid cols3">
       <div class="card">
-        <h3>Claude Code</h3>
-<pre>git clone https://github.com/NoorQureshi/SploitAgent
-cd SploitAgent &amp;&amp; claude</pre>
+        <h3>🚀 Getting Started</h3>
+        <p>Install it and use it with Claude Code, Codex, Gemini, or a local model in under a minute.</p>
+        <a class="more" href="start.html">How to use it →</a>
       </div>
       <div class="card">
-        <h3>Codex / Gemini</h3>
-<pre><span class="c"># they read AGENTS.md</span>
-codex   <span class="c"># or: gemini</span></pre>
+        <h3>🧩 Skills</h3>
+        <p>All 100 skills across 16 domains — what each covers, how one is structured, and the full catalog.</p>
+        <a class="more" href="skills.html">Explore the library →</a>
       </div>
       <div class="card">
-        <h3>Local (Ollama)</h3>
-<pre>ln -s "$PWD/skills" \
-  ~/.claude/skills/sploitagent</pre>
+        <h3>🛡️ Authorized Use</h3>
+        <p>The one rule that governs everything: SploitAgent only acts inside a confirmed authorization envelope.</p>
+        <a class="more" href="safety.html">Read the rule →</a>
       </div>
-    </div>
-    <p style="margin-top:18px" class="warn"><b>Authorized use only.</b> Every engagement's first skill is
-      <code>tradecraft-scope-roe</code> — SploitAgent acts only inside a confirmed envelope: a signed pentest
-      scope, a bug-bounty program you're in scope for, or systems you own.</p>
-  </section>
-
-  <section id="domains">
-    <h2><span class="hash">#</span> 16 domains, 100 skills</h2>
-    <p class="lead">Each skill is one <code>SKILL.md</code> with OWASP / MITRE ATT&amp;CK / CWE tags.
-      <a href="https://github.com/NoorQureshi/SploitAgent/blob/main/CATALOG.md">Browse the full catalog →</a></p>
-    <div class="doms">
-      <span class="chip"><b>web</b> <span class="n">31</span></span>
-      <span class="chip"><b>ai-ml</b> <span class="n">9</span></span>
-      <span class="chip"><b>cloud</b> <span class="n">8</span></span>
-      <span class="chip"><b>api</b> <span class="n">8</span></span>
-      <span class="chip"><b>recon</b> <span class="n">7</span></span>
-      <span class="chip"><b>defense</b> <span class="n">6</span></span>
-      <span class="chip"><b>code-review</b> <span class="n">6</span></span>
-      <span class="chip"><b>mobile</b> <span class="n">5</span></span>
-      <span class="chip"><b>ad</b> <span class="n">4</span></span>
-      <span class="chip"><b>network</b> <span class="n">3</span></span>
-      <span class="chip"><b>privesc</b> <span class="n">3</span></span>
-      <span class="chip"><b>exploit-dev</b> <span class="n">2</span></span>
-      <span class="chip"><b>payloads</b> <span class="n">2</span></span>
-      <span class="chip"><b>reporting</b> <span class="n">2</span></span>
-      <span class="chip"><b>automation</b> <span class="n">2</span></span>
-      <span class="chip"><b>tradecraft</b> <span class="n">2</span></span>
+      <div class="card">
+        <h3>🤝 Contribute</h3>
+        <p>A contribution is a single Markdown file — no code. See what's wanted and how to add it.</p>
+        <a class="more" href="contributing.html">Add a skill →</a>
+      </div>
+      <div class="card">
+        <h3>📖 Catalog</h3>
+        <p>The browsable index of every skill, with type, modes, and a one-line summary each.</p>
+        <a class="more" href="https://github.com/NoorQureshi/SploitAgent/blob/main/CATALOG.md">Open CATALOG.md →</a>
+      </div>
+      <div class="card">
+        <h3>📊 Coverage</h3>
+        <p>How the library maps to OWASP, MITRE ATT&amp;CK, and CWE — measured from each skill's frontmatter.</p>
+        <a class="more" href="https://github.com/NoorQureshi/SploitAgent/blob/main/COVERAGE.md">Open COVERAGE.md →</a>
+      </div>
     </div>
   </section>
 
-  <section id="contribute">
-    <h2><span class="hash">#</span> Contribute</h2>
-    <p class="lead">A contribution is a single Markdown file — no code. The
-      <a href="https://github.com/NoorQureshi/SploitAgent/blob/main/ROADMAP.md">roadmap</a> lists wanted skills
-      (🟢 = good first one); the full guide is
-      <a href="https://github.com/NoorQureshi/SploitAgent/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
-<pre>cp skills/_templates/technique.md skills/&lt;domain&gt;/&lt;slug&gt;/SKILL.md
-python3 tools/catalog.py            <span class="c"># validate + regenerate the indexes</span></pre>
-    <div class="cta" style="justify-content:flex-start;margin-top:22px">
-      <a class="btn primary" href="https://github.com/NoorQureshi/SploitAgent">Open the repo</a>
-      <a class="btn ghost" href="https://github.com/NoorQureshi/SploitAgent/blob/main/ROADMAP.md">Pick a skill to add</a>
-    </div>
+  <section>
+    <h2><span class="hash">#</span> How an agent works a target</h2>
+    <p class="lead">Every engagement follows the same loop. Each stage routes to the skills that fit it.</p>
+<pre>1. Scope       confirm authorization; record scope.txt     → tradecraft-scope-roe
+2. Recon       map the attack surface                       → recon-*
+3. Attack      route by domain (web / api / cloud / ad / …) → web-*, api-*, cloud-*, …
+4. Foothold    drive a weakness to proven impact            → exploit-chaining
+5. Escalate    privilege escalation and lateral movement    → privesc-*, ad-*, network-*
+6. Report      findings with severity and evidence          → reporting-*
+7. Defend      convert findings into detections             → defense-*</pre>
   </section>
 
 </main>

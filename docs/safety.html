@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authorized Use — SploitAgent</title>
+<meta name="description" content="SploitAgent operates only inside a confirmed authorization envelope: a signed pentest scope, an in-scope bug-bounty program, or systems you own.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Sploit<span class="a">Agent</span></a>
+  <a class="link" href="index.html">Home</a>
+  <a class="link" href="start.html">Getting Started</a>
+  <a class="link" href="skills.html">Skills</a>
+  <a class="link active" href="safety.html">Authorized Use</a>
+  <a class="link" href="contributing.html">Contribute</a>
+  <a class="gh" href="https://github.com/NoorQureshi/SploitAgent">GitHub ★</a>
+</div></nav>
+
+<main class="wrap page">
+  <p class="kicker">RULE ZERO</p>
+  <h1 class="title">Authorized use only</h1>
+  <p class="lead">SploitAgent is for security work you are permitted to do. Before it touches a target,
+    it loads <code>tradecraft-scope-roe</code> and confirms an authorization envelope. If scope is
+    unclear, it stops and asks — it never "probes a little to see".</p>
+
+  <section>
+    <h2><span class="hash">#</span> The three envelopes</h2>
+    <div class="grid cols3">
+      <div class="card">
+        <h3>Pentest engagement</h3>
+        <p>The boundary is the signed scope — the statement of work or authorization letter naming the
+          in-scope hosts, ranges, apps, and the testing window. Recorded in <code>scope.txt</code>.
+          Practice ranges you own or are licensed to test count here.</p>
+      </div>
+      <div class="card">
+        <h3>Bug-bounty program</h3>
+        <p>The boundary is the program's scope plus its rules of engagement — in-scope and out-of-scope
+          assets in <code>scope.txt</code>, and rate limits, prohibited actions, and disclosure terms
+          in <code>roe.md</code>. Out-of-scope is a hard block.</p>
+      </div>
+      <div class="card">
+        <h3>Defensive work</h3>
+        <p>You operate on systems your organization owns or authorizes. Scope is the asset inventory you
+          are permitted to assess or monitor.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> The discipline</h2>
+    <ol>
+      <li><b>Confirm authorization</b> and write the envelope files before scanning.</li>
+      <li><b>Match every target</b> against the in-scope list at request time. Anything unmatched or
+        out-of-scope is refused — third parties (shared CDNs, SaaS the target merely uses) are out.</li>
+      <li><b>Respect the rules of engagement</b> — throttle to the program's rate cap; skip prohibited
+        techniques.</li>
+      <li><b>Minimize impact</b> — prove the issue class with the least data and action; no data hoarding;
+        clean up test artifacts (uploaded files, test accounts).</li>
+      <li><b>Mode-gate skills</b> — a destructive technique safe only in a controlled lab does not run
+        against a live production target.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Not this</h2>
+    <p class="warn">Do not point SploitAgent at systems you are not authorized to test. "It resolved so it's
+      probably in scope", testing an acquisition not named in scope, ignoring rate limits because the bug
+      is interesting, or keeping real customer data as "evidence" — all out of bounds. Authorized use is
+      the whole point; keep it that way.</p>
+  </section>
+
+  <div class="pager">
+    <a href="skills.html"><span class="lbl">← Back</span>Skills</a>
+    <a href="contributing.html"><span class="lbl">Next →</span>Contribute</a>
+  </div>
+</main>
+
+<footer>
+  <p>SploitAgent · MIT · for authorized security work only.<br>
+  <a href="https://github.com/NoorQureshi/SploitAgent">github.com/NoorQureshi/SploitAgent</a></p>
+</footer>
+
+</body>
+</html>
