@@ -1,24 +1,28 @@
 <h1 align="center">🥷 Ronin</h1>
 
 <p align="center">
-  <b>A masterless AI operator for authorized CTF labs & bug-bounty — bring your own blade.</b><br>
-  One engagement brain. Plug it into <b>Claude Code</b>, <b>Codex</b>, <b>Gemini CLI</b>, or a <b>local model</b>.
+  <b>The open library of hacking skills for AI agents — authorized CTF, bug bounty & defense.</b><br>
+  One curated skill set. Load it into <b>Claude Code</b>, <b>Codex</b>, <b>Gemini CLI</b>, or a <b>local model</b>.
 </p>
 
 <p align="center">
   <a href="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="library" src="https://img.shields.io/badge/library-60%2B_skills_·_16_domains-6E56CF">
   <img alt="scope" src="https://img.shields.io/badge/scope-authorized_use_only-red">
-  <img alt="tools" src="https://img.shields.io/badge/works_with-Claude_Code_·_Codex_·_Gemini_·_local-6E56CF">
+  <img alt="works with" src="https://img.shields.io/badge/works_with-Claude_·_Codex_·_Gemini_·_local-6E56CF">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
 </p>
 
 ---
 
-A ronin serves no single master and fights with whatever weapon is at hand. This framework
-is the same: the *knowledge* of how to work a box — a full engagement methodology, phase
-playbooks, and a growing library of tool arsenals and learned exploit techniques — kept in
-**one tool-neutral core** and compiled into a native entry file for **whatever AI CLI you
-already run**.
+A ronin serves no single master and fights with whatever weapon is at hand. Ronin is the same:
+**not a tool — a library.** It's the *knowledge* of how to hack, written as trigger-loaded
+**skills** an AI agent picks up automatically for the task in front of it — recon, web, API,
+mobile, cloud, Active Directory, LLM/AI, source-code review, privesc, plus the defensive,
+reporting, and tradecraft craft. A full engagement methodology and a growing, curated skill set,
+kept in **one tool-neutral core** and compiled for **whatever AI CLI you already run**. An
+optional `ronin` CLI helps you install tooling and scaffold work — but the skills are the point,
+and adding to them is meant to be easy.
 
 > ⚠️ **Authorized use only.** Scope discipline is the first instruction in every component:
 > Ronin refuses to act until the target is inside a confirmed **authorization envelope** — a
@@ -28,12 +32,12 @@ already run**.
 
 ## How it works
 
-The valuable part — *how to think through a box* — is portable knowledge. Ronin keeps it in
-**one source** and generates each tool's entry file from it, so nothing is written twice and
-nothing drifts.
+The valuable part — *how to think through a target* — is portable knowledge. Ronin keeps the
+skills in **one source of truth** and generates each AI tool's entry file from it, so nothing is
+written twice and nothing drifts. Contributors add skills; every agent that loads Ronin gets sharper.
 
 ```
-ronin                         ← the CLI: doctor · install · build · start · local · new · lock
+ronin                         ← optional CLI: doctor · install · build · validate · catalog · start · local · new · lock
 setup.sh                      ← one-time bootstrap (build + put `ronin` on PATH)
 framework/                    ← SINGLE SOURCE OF TRUTH
   methodology.md                the loop · scope rule · note-taking standard          🔒 locked
@@ -97,9 +101,10 @@ Two ways to run on a **local model**, no cloud:
 
 Full details + model picks → **[docs/LOCAL-MODELS.md](docs/LOCAL-MODELS.md)**.
 
-## The `ronin` command
+## The `ronin` command (optional helper)
 
-A normal CLI front door — `ronin --help` and `ronin <cmd> --help` everywhere:
+The skills are the product and work without any CLI. `ronin` is just a convenience layer —
+`ronin --help` and `ronin <cmd> --help` everywhere:
 
 | Command | What it does |
 |---|---|
@@ -109,6 +114,8 @@ A normal CLI front door — `ronin --help` and `ronin <cmd> --help` everywhere:
 | `ronin local --provider ollama\|lmstudio --model <m>` | Start the offline advisor against a local model |
 | `ronin new <box> --target <ip>` | Scaffold an engagement dir (`scope.txt`, `notes.md`, `state.md`, `recon/` …) |
 | `ronin build [all\|claude-code\|codex\|gemini]` | Regenerate the entry files after editing `framework/` |
+| `ronin validate` | Schema-check every skill's frontmatter (domain, type, modes, mappings) |
+| `ronin catalog` | Regenerate `CATALOG.md`, the machine index, and discovery symlinks |
 | `ronin lock` / `ronin unlock` | Freeze / edit the stable core |
 
 `ronin install` reads what `ronin doctor` found missing and installs it the right way for

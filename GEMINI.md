@@ -364,45 +364,92 @@ Open the matching `framework/skills/<domain>/<slug>/SKILL.md` when its trigger f
 
 **Reconnaissance** (`recon`)
 - `recon-content-discovery` — Discover hidden paths, endpoints, params, and JS-exposed routes on a web target.
+- `recon-js-analysis` — Mine JavaScript for endpoints, params, secrets, and hidden functionality.
+- `recon-osint` — Passive OSINT to expand attack surface without touching the target: dorks, code/secret leaks, Shodan/Censys, cloud assets, employees.
 - `recon-subdomain-enum` — Enumerate subdomains and live hosts to build the attack surface for a bug-bounty program or external assessment.
 - `tools-recon` — port/host/service discovery tool arsenal for authorized labs.
 
 **Web application** (`web`)
 - `tools-web` — web enumeration + exploitation tool arsenal for authorized labs.
 - `web-auth-jwt` — Attack JWT/session authentication.
+- `web-business-logic` — Find business-logic flaws — abusing intended functionality in unintended ways.
+- `web-cors` — Exploit CORS misconfiguration to read cross-origin responses (data theft).
+- `web-csrf` — Cross-Site Request Forgery — force a victim's browser to perform state-changing actions.
+- `web-deserialization` — Insecure deserialization → RCE via gadget chains.
 - `web-file-upload` — Turn a file upload into RCE or stored XSS/SSRF.
 - `web-idor` — Insecure Direct Object Reference / broken access control on web objects.
+- `web-lfi-path-traversal` — Local File Inclusion / path traversal → read files, sometimes RCE.
+- `web-oauth` — Attack OAuth 2.0 / OIDC / SSO flows for account takeover.
+- `web-open-redirect` — Open redirect — abuse a redirect param to send users to attacker sites, and chain it (OAuth token theft, SSRF filter bypass, phishing).
+- `web-race-conditions` — Exploit race conditions / TOCTOU — fire concurrent requests to break single-use limits.
+- `web-request-smuggling` — HTTP request smuggling (CL.TE/TE.CL/TE.TE/CL.0) — desync front-end and back-end to poison other users' requests.
 - `web-sqli` — Detect and exploit SQL injection (error-based, UNION, boolean/time blind, stacked).
 - `web-ssrf` — Discover and escalate Server-Side Request Forgery.
 - `web-ssrf-gopher-redis-rce` — Turn a server-side request (SSRF) into RCE by speaking the Redis protocol over gopher:// to an internal, unauthenticated Redis — write a cron job, an …
 - `web-ssti` — Server-Side Template Injection → RCE.
+- `web-subdomain-takeover` — Claim a dangling DNS record pointing to a deprovisioned service (subdomain takeover).
 - `web-webauthn-software-authenticator` — Register and authenticate against a WebAuthn/FIDO2 relying party using a self-built SOFTWARE authenticator (no hardware key) when the RP requests atte…
 - `web-xss` — Find and prove Cross-Site Scripting (reflected, stored, DOM).
+- `web-xxe` — XML External Entity injection → file read, SSRF, sometimes RCE.
 
 **API** (`api`)
+- `api-auth-attacks` — Break API authentication: token handling, key leakage, weak session/JWT, and no-auth endpoints.
 - `api-bola` — Broken Object/Function Level Authorization in REST/JSON APIs (the #1 API risk).
+- `api-fuzzing` — Discover and fuzz API endpoints, methods, params, and versions systematically.
 - `api-graphql` — Attack GraphQL APIs.
 - `api-mass-assignment` — Mass assignment / auto-binding privilege escalation.
 - `api-mongo-agg-facet-bypass` — Bypass a MongoDB aggregation-pipeline stage allowlist by nesting disallowed read stages inside $facet, then $unionWith/$lookup sibling collections to …
 
+**Mobile** (`mobile`)
+- `mobile-android-assessment` — Assess an Android app (static + dynamic).
+- `mobile-cert-pinning-bypass` — Bypass TLS certificate pinning so you can proxy a mobile app's traffic.
+- `mobile-deeplink-abuse` — Abuse deep links / custom URL schemes / intents for redirect, token theft, and reaching internal screens.
+
 **Cloud & containers** (`cloud`)
+- `cloud-container-escape` — Break out of a container to the host.
 - `cloud-imds-ssrf` — Escalate SSRF to cloud credential theft via the instance metadata service (IMDS).
+- `cloud-kubernetes` — Attack exposed Kubernetes: API server, kubelet, etcd, dashboards, and RBAC.
 - `cloud-s3-exposure` — Find and prove misconfigured cloud object storage (S3/GCS/Azure Blob).
+
+**Network & services** (`network`)
+- `network-pivoting-tunneling` — Pivot into internal networks from a foothold — tunnels, port-forwards, and proxychains.
+- `network-service-attacks` — Attack non-web network services surfaced by recon.
 
 **Active Directory** (`ad`)
 - `tools-ad-pivot` — Active Directory, pivoting/tunneling, and password-cracking arsenal for authorized labs.
 
 **AI / LLM** (`ai-ml`)
+- `ai-jailbreak` — Bypass an LLM's safety/guardrails to make it produce restricted output or ignore its policy.
 - `ai-prompt-injection` — Test LLM-backed apps for prompt injection (direct + indirect) and its consequences: data exfil, tool/function abuse, guardrail bypass.
+- `ai-rag-poisoning` — Poison a RAG/knowledge-base pipeline so retrieved content hijacks the model (indirect prompt injection at scale) or exfiltrates data.
+
+**Source-code review** (`code-review`)
+- `code-review-dangerous-sinks` — Grep-ready dangerous function/sink catalog per language for fast code review.
+- `code-review-methodology` — Systematic manual source-code security review — how to find bugs by reading code.
+- `code-review-secrets-detection` — Find leaked secrets in code, git history, and CI.
+
+**Exploit development** (`exploit-dev`)
+- `exploit-chaining` — Combine low/medium findings into one high-impact exploit chain, and amplify demonstrated impact.
+- `exploit-poc-development` — Turn a known/1-day vulnerability or a raw bug into a working, reliable PoC for an authorized target.
 
 **Privilege escalation** (`privesc`)
 - `tools-privesc` — Linux + Windows local privilege-escalation tool arsenal for authorized labs.
 
 **Defense / blue-team** (`defense`)
 - `defense-detection-sigma` — Write portable detections as Sigma rules and map them to MITRE ATT&CK, then convert to your SIEM.
+- `defense-dfir-triage` — First-response DFIR triage: scope an incident, collect volatile evidence, and find attacker activity on Linux/Windows.
+- `defense-hardening-baseline` — Turn offensive findings into concrete hardening — the fix side of each vuln class, plus config baselines.
+
+**Payloads** (`payloads`)
+- `payloads-waf-bypass` — Bypass WAFs/filters blocking your payloads.
+- `payloads-xss-polyglots` — Context-breaking XSS polyglots and per-context payloads that fire across HTML/attribute/JS/ URL sinks in one shot.
 
 **Reporting** (`reporting`)
 - `reporting-bug-bounty-writeup` — Turn a confirmed finding into a triage-friendly bug-bounty report (HackerOne/Bugcrowd) with correct severity and clean evidence.
+
+**Automation** (`automation`)
+- `automation-nuclei-templates` — Write custom nuclei templates to codify a finding into a repeatable, mass-scannable check.
+- `automation-recon-pipeline` — Chain recon tools into a repeatable, resumable pipeline for continuous bug-bounty coverage.
 
 **Tradecraft & discipline** (`tradecraft`)
 - `htb-insane` — Structure and methodology for hard and Insane-rated lab machines (HackTheBox, Pro Labs, CPTS/OSCP-hard).
