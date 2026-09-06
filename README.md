@@ -1,120 +1,128 @@
-<h1 align="center">🥷 Ronin</h1>
+<div align="center">
 
-<p align="center">
-  <b>The open library of hacking skills for AI agents.</b><br>
-  Load it into your agent and it works like a senior operator — recon to report, offense and defense.
-</p>
+# 🥷 Ronin
 
-<p align="center">
-  <a href="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg"></a>
-  <img alt="skills" src="https://img.shields.io/badge/skills-61-6E56CF">
-  <img alt="domains" src="https://img.shields.io/badge/domains-16-6E56CF">
-  <img alt="for" src="https://img.shields.io/badge/for-pentest_·_bug_bounty_·_defense-0b7285">
-  <img alt="scope" src="https://img.shields.io/badge/use-authorized_only-red">
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
-</p>
+**The open library of hacking skills for AI agents.**
+
+Point your agent at Ronin and it works like a seasoned operator — recon to report, offense and defense.
+
+[![CI](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml)
+![skills](https://img.shields.io/badge/skills-73-6E56CF)
+![domains](https://img.shields.io/badge/domains-16-6E56CF)
+![for](https://img.shields.io/badge/for-pentest_·_bug_bounty_·_defense-0b7285)
+![use](https://img.shields.io/badge/use-authorized_only-red)
+![license](https://img.shields.io/badge/license-MIT-blue)
+
+[Browse the catalog](CATALOG.md) · [Coverage](COVERAGE.md) · [Using Ronin](docs/USING.md) · [Contribute](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)
+
+</div>
 
 ---
 
-**Ronin is not a tool — it's a library.** It's the knowledge of *how to actually do the work* —
+Ronin is **not a tool — it's a library.** It's the knowledge of *how the work is actually done* —
 find the bug, prove the impact, escalate, pivot, report, and defend — written as small,
-trigger-tagged **skills** in the standard Agent-Skills format. Point any AI agent (Claude Code,
-Codex, Gemini, a local model) at the `skills/` folder and it loads the right skill automatically
-for the task in front of it.
+trigger-tagged **skills**. Drop it in front of any AI agent (Claude Code, Codex, Gemini, a local
+model) and the right skill loads itself for the task in front of it.
 
-It's built for the people who do this for a living or for sport-with-permission:
+```text
+you:   "Bug-bounty program acme.com, wildcard in scope. Map it, then hunt the API."
+agent: loads recon-subdomain-enum → recon-content-discovery → api-fuzzing → api-bola …
+```
 
-- **Penetration testers** — a full engagement method plus tool arsenals and concrete chains.
-- **Bug-bounty hunters** — the web/API/mobile/cloud/LLM classes that actually pay, with triage-ready reporting.
-- **Defenders** — the other half: detection engineering, hardening, and DFIR, mapped to the same attacks.
+## Why Ronin
 
-No runtime, no lock-in. The skills are plain Markdown you can read, grep, copy, and improve.
+- **Knowledge outlasts tools.** Scanners encode one team's checks at one moment; a library of
+  skills encodes *how to think* — the mechanism, the exact command, the gotcha. Agents change
+  every quarter; the tradecraft doesn't.
+- **Portable, no lock-in.** Plain Markdown in the standard Agent-Skills format. No runtime, no
+  build step, no framework to adopt. Read it, grep it, copy it, improve it.
+- **Offense *and* defense.** Every attack has its counterpart — detection, hardening, DFIR — so
+  the same library serves red and blue.
+- **Built to grow.** A schema keeps every skill consistent; contributions are one Markdown file.
 
-## Why a library, not a tool
+## What's inside
 
-Tools go stale; knowledge compounds. A scanner encodes one team's checks at one moment. A
-*library of skills* encodes **how to think** — the mechanism behind each bug, the exact command
-with the flag that matters, the gotcha that tells "not vulnerable" apart from "you did it wrong."
-Agents change every quarter; the tradecraft doesn't. Keep it in one place, in the open, and every
-agent that loads it gets sharper — and so does every contributor who reads it.
+**73 skills across 16 domains.** Full, always-current list in **[CATALOG.md](CATALOG.md)**.
 
-Each skill is written to **teach the mechanism**, not just paste a payload:
+| Domain | | Domain | | Domain | |
+|---|--:|---|--:|---|--:|
+| `web` | 25 | `cloud` | 5 | `code-review` | 3 |
+| `api` | 7 | `ai-ml` | 5 | `mobile` | 3 |
+| `recon` | 6 | `defense` | 3 | `network` · `exploit-dev` · `privesc` · `payloads` · `automation` · `reporting` · `tradecraft` · `ad` | 2 / 2 / 2 / 2 / 2 / 2 / 2 / 2 |
 
-> *when it applies · why it works · method (exact commands + flag gloss) · gotchas · verify success*
+Every skill carries OWASP / OWASP-LLM / OWASP-API / MITRE ATT&CK / CWE tags, so coverage is
+measurable and gaps are visible — see **[COVERAGE.md](COVERAGE.md)**.
 
-## What's inside — 61 skills across 16 domains
+## What a skill looks like
 
-| Domain | Skills | Covers |
-|---|--:|---|
-| **web** | 21 | XSS, SQLi, SSRF, SSTI, IDOR, JWT, upload, XXE, CSRF, CORS, LFI, request-smuggling, deserialization, OAuth, subdomain-takeover, business-logic, race-conditions… |
-| **api** | 6 | BOLA/BFLA, mass assignment, GraphQL, auth attacks, fuzzing, NoSQL injection |
-| **recon** | 5 | subdomain enum, content/JS discovery, OSINT, service enum, the tooling arsenal |
-| **cloud** | 4 | IMDS/SSRF → creds, S3/bucket exposure, Kubernetes, container escape |
-| **ai-ml** | 3 | prompt injection, jailbreaks, RAG/knowledge-base poisoning |
-| **defense** | 3 | detection engineering (Sigma/ATT&CK), hardening baselines, DFIR triage |
-| **code-review** | 3 | review methodology, dangerous-sink catalog, secrets detection |
-| **mobile** | 3 | Android assessment, cert-pinning bypass, deep-link/intent abuse |
-| **network** | 2 | non-web service attacks, pivoting & tunneling |
-| **exploit-dev** | 2 | exploit chaining & impact amplification, PoC development |
-| **payloads** | 2 | WAF/filter bypass, XSS polyglots (with reference payload sets) |
-| **automation** | 2 | recon pipelines, custom nuclei templates |
-| **tradecraft** | 2 | scope & rules-of-engagement, complex multi-stage engagements |
-| **ad · privesc · reporting** | 3 | Active Directory & pivoting, Linux/Windows privesc, bug-bounty reporting |
+Each `SKILL.md` has a trigger line (so the agent knows *when* to load it) and a body that teaches
+the *mechanism*, not just a payload:
 
-Browse the full, always-current list in **[`CATALOG.md`](CATALOG.md)**. Every skill carries
-OWASP / OWASP-LLM / OWASP-API / MITRE ATT&CK / CWE tags in its frontmatter, so coverage is
-measurable and gaps are visible.
+```markdown
+---
+name: web-ssrf
+description: Discover and escalate Server-Side Request Forgery. Load when the app
+  fetches a URL you influence: webhooks, "import from URL", PDF/image render…
+domain: web
+type: technique
+modes: [pentest, bugbounty]
+owasp: [A10:2021-SSRF]
+cwe: [CWE-918]
+---
+## When it applies · Why it works · Method (exact commands + flag gloss) · Gotchas · Verify success
+```
 
-## Use it in 30 seconds
+That shape — *when it applies · why it works · method · gotchas · verify* — is the house style,
+and it's what makes the skills useful to a human *and* an agent.
+
+## Quickstart
 
 ```bash
 git clone https://github.com/noorqureshi/ronin
-# Claude Code: expose the skills to your agent
+
+# Claude Code — expose the skills to your agent:
 ln -s "$PWD/ronin/skills" ~/.claude/skills/ronin      # or: cp -r ronin/skills/* ~/.claude/skills/
 ```
 
-Then just describe an **authorized** target and let the agent pick the skills:
+Then describe an **authorized** target and let the agent pick the skills. Codex, Gemini, and local
+models work the same way — point them at `skills/`, or drop a single `SKILL.md` into context.
+Full instructions per agent: **[docs/USING.md](docs/USING.md)**.
 
-> *"Bug-bounty program acme.com, wildcard in scope. Start recon, then hunt the API."*
+> [!WARNING]
+> **Authorized use only.** The first skill every engagement loads is `tradecraft-scope-roe`.
+> Ronin operates only inside a confirmed authorization envelope — a signed pentest scope, a
+> bug-bounty program you're in scope for, or systems you own. Never point it at anything else.
 
-Works the same with Codex, Gemini, or a local model — point the agent at `skills/`, or drop a
-specific `SKILL.md` into context. Details for each: **[docs/USING.md](docs/USING.md)**.
+## Contribute — this is the point
 
-## The rule that comes first
-
-> ⚠️ **Authorized use only.** The first skill every engagement loads is `tradecraft-scope-roe`.
-> Ronin operates only inside a confirmed **authorization envelope** — a signed pentest scope, a
-> bug-bounty program you're in scope for, or systems you own/are authorized to test. Out-of-scope
-> is a hard block. Never point these skills at anything you don't have permission to test.
-
-## Layout
-
-```
-skills/<domain>/<slug>/SKILL.md   ← the library (the point of the repo)
-  _templates/                       per-type skill templates
-methodology.md                    the engagement loop · scope rule · note-taking standard
-schemas/skill.schema.json         the validated skill contract (versioned)
-tools/catalog.py                  validate skills + (re)generate CATALOG.md
-CATALOG.md                        generated, browsable index of every skill
-docs/USING.md                     how to load Ronin into each AI agent
-CONTRIBUTING.md                   how to add a skill
-```
-
-## Contributing
-
-New skills are the whole point — especially techniques you've proven on real (authorized) targets
-and defensive counterparts to the attacks. It's Markdown, not code:
+Ronin gets sharper with every skill added, and adding one is deliberately easy: **it's a single
+Markdown file, no code.**
 
 ```bash
 cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
 # write it, then:
-python3 tools/catalog.py validate    # schema-check
-python3 tools/catalog.py             # regenerate CATALOG.md
+python3 tools/catalog.py            # validate + regenerate the catalog
 ```
 
-Strong trigger keywords, teach the mechanism, no real targets/creds. Full guide and PR checklist:
-**[CONTRIBUTING.md](CONTRIBUTING.md)**. CI validates every skill against the schema on each push.
+- **Not sure what to write?** The **[Roadmap](ROADMAP.md)** lists wanted skills — the 🟢 ones are
+  great first contributions.
+- **Have a technique you've used on a real (authorized) target?** That's exactly what belongs here.
+- **Blue team?** Detection, hardening, and DFIR skills are just as welcome as offensive ones.
+
+Full guide, house style, and PR checklist: **[CONTRIBUTING.md](CONTRIBUTING.md)**. Every PR is
+schema-validated by CI, so it's hard to get the format wrong.
+
+## Layout
+
+```text
+skills/<domain>/<slug>/SKILL.md   the library (the point of the repo)
+methodology.md                    the engagement loop · scope rule · note standard
+schemas/skill.schema.json         the skill contract (validated in CI)
+tools/catalog.py                  validate skills + regenerate CATALOG.md / COVERAGE.md
+CATALOG.md · COVERAGE.md          generated indexes
+docs/USING.md · CONTRIBUTING.md · ROADMAP.md
+```
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Use it responsibly and legally.
+MIT — see [LICENSE](LICENSE). Built for people who do this legally and with permission.

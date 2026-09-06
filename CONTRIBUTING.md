@@ -1,17 +1,24 @@
 # Contributing to Ronin
 
-Thanks for helping grow the library. Ronin is for **authorized** security work only —
-penetration-testing engagements, bug-bounty programs you're in scope for, and defensive
-assessment of systems you own or are authorized to test. Every contribution must keep that
-framing: no real targets, no live credentials/secrets, no content aimed at systems you don't
-own or aren't authorized to test.
+**Ronin is built by the people who use it — welcome aboard.** If you've got a technique you reach
+for on real (authorized) engagements, a cleaner way to explain a bug, or a defensive counterpart
+to an attack, it belongs here. One good skill helps every operator who loads Ronin, and your name
+is on it in the git history.
+
+You don't need to be famous or write ten of them. **One solid skill is a great contribution.**
+Not sure what to write? The **[Roadmap](ROADMAP.md)** lists what we want — the 🟢 items are
+designed to be good first contributions.
+
+> Ronin is for **authorized** security work only — pentest engagements, bug-bounty programs you're
+> in scope for, and defensive assessment of systems you own. Every contribution must keep that
+> framing: no real targets, no live credentials/secrets, nothing aimed at systems you aren't
+> authorized to test.
 
 ## What a contribution is
 
-Ronin is a **library of skills**. A contribution is almost always a new (or improved)
-`skills/<domain>/<slug>/SKILL.md`. There's no build step and no CLI to learn — skills are plain
-Markdown with a validated frontmatter block. The one script, `tools/catalog.py`, validates skills
-and regenerates the catalog.
+A contribution is almost always a new (or improved) `skills/<domain>/<slug>/SKILL.md`. There's no
+build step and no CLI to learn — skills are plain Markdown with a validated frontmatter block. The
+one script, `tools/catalog.py`, validates skills and regenerates the catalog.
 
 ## Add a skill (the common PR)
 
@@ -49,16 +56,15 @@ Fill it in:
 ## Before you open a PR
 
 ```bash
-python3 -m py_compile tools/catalog.py
-python3 tools/catalog.py validate                       # skills pass the schema
-python3 tools/catalog.py && git diff --quiet -- CATALOG.md && echo "catalog up to date ✓"
+python3 tools/catalog.py validate                                          # skills pass the schema
+python3 tools/catalog.py && git diff --quiet -- CATALOG.md COVERAGE.md && echo "indexes up to date ✓"
 ```
 
 Checklist:
 - [ ] Skill under the right `skills/<domain>/`, frontmatter passes `tools/catalog.py validate`.
 - [ ] Authorized-use framing; correct `modes:`; no real targets/creds/secrets.
 - [ ] Strong trigger signals in `description:`; mappings (`owasp`/`mitre`/`cwe`) where they apply.
-- [ ] `CATALOG.md` regenerated and committed; CI is green.
+- [ ] `CATALOG.md` + `COVERAGE.md` regenerated and committed; CI is green.
 
 ## Style
 Match the house voice: terse, teach-the-mechanism — *tool · why over alternatives · exact command
