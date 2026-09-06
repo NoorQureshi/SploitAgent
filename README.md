@@ -7,7 +7,7 @@
 Point any AI agent at Ronin and it works like a seasoned operator — recon to report, offense and defense.
 
 [![CI](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-85-6E56CF)
+![skills](https://img.shields.io/badge/skills-100-6E56CF)
 ![domains](https://img.shields.io/badge/domains-16-6E56CF)
 ![for](https://img.shields.io/badge/for-pentest_·_bug_bounty_·_defense-0b7285)
 ![use](https://img.shields.io/badge/use-authorized_only-red)
@@ -97,22 +97,22 @@ engagements/<target>/
 
 ## The 16 domains
 
-**85 skills.** Every skill is one `SKILL.md`; the full list is in **[CATALOG.md](CATALOG.md)**.
+**100 skills.** Every skill is one `SKILL.md`; the full list is in **[CATALOG.md](CATALOG.md)**.
 
 | Domain | Skills | What it covers |
 |---|:--:|---|
-| [`web`](skills/web) | 29 | XSS · SQLi · SSRF · SSTI · IDOR · XXE · CSRF · CORS · LFI · deserialization · OAuth · request smuggling · prototype pollution · cache poisoning · host-header · clickjacking · websocket · race conditions · business logic · upload · JWT · account takeover |
+| [`web`](skills/web) | 31 | XSS · SQLi · SSRF · SSTI · IDOR · XXE · CSRF · CORS · LFI · deserialization · OAuth · SAML · request smuggling · prototype pollution · cache poisoning · host-header · clickjacking · websocket · race conditions · business logic · upload · JWT · account takeover · dependency confusion |
+| [`ai-ml`](skills/ai-ml) | 9 | prompt injection · jailbreaks · RAG poisoning · model extraction · agent/tool abuse · **MCP / tool-integration security** · insecure output handling · supply chain · LLM denial-of-wallet |
+| [`cloud`](skills/cloud) | 8 | IMDS→credential theft · S3/bucket exposure · Kubernetes · container escape · IAM privesc · container registries · **GCP** · **Azure / Entra ID** |
 | [`api`](skills/api) | 8 | BOLA/BFLA · GraphQL · gRPC · mass assignment · auth attacks · fuzzing · versioning · NoSQL injection |
 | [`recon`](skills/recon) | 7 | subdomain enum · DNS analysis · content & JS discovery · OSINT · cloud-asset discovery · service enumeration |
-| [`ai-ml`](skills/ai-ml) | 6 | prompt injection · jailbreaks · RAG poisoning · model extraction · agent/tool abuse · LLM denial-of-wallet |
-| [`cloud`](skills/cloud) | 6 | IMDS→credential theft · S3/bucket exposure · Kubernetes · container escape · IAM privesc · container registries |
+| [`defense`](skills/defense) | 6 | detection engineering (Sigma/ATT&CK) · hardening baselines · DFIR triage · threat modeling · **log analysis / hunting** · **purple teaming** |
+| [`code-review`](skills/code-review) | 6 | methodology · dangerous-sink catalog · secrets detection · CI/CD security · **Python** · **Node.js/JS** |
 | [`mobile`](skills/mobile) | 5 | Android & iOS assessment · cert-pinning bypass · deep-link abuse · WebView abuse |
-| [`code-review`](skills/code-review) | 4 | review methodology · dangerous-sink catalog · secrets detection · CI/CD pipeline security |
-| [`defense`](skills/defense) | 4 | detection engineering (Sigma/ATT&CK) · hardening baselines · DFIR triage · threat modeling |
-| [`ad`](skills/ad) | 2 | Kerberoasting / AS-REP · Active Directory & pivoting arsenal |
-| [`network`](skills/network) | 2 | non-web service attacks · pivoting & tunneling |
+| [`ad`](skills/ad) | 4 | Kerberoasting/AS-REP · **ADCS (ESC1–8)** · **ACL/DACL abuse** · AD & pivoting arsenal |
+| [`network`](skills/network) | 3 | service attacks · pivoting & tunneling · **NTLM coercion & relay** |
+| [`privesc`](skills/privesc) | 3 | Linux arsenal · GTFOBins (sudo/SUID/caps) · **Windows token impersonation (Potato)** |
 | [`exploit-dev`](skills/exploit-dev) | 2 | exploit chaining & impact amplification · PoC development |
-| [`privesc`](skills/privesc) | 2 | Linux/Windows arsenal · GTFOBins (sudo/SUID/capabilities) |
 | [`payloads`](skills/payloads) | 2 | WAF/filter bypass · XSS polyglots |
 | [`reporting`](skills/reporting) | 2 | bug-bounty write-up · full pentest report |
 | [`automation`](skills/automation) | 2 | recon pipelines · custom nuclei templates |
