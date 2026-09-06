@@ -24,11 +24,11 @@ jobs:
           grep -q "hard rule — scope" methodology.md || { echo "::error::methodology.md missing scope rule"; exit 1; }
           test -f skills/tradecraft/tradecraft-scope-roe/SKILL.md || { echo "::error::scope-roe skill missing"; exit 1; }
 
-      - name: CATALOG.md is up to date
+      - name: Generated indexes are up to date
         run: |
-          python3 tools/catalog.py catalog >/dev/null
-          if ! git diff --quiet -- CATALOG.md; then
-            echo "::error::CATALOG.md is stale. Run: python3 tools/catalog.py"
-            git --no-pager diff -- CATALOG.md
+          python3 tools/catalog.py >/dev/null
+          if ! git diff --quiet -- CATALOG.md COVERAGE.md; then
+            echo "::error::CATALOG.md / COVERAGE.md are stale. Run: python3 tools/catalog.py"
+            git --no-pager diff -- CATALOG.md COVERAGE.md
             exit 1
           fi
