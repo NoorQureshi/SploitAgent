@@ -5,7 +5,7 @@
 **A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-100-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-103-334155?style=flat-square)
 ![domains](https://img.shields.io/badge/domains-16-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
@@ -20,7 +20,7 @@
 
 ## Overview
 
-SploitAgent is a portable library of **100 security skills** an AI agent loads on demand. It is not a
+SploitAgent is a portable library of **103 security skills** an AI agent loads on demand. It is not a
 scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
 impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
 standard Agent-Skills format.
@@ -99,11 +99,11 @@ engagements/<target>/
 
 ## Skill coverage
 
-100 skills across 16 domains. The complete index is in [CATALOG.md](CATALOG.md).
+103 skills across 16 domains. The complete index is in [CATALOG.md](CATALOG.md).
 
 | Domain | Skills | Coverage |
 |---|:--:|---|
-| [`web`](skills/web) | 31 | XSS, SQLi, SSRF, SSTI, IDOR, XXE, CSRF, CORS, LFI, deserialization, OAuth, SAML, request smuggling, prototype pollution, cache poisoning, host-header, clickjacking, WebSocket, race conditions, business logic, file upload, JWT, account takeover, dependency confusion |
+| [`web`](skills/web) | 32 | XSS, SQLi, SSRF, SSTI, IDOR, XXE, CSRF, CORS, LFI, deserialization, OAuth, SAML, request smuggling, prototype pollution, cache poisoning, host-header, clickjacking, WebSocket, race conditions, business logic, file upload, JWT, account takeover, dependency confusion, client-side signing reversal |
 | [`ai-ml`](skills/ai-ml) | 9 | Prompt injection, jailbreaks, RAG poisoning, model extraction, agent/tool and MCP abuse, insecure output handling, supply chain, unbounded consumption |
 | [`cloud`](skills/cloud) | 8 | IMDS credential theft, object-storage exposure, Kubernetes, container escape, IAM privilege escalation, registries, GCP, Azure / Entra ID |
 | [`api`](skills/api) | 8 | BOLA/BFLA, GraphQL, gRPC, mass assignment, authentication attacks, fuzzing, version drift, NoSQL injection |
@@ -112,11 +112,11 @@ engagements/<target>/
 | [`code-review`](skills/code-review) | 6 | Methodology, dangerous-sink catalog, secrets detection, CI/CD security, Python, Node.js |
 | [`mobile`](skills/mobile) | 5 | Android and iOS assessment, certificate-pinning bypass, deep-link abuse, WebView abuse |
 | [`ad`](skills/ad) | 4 | Kerberoasting / AS-REP, ADCS (ESC1–8), ACL/DACL abuse, pivoting arsenal |
-| [`network`](skills/network) | 3 | Service attacks, pivoting and tunneling, NTLM coercion and relay |
+| [`network`](skills/network) | 4 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing |
 | [`privesc`](skills/privesc) | 3 | Linux arsenal, GTFOBins (sudo/SUID/capabilities), Windows token impersonation |
 | [`exploit-dev`](skills/exploit-dev) | 2 | Exploit chaining and impact amplification, PoC development |
 | [`payloads`](skills/payloads) | 2 | WAF/filter bypass, XSS polyglots |
-| [`reporting`](skills/reporting) | 2 | Bug-bounty write-up, penetration-test report |
+| [`reporting`](skills/reporting) | 3 | Finding triage and validation, bug-bounty write-up, penetration-test report |
 | [`automation`](skills/automation) | 2 | Recon pipelines, custom nuclei templates |
 | [`tradecraft`](skills/tradecraft) | 2 | Scope and rules of engagement, complex multi-stage engagements |
 
