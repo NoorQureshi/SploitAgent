@@ -22,21 +22,35 @@ CI fails if the generated files are out of date, so always rebuild before commit
   skills (`tools-*`, `htb-insane`). Changing these changes the agent's behaviour; do it
   deliberately (`bin/unlock.sh` → edit → `./adapters/build.sh all` → `bin/lock.sh`) and
   explain *why* in your PR.
-- ✍️ **Learning library** — `framework/skills/tech-*`. New exploit techniques land here.
+- ✍️ **Learning library** — every skill tagged `stability: learning`. New techniques land here.
   This is the easiest and most welcome contribution.
 
-## Add a technique skill (most common PR)
+## Add a skill (most common PR)
+
+Skills live under a domain: `framework/skills/<domain>/<slug>/SKILL.md`. Domains:
+`recon web api mobile cloud network ad ai-ml code-review exploit-dev privesc defense
+payloads reporting automation tradecraft`.
 
 ```bash
-cp framework/skills/TECHNIQUE-TEMPLATE.md framework/skills/tech-<slug>/SKILL.md
+cp framework/skills/_templates/technique.md framework/skills/<domain>/<slug>/SKILL.md
+# (arsenal.md / methodology.md templates also available)
+ronin validate      # schema-check your frontmatter
+ronin catalog       # regenerate CATALOG.md + index + discovery symlinks
 ```
-Fill it in:
-- **`description:`** frontmatter with concrete **trigger signals** (service/version, vuln
-  class, tool-output patterns, error strings) — auto-loading is only as good as this line.
-- **when it applies · why it works · method (exact commands) · gotchas · verify success.**
-- Generalize: no box-specific IPs/creds/flags (reference the box only under "Learned on").
 
-Then index it in `framework/skills/README.md` under the learning section, and rebuild.
+Fill it in:
+- **Frontmatter** — required: `name` (domain-prefixed kebab-case, e.g. `web-ssrf`),
+  `description`, `domain`, `type`, `stability` (`learning` for new techniques), `modes`
+  (`ctf`/`bugbounty`/`defense`), `schema_version: 1`. Optional but encouraged:
+  `severity`, `owasp`/`owasp_llm`/`owasp_api`, `mitre`, `cwe`, `tools`.
+- **`description:`** must pack concrete **trigger signals** (service/version, vuln class,
+  tool-output patterns, error strings, ports) — auto-loading is only as good as this line.
+- **Body:** when it applies · why it works · method (exact commands + flag gloss) · gotchas
+  · verify success · references.
+- Generalize: no real IPs/creds/flags (reference a box only under a "Learned on" note).
+
+The catalog and index are **generated** — you don't hand-edit `CATALOG.md` or the README
+index; `ronin catalog` regenerates them from your frontmatter.
 
 ## Add a tool to `ronin install`
 
@@ -48,17 +62,18 @@ binary, the package name per manager where you know it (`apt`/`brew`/`pacman`/`d
 
 Run the same checks CI runs:
 ```bash
-python3 -m py_compile ronin adapters/local/ronin-advisor.py
+python3 -m py_compile ronin adapters/gen_index.py adapters/local/ronin-advisor.py
 bash -n adapters/build.sh bin/lock.sh bin/unlock.sh setup.sh
-./adapters/build.sh all && git diff --quiet -- CLAUDE.md AGENTS.md GEMINI.md && echo "no drift ✓"
+./ronin validate                                                   # skills pass the schema
+./adapters/build.sh all && git diff --quiet -- CLAUDE.md AGENTS.md GEMINI.md CATALOG.md && echo "no drift ✓"
 ./ronin doctor >/dev/null && echo "cli ok ✓"
 ```
 
 Checklist:
-- [ ] Source edited under `framework/` (or `ronin`), generated files rebuilt.
-- [ ] Authorized-lab framing; no real targets/creds/flags.
-- [ ] New technique has strong trigger keywords and is indexed.
-- [ ] CI is green.
+- [ ] Skill under the right `framework/skills/<domain>/`, frontmatter passes `ronin validate`.
+- [ ] Authorized-use framing; correct `modes:`; no real targets/creds/flags.
+- [ ] Strong trigger signals in `description:`; mappings (`owasp`/`mitre`/`cwe`) where they apply.
+- [ ] Generated files rebuilt (`ronin build`) and committed; CI is green.
 
 ## Style
 Match the house voice: terse, teach-the-mechanism, *tool · why over alternatives · exact

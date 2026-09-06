@@ -112,12 +112,12 @@ technique, tell the agent:
 
 > "capture this as a skill"
 
-The **learn role** writes a new skill from `TECHNIQUE-TEMPLATE.md`, tagged with the
+The **learn role** writes a new skill from `_templates/technique.md`, tagged with the
 **trigger signals** that should auto-apply it later, and indexes it:
 
 ```
-framework/skills/tech-<slug>/SKILL.md   # the new technique
-framework/skills/README.md              # index entry (auto-updated)
+framework/skills/<domain>/<slug>/SKILL.md   # the new technique
+CATALOG.md                                 # index entry (auto-regenerated)
 ```
 
 Then rebuild so every tool picks it up:
@@ -131,7 +131,7 @@ Then rebuild so every tool picks it up:
 - **Locked core** — the methodology, the roles, and the reference skills
   (`tools-*`, `htb-insane`). This is **stable**. Don't edit it mid-engagement.
   `bin/lock.sh` can make it read-only so you can't corrupt it by accident.
-- **Learning library** (`framework/skills/tech-*`) — the **only** part that grows
+- **Learning library** (skills tagged `stability: learning`) — the **only** part that grows
   during CTFs.
 
 So the framework gets smarter each box **without ever touching its stable core**.

@@ -14,14 +14,20 @@ For **authorized penetration-testing practice only** — HackTheBox, TryHackMe, 
 Labs, and CPTS/OSCP-style exam environments.
 
 ## The hard rule — scope
-Only ever operate against a target the user has confirmed is authorized (a lab VPN
-range such as `10.129.x.x` / `10.10.x.x`, a declared exam range, or an IP the user
-explicitly names as theirs). Before any scan, request, or exploit:
-- If the target isn't clearly in a lab range, **stop and ask the user to confirm
+Only ever operate inside a **confirmed authorization envelope**, and the envelope type is
+explicit (the `tradecraft-scope-roe` skill governs this in full — load it first):
+- **CTF / lab mode** — a lab VPN range (`10.129.x.x` / `10.10.x.x`), a declared exam range,
+  or an IP the user explicitly names as theirs. Record it in `scope.txt`.
+- **Bug-bounty / authorized-assessment mode** — a program's in-scope assets plus its rules of
+  engagement. Record in-scope AND out-of-scope in `scope.txt` and the RoE (rate limits,
+  prohibited actions, disclosure terms) in `roe.md`.
+
+Before any scan, request, or exploit:
+- If the target isn't clearly inside a confirmed envelope, **stop and ask the user to confirm
   authorization** before doing anything.
-- Never touch production, third-party, or public infrastructure.
-- Record the confirmed target(s) in the box's `scope.txt`; treat it as a hard
-  boundary for every phase.
+- Never touch out-of-scope, third-party, or unauthorized infrastructure. Match every action to
+  an in-scope asset and stay within the RoE.
+- Treat the envelope files as a hard boundary for every phase.
 
 ## Engagement layout (create per box)
 ```
@@ -67,13 +73,15 @@ GTFOBins) in half a sentence the first time. Favor plain-language mechanism over
 7. **Report** → apply the **report** role to compile `notes.md` into `report.md`.
 
 ## Consult and grow the skills library
-- Before exploiting anything, check `framework/skills/` for a matching `tools-*` (tool
-  selection) or `tech-*` (a known chain) skill and apply it.
+Skills live by domain at `framework/skills/<domain>/<slug>/SKILL.md`; browse them all in
+`CATALOG.md`.
+- Before exploiting anything, load the matching skill for the current vuln class / domain
+  (an `arsenal` for tool selection, a `technique` for a known chain) and apply it.
 - On hard/Insane boxes, the `htb-insane` skill governs structure and rabbit-hole
   discipline.
-- When a box teaches a reusable technique, apply the **learn** role to capture it as a
-  new `tech-*` skill (from `framework/skills/TECHNIQUE-TEMPLATE.md`) so future boxes
-  auto-apply it. Index it in `framework/skills/README.md`.
+- When work teaches a reusable technique, apply the **learn** role to capture it as a new
+  `technique` skill (from `framework/skills/_templates/technique.md`) under the right domain
+  so future engagements auto-apply it, then run `ronin validate && ronin catalog`.
 
 ## Locked core vs learning library
 The framework is split so it improves without ever corrupting what makes it reliable:
@@ -81,12 +89,12 @@ The framework is split so it improves without ever corrupting what makes it reli
 - **Locked core (stable — do NOT edit during an engagement):** `methodology.md`, everything
   in `roles/`, and the **reference skills** (`htb-insane`, `tools-recon`, `tools-web`,
   `tools-privesc`, `tools-ad-pivot`). This is the agent's behaviour and curated knowledge.
-- **Learning library (grows as you work):** `framework/skills/tech-*` — trigger-tagged
-  technique chains learned from boxes — plus `TECHNIQUE-TEMPLATE.md`. **This is the only place
-  new knowledge is written while working a box.**
+- **Learning library (grows as you work):** every skill tagged `stability: learning` —
+  trigger-tagged technique chains under each domain — plus the `_templates/`. **This is the only
+  place new knowledge is written while working a box.**
 
 Rule for every phase, and especially the **learn** role: when you discover something new, add
-or update a `tech-*` skill — never modify a locked-core file to record a finding. Deliberate
+or update a `learning` technique skill — never modify a locked-core file to record a finding. Deliberate
 core changes are a separate, explicit action (`bin/unlock.sh` → edit → `adapters/build.sh all`
 → `bin/lock.sh`). `bin/lock.sh` can make the core read-only so this boundary is enforced, not
 just trusted.
@@ -313,10 +321,10 @@ technique just used on an authorized lab box into a reusable **technique skill**
 auto-triggers next time a similar situation arises.
 
 ## Where you may write (locked core vs learning library)
-- You write **only** to the LEARNING library: `framework/skills/tech-<slug>/SKILL.md`
-  and its index line in `framework/skills/README.md`.
+- You write **only** to the LEARNING library: a `stability: learning` skill at
+  `framework/skills/<domain>/<slug>/SKILL.md`. The catalog/index regenerate — don't hand-edit them.
 - You **never** modify the locked core — `framework/methodology.md`, `framework/roles/`,
-  or the reference skills (`htb-insane`, `tools-*`). If a finding seems to belong there,
+  or the locked reference skills (`htb-insane`, the `*-arsenal` skills). If a finding seems to belong there,
   stop and recommend it to the operator as a deliberate core change; don't make it.
 
 ## When to capture
@@ -326,16 +334,17 @@ skill exists, UPDATE it rather than creating a near-duplicate.
 
 ## How to capture
 1. Read the relevant `notes.md` / `chains/` / `exploit-dev/` for the box.
-2. Create `framework/skills/tech-<slug>/SKILL.md` from
-   `framework/skills/TECHNIQUE-TEMPLATE.md`. Slug is short and specific
-   (e.g. `tech-adcs-esc1`, `tech-gopher-redis-rce`).
-3. Write the `description` frontmatter with **trigger keywords** — service/version,
-   vuln class, tool-output patterns, error strings. Auto-triggering is only as good
-   as this line.
+2. Create `framework/skills/<domain>/<slug>/SKILL.md` from
+   `framework/skills/_templates/technique.md`. Slug is domain-prefixed and specific
+   (e.g. `ad-adcs-esc1`, `web-ssrf-gopher-redis-rce`).
+3. Fill the frontmatter: `name`, `domain`, `type: technique`, `stability: learning`,
+   `modes`, `schema_version: 1`, plus mappings (`owasp`/`mitre`/`cwe`/`severity`) where they
+   apply. Write the `description` with **trigger keywords** — service/version, vuln class,
+   tool-output patterns, error strings. Auto-triggering is only as good as this line.
 4. Body: when it applies, why it works, step-by-step method with exact commands/tools,
    gotchas, and how to verify success. General enough to reuse; concrete enough to act.
-5. Add a line under the learning section of `framework/skills/README.md`:
-   `- **tech-<slug>** — <one-line what/when>`.
+5. Run `ronin validate && ronin catalog` — frontmatter is schema-checked and the
+   catalog/index/discovery symlinks regenerate automatically (no manual index edit).
 6. Tell the operator to run `./adapters/build.sh all` so every tool (Claude Code, Codex,
    Gemini, local) picks up the new technique.
 
@@ -350,33 +359,98 @@ skill exists, UPDATE it rather than creating a near-duplicate.
 Report back: the skill path created/updated, its trigger keywords, the
 `framework/skills/README.md` index line you added, and the reminder to rebuild.
 
-## Skills index
-Open the matching file under `framework/skills/<name>/SKILL.md` when its trigger fits the phase.
+## Skills index (by domain)
+Open the matching `framework/skills/<domain>/<slug>/SKILL.md` when its trigger fits the phase. Full table: `CATALOG.md`.
 
-# Skills library — index
+**Reconnaissance** (`recon`)
+- `recon-content-discovery` — Discover hidden paths, endpoints, params, and JS-exposed routes on a web target.
+- `recon-js-analysis` — Mine JavaScript for endpoints, params, secrets, and hidden functionality.
+- `recon-osint` — Passive OSINT to expand attack surface without touching the target: dorks, code/secret leaks, Shodan/Censys, cloud assets, employees.
+- `recon-subdomain-enum` — Enumerate subdomains and live hosts to build the attack surface for a bug-bounty program or external assessment.
+- `tools-recon` — port/host/service discovery tool arsenal for authorized labs.
 
-How skills are used: before acting, consult the matching skill for the current phase.
-Each skill lives in `<slug>/SKILL.md`; its `description:` line is written so it auto-loads
-on the right signals (service, vuln class, error string).
+**Web application** (`web`)
+- `tools-web` — web enumeration + exploitation tool arsenal for authorized labs.
+- `web-auth-jwt` — Attack JWT/session authentication.
+- `web-business-logic` — Find business-logic flaws — abusing intended functionality in unintended ways.
+- `web-cors` — Exploit CORS misconfiguration to read cross-origin responses (data theft).
+- `web-csrf` — Cross-Site Request Forgery — force a victim's browser to perform state-changing actions.
+- `web-deserialization` — Insecure deserialization → RCE via gadget chains.
+- `web-file-upload` — Turn a file upload into RCE or stored XSS/SSRF.
+- `web-idor` — Insecure Direct Object Reference / broken access control on web objects.
+- `web-lfi-path-traversal` — Local File Inclusion / path traversal → read files, sometimes RCE.
+- `web-oauth` — Attack OAuth 2.0 / OIDC / SSO flows for account takeover.
+- `web-open-redirect` — Open redirect — abuse a redirect param to send users to attacker sites, and chain it (OAuth token theft, SSRF filter bypass, phishing).
+- `web-race-conditions` — Exploit race conditions / TOCTOU — fire concurrent requests to break single-use limits.
+- `web-request-smuggling` — HTTP request smuggling (CL.TE/TE.CL/TE.TE/CL.0) — desync front-end and back-end to poison other users' requests.
+- `web-sqli` — Detect and exploit SQL injection (error-based, UNION, boolean/time blind, stacked).
+- `web-ssrf` — Discover and escalate Server-Side Request Forgery.
+- `web-ssrf-gopher-redis-rce` — Turn a server-side request (SSRF) into RCE by speaking the Redis protocol over gopher:// to an internal, unauthenticated Redis — write a cron job, an …
+- `web-ssti` — Server-Side Template Injection → RCE.
+- `web-subdomain-takeover` — Claim a dangling DNS record pointing to a deprovisioned service (subdomain takeover).
+- `web-webauthn-software-authenticator` — Register and authenticate against a WebAuthn/FIDO2 relying party using a self-built SOFTWARE authenticator (no hardware key) when the RP requests atte…
+- `web-xss` — Find and prove Cross-Site Scripting (reflected, stored, DOM).
+- `web-xxe` — XML External Entity injection → file read, SSRF, sometimes RCE.
 
-The library has two halves — **locked** and **learning**:
+**API** (`api`)
+- `api-auth-attacks` — Break API authentication: token handling, key leakage, weak session/JWT, and no-auth endpoints.
+- `api-bola` — Broken Object/Function Level Authorization in REST/JSON APIs (the #1 API risk).
+- `api-fuzzing` — Discover and fuzz API endpoints, methods, params, and versions systematically.
+- `api-graphql` — Attack GraphQL APIs.
+- `api-mass-assignment` — Mass assignment / auto-binding privilege escalation.
+- `api-mongo-agg-facet-bypass` — Bypass a MongoDB aggregation-pipeline stage allowlist by nesting disallowed read stages inside $facet, then $unionWith/$lookup sibling collections to …
 
-## 🔒 Reference skills — LOCKED (stable; don't edit during an engagement)
-Curated methodology + tool arsenals. Part of the stable core; change only deliberately
-(`bin/unlock.sh` → edit → `adapters/build.sh all` → `bin/lock.sh`).
+**Mobile** (`mobile`)
+- `mobile-android-assessment` — Assess an Android app (static + dynamic).
+- `mobile-cert-pinning-bypass` — Bypass TLS certificate pinning so you can proxy a mobile app's traffic.
+- `mobile-deeplink-abuse` — Abuse deep links / custom URL schemes / intents for redirect, token theft, and reaching internal screens.
 
-- **htb-insane** — structure & rabbit-hole discipline for hard/Insane multi-stage boxes.
-- **tools-recon** — port/host/service discovery (nmap, rustscan, DNS/vhost, SMB/RPC, SNMP, NFS).
-- **tools-web** — web enum + exploitation (content/param discovery, nuclei, sqlmap, NoSQLi, LFI/SSTI/SSRF, JWT).
-- **tools-privesc** — Linux + Windows local privesc (linpeas/winPEAS, sudo/SUID/caps, potato family, shell/transfer).
-- **tools-ad-pivot** — Active Directory, pivoting/tunneling, password cracking (BloodHound, netexec, impacket, certipy, ligolo/chisel, hashcat).
+**Cloud & containers** (`cloud`)
+- `cloud-container-escape` — Break out of a container to the host.
+- `cloud-imds-ssrf` — Escalate SSRF to cloud credential theft via the instance metadata service (IMDS).
+- `cloud-kubernetes` — Attack exposed Kubernetes: API server, kubelet, etcd, dashboards, and RBAC.
+- `cloud-s3-exposure` — Find and prove misconfigured cloud object storage (S3/GCS/Azure Blob).
 
-## ✍️ Technique skills — LEARNING (this is where the framework grows)
-Narrow, trigger-tagged chains captured by the **learn** role as boxes teach them. This is the
-**only** part of the framework written to while working a box. Add one:
-`cp TECHNIQUE-TEMPLATE.md tech-<slug>/SKILL.md`, fill it in, add a line below, then
-`./adapters/build.sh all`.
+**Network & services** (`network`)
+- `network-pivoting-tunneling` — Pivot into internal networks from a foothold — tunnels, port-forwards, and proxychains.
+- `network-service-attacks` — Attack non-web network services surfaced by recon.
 
-- **tech-mongo-agg-facet-bypass** — MongoDB aggregation stage-allowlist bypass via `$facet`→`$unionWith` to read sibling collections (trigger: user-supplied `pipeline` param, "use the pipeline parameter" error, Node+Mongo). *[AEGIS]*
-- **tech-webauthn-software-authenticator** — register/log in to a WebAuthn RP with a self-built software authenticator when attestation is `none` (trigger: FIDO2/passkey login, `/webauthn/*/begin|finish`, an invite/enroll token in hand). *[AEGIS]*
-- **tech-gopher-redis-rce** — SSRF → internal unauth Redis → RCE via `gopher://` (cron / SSH key / webshell) (trigger: confirmed SSRF + Redis/6379 reachable).
+**Active Directory** (`ad`)
+- `tools-ad-pivot` — Active Directory, pivoting/tunneling, and password-cracking arsenal for authorized labs.
+
+**AI / LLM** (`ai-ml`)
+- `ai-jailbreak` — Bypass an LLM's safety/guardrails to make it produce restricted output or ignore its policy.
+- `ai-prompt-injection` — Test LLM-backed apps for prompt injection (direct + indirect) and its consequences: data exfil, tool/function abuse, guardrail bypass.
+- `ai-rag-poisoning` — Poison a RAG/knowledge-base pipeline so retrieved content hijacks the model (indirect prompt injection at scale) or exfiltrates data.
+
+**Source-code review** (`code-review`)
+- `code-review-dangerous-sinks` — Grep-ready dangerous function/sink catalog per language for fast code review.
+- `code-review-methodology` — Systematic manual source-code security review — how to find bugs by reading code.
+- `code-review-secrets-detection` — Find leaked secrets in code, git history, and CI.
+
+**Exploit development** (`exploit-dev`)
+- `exploit-chaining` — Combine low/medium findings into one high-impact exploit chain, and amplify demonstrated impact.
+- `exploit-poc-development` — Turn a known/1-day vulnerability or a raw bug into a working, reliable PoC for an authorized target.
+
+**Privilege escalation** (`privesc`)
+- `tools-privesc` — Linux + Windows local privilege-escalation tool arsenal for authorized labs.
+
+**Defense / blue-team** (`defense`)
+- `defense-detection-sigma` — Write portable detections as Sigma rules and map them to MITRE ATT&CK, then convert to your SIEM.
+- `defense-dfir-triage` — First-response DFIR triage: scope an incident, collect volatile evidence, and find attacker activity on Linux/Windows.
+- `defense-hardening-baseline` — Turn offensive findings into concrete hardening — the fix side of each vuln class, plus config baselines.
+
+**Payloads** (`payloads`)
+- `payloads-waf-bypass` — Bypass WAFs/filters blocking your payloads.
+- `payloads-xss-polyglots` — Context-breaking XSS polyglots and per-context payloads that fire across HTML/attribute/JS/ URL sinks in one shot.
+
+**Reporting** (`reporting`)
+- `reporting-bug-bounty-writeup` — Turn a confirmed finding into a triage-friendly bug-bounty report (HackerOne/Bugcrowd) with correct severity and clean evidence.
+
+**Automation** (`automation`)
+- `automation-nuclei-templates` — Write custom nuclei templates to codify a finding into a repeatable, mass-scannable check.
+- `automation-recon-pipeline` — Chain recon tools into a repeatable, resumable pipeline for continuous bug-bounty coverage.
+
+**Tradecraft & discipline** (`tradecraft`)
+- `htb-insane` — Structure and methodology for hard and Insane-rated lab machines (HackTheBox, Pro Labs, CPTS/OSCP-hard).
+- `tradecraft-scope-roe` — Establish and enforce the authorization envelope before any testing — the dual-mode scope rule.

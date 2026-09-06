@@ -136,7 +136,7 @@ entry file:
 ./adapters/build.sh all
 ```
 
-**Locked-core rule:** only the learning library (`framework/skills/tech-*`) is meant
+**Locked-core rule:** only the learning library (skills tagged `stability: learning`) is meant
 to change during engagements. Keep the stable core read-only, and unlock it only when
 you deliberately intend to edit it:
 

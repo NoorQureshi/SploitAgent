@@ -156,6 +156,8 @@ def _sh(path, *args):
     os.execv(p, [p, *args]) if os.access(p, os.X_OK) else sys.exit(f"not executable: {p}")
 
 def cmd_build(a):  _sh("adapters/build.sh", a.target)
+def cmd_validate(a): _sh("adapters/gen_index.py", "validate")
+def cmd_catalog(a):  _sh("adapters/gen_index.py", "all")
 def cmd_lock(a):   _sh("bin/lock.sh")
 def cmd_unlock(a): _sh("bin/unlock.sh")
 
@@ -213,6 +215,9 @@ def main():
     pb = sub.add_parser("build", help="(re)generate the per-tool entry files from framework/")
     pb.add_argument("target", nargs="?", default="all", choices=["all", "claude-code", "codex", "gemini"])
     pb.set_defaults(fn=cmd_build)
+
+    sub.add_parser("validate", help="validate every skill's frontmatter against the schema").set_defaults(fn=cmd_validate)
+    sub.add_parser("catalog", help="regenerate CATALOG.md, the skills index, and discovery symlinks").set_defaults(fn=cmd_catalog)
 
     ps = sub.add_parser("start", help="launch an AI backend in the repo")
     ps.add_argument("backend", choices=["claude", "codex", "gemini"])
