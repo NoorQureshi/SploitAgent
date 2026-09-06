@@ -7,45 +7,45 @@ one, write it (see [CONTRIBUTING.md](CONTRIBUTING.md)), open a PR. Struck-throug
 technique with plenty of public references.
 
 ## Web
-- 🟢 `web-host-header` — host-header injection (password-reset poisoning, routing, cache)
-- 🟢 `web-clickjacking` — framing/UI-redress, and when it's actually impactful
+- ✅ ~~`web-host-header` — host-header injection (password-reset poisoning, routing, cache)~~
+- ✅ ~~`web-clickjacking` — framing/UI-redress, and when it's actually impactful~~
 - 🟢 `web-open-graph-ssrf` — link-preview/oEmbed SSRF variants
-- `web-websocket` — WebSocket hijacking, message tampering, CSWSH
-- `web-rate-limit-bypass` — the many ways rate limits fail (headers, casing, parallelism)
+- ✅ ~~`web-websocket` — WebSocket hijacking, message tampering, CSWSH~~
+- ✅ ~~`web-rate-limit-bypass` — the many ways rate limits fail (headers, casing, parallelism)~~
 - `web-dependency-confusion` — internal package name takeover
 - `web-saml` — SAML assertion/signature-wrapping attacks
 - `web-dom-clobbering` — DOM clobbering to bootstrap XSS
 - `web-postmessage` — cross-window `postMessage` origin flaws
 
 ## API
-- 🟢 `api-versioning` — old/shadow API versions that skipped a fix
+- ✅ ~~`api-versioning` — old/shadow API versions that skipped a fix~~
 - `api-websocket` — realtime/subscription authz
 
 ## Mobile
-- `mobile-ios-assessment` — iOS static + dynamic (Frida, keychain, IPA)
-- 🟢 `mobile-webview` — Android/iOS WebView JS-bridge & file-access abuse
+- ✅ ~~`mobile-ios-assessment` — iOS static + dynamic (Frida, keychain, IPA)~~
+- ✅ ~~`mobile-webview` — Android/iOS WebView JS-bridge & file-access abuse~~
 
 ## Cloud
 - `cloud-gcp` — GCP-specific privesc & misconfig depth
 - `cloud-azure` — Entra ID / Azure RBAC attacks
-- 🟢 `cloud-docker-registry` — exposed/unauth registries and image secrets
+- ✅ ~~`cloud-docker-registry` — exposed/unauth registries and image secrets~~
 
 ## AI / LLM
-- 🟢 `ai-llm-dos` — unbounded-consumption / cost-amplification (LLM10)
+- ✅ ~~`ai-llm-dos` — unbounded-consumption / cost-amplification (LLM10)~~
 - `ai-supply-chain` — poisoned models/datasets/plugins (LLM03/LLM05)
 
 ## Code review
 - `code-review-python`, `code-review-nodejs`, `code-review-java`, `code-review-php`,
   `code-review-go` — per-language sink/idiom guides
 - `code-review-iac` — Terraform/CloudFormation/K8s manifest review
-- 🟢 `code-review-cicd` — pipeline & GitHub Actions security (poisoned workflows, secrets)
+- ✅ ~~`code-review-cicd` — pipeline & GitHub Actions security (poisoned workflows, secrets)~~
 
 ## Recon / OSINT
-- 🟢 `recon-cloud-assets` — finding an org's cloud footprint (buckets, apps, IP ranges)
+- ✅ ~~`recon-cloud-assets` — finding an org's cloud footprint (buckets, apps, IP ranges)~~
 - 🟢 `recon-github-leaks` — deep GitHub/org code-leak hunting
 
 ## Defense (blue team)
-- 🟢 `defense-threat-modeling` — STRIDE/attack-tree modeling for a design
+- ✅ ~~`defense-threat-modeling` — STRIDE/attack-tree modeling for a design~~
 - `defense-log-analysis` — hunting in logs (auth, web, cloud) with concrete queries
 - `defense-purple-team` — turning each offensive skill into a detection test
 

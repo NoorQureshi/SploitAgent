@@ -7,7 +7,7 @@
 Point your agent at Ronin and it works like a seasoned operator — recon to report, offense and defense.
 
 [![CI](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-73-6E56CF)
+![skills](https://img.shields.io/badge/skills-85-6E56CF)
 ![domains](https://img.shields.io/badge/domains-16-6E56CF)
 ![for](https://img.shields.io/badge/for-pentest_·_bug_bounty_·_defense-0b7285)
 ![use](https://img.shields.io/badge/use-authorized_only-red)
@@ -42,13 +42,13 @@ agent: loads recon-subdomain-enum → recon-content-discovery → api-fuzzing �
 
 ## What's inside
 
-**73 skills across 16 domains.** Full, always-current list in **[CATALOG.md](CATALOG.md)**.
+**85 skills across 16 domains.** Full, always-current list in **[CATALOG.md](CATALOG.md)**.
 
 | Domain | | Domain | | Domain | |
 |---|--:|---|--:|---|--:|
-| `web` | 25 | `cloud` | 5 | `code-review` | 3 |
-| `api` | 7 | `ai-ml` | 5 | `mobile` | 3 |
-| `recon` | 6 | `defense` | 3 | `network` · `exploit-dev` · `privesc` · `payloads` · `automation` · `reporting` · `tradecraft` · `ad` | 2 / 2 / 2 / 2 / 2 / 2 / 2 / 2 |
+| `web` | 29 | `cloud` | 6 | `code-review` | 4 |
+| `api` | 8 | `ai-ml` | 6 | `mobile` | 5 |
+| `recon` | 7 | `defense` | 4 | `ad` · `network` · `exploit-dev` · `privesc` · `payloads` · `automation` · `reporting` · `tradecraft` | 2 each |
 
 Every skill carries OWASP / OWASP-LLM / OWASP-API / MITRE ATT&CK / CWE tags, so coverage is
 measurable and gaps are visible — see **[COVERAGE.md](COVERAGE.md)**.
