@@ -5,8 +5,8 @@
 **A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-106-334155?style=flat-square)
-![domains](https://img.shields.io/badge/domains-16-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-113-334155?style=flat-square)
+![domains](https://img.shields.io/badge/domains-18-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
 
@@ -20,7 +20,7 @@
 
 ## Overview
 
-SploitAgent is a portable library of **106 security skills** an AI agent loads on demand. It is not a
+SploitAgent is a portable library of **113 security skills** an AI agent loads on demand. It is not a
 scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
 impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
 standard Agent-Skills format.
@@ -99,7 +99,7 @@ engagements/<target>/
 
 ## Skill coverage
 
-106 skills across 16 domains. The complete index is in [CATALOG.md](CATALOG.md).
+113 skills across 18 domains. The complete index is in [CATALOG.md](CATALOG.md).
 
 | Domain | Skills | Coverage |
 |---|:--:|---|
@@ -115,10 +115,12 @@ engagements/<target>/
 | [`network`](skills/network) | 5 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing, perimeter appliance and VPN offensive |
 | [`privesc`](skills/privesc) | 3 | Linux arsenal, GTFOBins (sudo/SUID/capabilities), Windows token impersonation |
 | [`exploit-dev`](skills/exploit-dev) | 2 | Exploit chaining and impact amplification, PoC development |
+| [`reverse-engineering`](skills/reverse-engineering) | 3 | Native binary triage, deobfuscation (packed/JS/WASM/JSVMP), firmware extraction and analysis |
 | [`payloads`](skills/payloads) | 2 | WAF/filter bypass, XSS polyglots |
 | [`reporting`](skills/reporting) | 3 | Finding triage and validation, bug-bounty write-up, penetration-test report |
 | [`automation`](skills/automation) | 2 | Recon pipelines, custom nuclei templates |
 | [`tradecraft`](skills/tradecraft) | 2 | Scope and rules of engagement, complex multi-stage engagements |
+| [`social-eng`](skills/social-eng) | 4 | Authorized human-factor testing: methodology, phishing, vishing/pretexting, physical assessment |
 
 ## Skill format
 

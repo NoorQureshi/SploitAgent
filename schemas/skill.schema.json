@@ -38,12 +38,14 @@
         "ai-ml",
         "code-review",
         "exploit-dev",
+        "reverse-engineering",
         "privesc",
         "defense",
         "payloads",
         "reporting",
         "automation",
-        "tradecraft"
+        "tradecraft",
+        "social-eng"
       ]
     },
     "type": {

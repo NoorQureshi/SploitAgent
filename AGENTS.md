@@ -5,7 +5,7 @@ security skills. This file tells you how to use it. Keep it short in your head: 
 pick the skill that matches the task → follow it → prove impact → report.**
 
 ## What you have here
-- `skills/<domain>/<slug>/SKILL.md` — 106 trigger-loaded skills across 16 domains (offensive **and**
+- `skills/<domain>/<slug>/SKILL.md` — 113 trigger-loaded skills across 18 domains (offensive **and**
   defensive). Each has a `description:` that says *when* to load it, and a body that teaches the mechanism.
 - `CATALOG.md` — the full, browsable index of every skill.
 - `COVERAGE.md` — how skills map to OWASP / MITRE ATT&CK / CWE.
@@ -27,11 +27,16 @@ Work one lead at a time; load the next skill as new leads appear.
 1. **Set up** — create the engagement workspace (below); write `scope.txt` (+ `roe.md` for bug bounty).
 2. **Recon** — `recon-*` (subdomains, DNS, content/JS discovery, OSINT, services).
 3. **Attack surface** — route by domain: web → `web-*`, APIs → `api-*`, cloud → `cloud-*`,
-   mobile → `mobile-*`, Active Directory → `ad-*`, LLM/AI targets → `ai-ml/*`, source → `code-review-*`.
+   mobile → `mobile-*`, Active Directory → `ad-*`, perimeter/appliances → `network-*`,
+   LLM/AI targets → `ai-ml/*`, source → `code-review-*`, binaries/firmware → `reverse-engineering-*`.
 4. **Foothold** — drive a weakness to proven impact; combine small bugs with `exploit-chaining`.
 5. **Escalate & pivot** — `privesc-*`, `ad-*`, `network-pivoting-tunneling`.
-6. **Report** — `reporting-bug-bounty-writeup` or `reporting-pentest-report`.
+6. **Report** — validate first with `reporting-triage-validation`, then `reporting-bug-bounty-writeup`
+   or `reporting-pentest-report`.
 7. **Defend** (if asked) — `defense-*` (detection, hardening, DFIR, threat modeling).
+
+**Human-factor work** (`social-eng-*`) is a separate, **pentest-only** track with stricter
+authorization — load `social-eng-methodology` first and never run it on a bug-bounty target.
 
 ## Per-engagement structure (create this, keep it tidy)
 For each target, work inside its own folder so notes and loot never mix or leak:
