@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="430" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14">
+  <rect width="820" height="430" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <rect width="820" height="34" rx="10" fill="#161b22"/>
+  <rect y="24" width="820" height="10" fill="#161b22"/>
+  <circle cx="20" cy="17" r="6" fill="#ff5f56"/><circle cx="40" cy="17" r="6" fill="#ffbd2e"/><circle cx="60" cy="17" r="6" fill="#27c93f"/>
+  <text x="410" y="22" text-anchor="middle" fill="#8b949e">sploitagent — zsh</text>
+  <text xml:space="preserve" x="18" y="64" fill="#c9d1d9">
+    <tspan x="18" dy="0"><tspan fill="#39d353">➜</tspan>  <tspan fill="#58a6ff">~</tspan>  git clone https://github.com/NoorQureshi/SploitAgent &amp;&amp; cd SploitAgent</tspan>
+    <tspan x="18" dy="26"><tspan fill="#39d353">➜</tspan>  <tspan fill="#58a6ff">SploitAgent</tspan>  claude</tspan>
+    <tspan x="18" dy="34" fill="#8b949e">┌─ Claude Code · SploitAgent loaded (100 skills · 16 domains) ────────────┐</tspan>
+    <tspan x="18" dy="30" fill="#e6edf3">❯ Authorized bug-bounty target: acme.com (wildcard in scope).</tspan>
+    <tspan x="18" dy="22" fill="#e6edf3">  Recon it, then hunt the API.</tspan>
+    <tspan x="18" dy="30"><tspan fill="#a371f7">◆ skill</tspan>  tradecraft-scope-roe   <tspan fill="#8b949e">scope confirmed → scope.txt</tspan></tspan>
+    <tspan x="18" dy="24"><tspan fill="#a371f7">◆ skill</tspan>  recon-subdomain-enum   <tspan fill="#8b949e">47 live hosts</tspan></tspan>
+    <tspan x="18" dy="24"><tspan fill="#a371f7">◆ skill</tspan>  recon-content-discovery <tspan fill="#8b949e">1,204 endpoints · api.acme.com flagged</tspan></tspan>
+    <tspan x="18" dy="24"><tspan fill="#a371f7">◆ skill</tspan>  api-fuzzing → api-bola</tspan>
+    <tspan x="18" dy="26" fill="#e6edf3">  <tspan fill="#f85149">● HIGH</tspan>  BOLA on /api/v1/users/{id} — cross-tenant read confirmed</tspan>
+    <tspan x="18" dy="24"><tspan fill="#a371f7">◆ skill</tspan>  reporting-bug-bounty-writeup <tspan fill="#8b949e">draft ready · CVSS 8.1</tspan></tspan>
+    <tspan x="18" dy="30"><tspan fill="#39d353">➜</tspan>  <tspan fill="#58a6ff">SploitAgent</tspan>  <tspan fill="#e6edf3">▉</tspan></tspan>
+  </text>
+</svg>
