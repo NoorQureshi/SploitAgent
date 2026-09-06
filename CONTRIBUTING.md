@@ -1,15 +1,15 @@
-# Contributing to Ronin
+# Contributing to HackAgent
 
-**Ronin is built by the people who use it — welcome aboard.** If you've got a technique you reach
+**HackAgent is built by the people who use it — welcome aboard.** If you've got a technique you reach
 for on real (authorized) engagements, a cleaner way to explain a bug, or a defensive counterpart
-to an attack, it belongs here. One good skill helps every operator who loads Ronin, and your name
+to an attack, it belongs here. One good skill helps every operator who loads HackAgent, and your name
 is on it in the git history.
 
 You don't need to be famous or write ten of them. **One solid skill is a great contribution.**
 Not sure what to write? The **[Roadmap](ROADMAP.md)** lists what we want — the 🟢 items are
 designed to be good first contributions.
 
-> Ronin is for **authorized** security work only — pentest engagements, bug-bounty programs you're
+> HackAgent is for **authorized** security work only — pentest engagements, bug-bounty programs you're
 > in scope for, and defensive assessment of systems you own. Every contribution must keep that
 > framing: no real targets, no live credentials/secrets, nothing aimed at systems you aren't
 > authorized to test.

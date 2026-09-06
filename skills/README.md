@@ -1,6 +1,6 @@
 # Skills library
 
-The heart of Ronin: trigger-tagged skills an AI agent auto-loads for the task at hand. Each skill
+The heart of HackAgent: trigger-tagged skills an AI agent auto-loads for the task at hand. Each skill
 is `skills/<domain>/<slug>/SKILL.md` with schema-validated frontmatter; its `description:` line is
 written so it loads on the right signals (service, vuln class, error string, port).
 

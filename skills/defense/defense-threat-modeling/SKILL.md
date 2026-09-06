@@ -31,7 +31,7 @@ ad-hoc review misses, and produces a prioritized list of controls and tests.
      **I**nformation disclosure (confidentiality), **D**enial of service (availability),
      **E**levation of privilege (authz).
 3. **Attack trees** for high-value targets: root = attacker goal, branches = paths; map each to a
-   real technique (link the relevant Ronin offensive skill).
+   real technique (link the relevant HackAgent offensive skill).
 4. **Rate & prioritize**: likelihood × impact (or DREAD); focus on trust-boundary crossings.
 5. **Define controls & tests**: for each accepted threat, a mitigation and a test/detection
    (→ `defense-hardening-baseline`, `defense-detection-sigma`).

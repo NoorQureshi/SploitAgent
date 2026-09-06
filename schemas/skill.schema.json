@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/noorqureshi/ronin/schemas/skill.schema.json",
-  "title": "Ronin Skill frontmatter",
-  "description": "Contract for the YAML frontmatter of every framework/skills/<domain>/<slug>/SKILL.md. Validated by `ronin validate` and CI.",
+  "$id": "https://github.com/noorqureshi/HackAgent/schemas/skill.schema.json",
+  "title": "HackAgent Skill frontmatter",
+  "description": "Contract for the YAML frontmatter of every skills/<domain>/<slug>/SKILL.md. Validated by `tools/catalog.py` and CI.",
   "type": "object",
   "required": [
     "name",

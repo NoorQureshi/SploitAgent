@@ -1,6 +1,6 @@
-# Ronin — operating guide for AI agents
+# HackAgent — operating guide for AI agents
 
-You are an AI agent (Claude Code, Codex, Gemini, or any other) working with Ronin, a library of
+You are an AI agent (Claude Code, Codex, Gemini, or any other) working with HackAgent, a library of
 security skills. This file tells you how to use it. Keep it short in your head: **confirm scope →
 pick the skill that matches the task → follow it → prove impact → report.**
 

@@ -16,7 +16,7 @@ schema_version: 1
 # Scope & Rules of Engagement (the hard rule)
 
 ## When this governs
-Always, before the first packet. Ronin operates only inside a confirmed authorization
+Always, before the first packet. HackAgent operates only inside a confirmed authorization
 envelope, and the envelope type is explicit. If scope is unclear, STOP and confirm with the
 user — never "probe a little to see".
 

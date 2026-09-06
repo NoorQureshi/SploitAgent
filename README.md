@@ -1,12 +1,12 @@
 <div align="center">
 
-# 🥷 Ronin
+# 🥷 HackAgent
 
 **The open library of hacking skills for AI agents.**
 
-Point any AI agent at Ronin and it works like a seasoned operator — recon to report, offense and defense.
+Point any AI agent at HackAgent and it works like a seasoned operator — recon to report, offense and defense.
 
-[![CI](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml)
+[![CI](https://github.com/NoorQureshi/HackAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/HackAgent/actions/workflows/ci.yml)
 ![skills](https://img.shields.io/badge/skills-100-6E56CF)
 ![domains](https://img.shields.io/badge/domains-16-6E56CF)
 ![for](https://img.shields.io/badge/for-pentest_·_bug_bounty_·_defense-0b7285)
@@ -19,7 +19,7 @@ Point any AI agent at Ronin and it works like a seasoned operator — recon to r
 
 ---
 
-Ronin is **not a tool — it's a library.** It captures *how the work is actually done* — find the
+HackAgent is **not a tool — it's a library.** It captures *how the work is actually done* — find the
 bug, prove the impact, escalate, pivot, report, and defend — as small, trigger-tagged **skills** in
 the standard Agent-Skills format. Drop it in front of any AI agent and the right skill loads itself
 for the task at hand.
@@ -39,14 +39,14 @@ The skills are plain Markdown, so any agent can use them. Pick your setup:
 **Option A — open Claude Code inside the repo (zero setup).** It reads `CLAUDE.md`, which teaches it
 how to use the skills and to confirm scope first.
 ```bash
-git clone https://github.com/NoorQureshi/ronin && cd ronin
+git clone https://github.com/NoorQureshi/HackAgent && cd HackAgent
 claude          # then: "Here's my authorized target … start recon"
 ```
 
 **Option B — make the skills available in every project.** Symlink them into your user scope once:
 ```bash
-git clone https://github.com/NoorQureshi/ronin
-ln -s "$PWD/ronin/skills" ~/.claude/skills/ronin
+git clone https://github.com/NoorQureshi/HackAgent
+ln -s "$PWD/HackAgent/skills" ~/.claude/skills/hackagent
 ```
 </details>
 
@@ -56,7 +56,7 @@ ln -s "$PWD/ronin/skills" ~/.claude/skills/ronin
 Clone the repo and open your agent in it — it reads **`AGENTS.md`** (the same operating guide),
 or point the agent at the `skills/` folder. For a one-off, paste a single `SKILL.md` into context.
 ```bash
-git clone https://github.com/NoorQureshi/ronin && cd ronin
+git clone https://github.com/NoorQureshi/HackAgent && cd HackAgent
 ```
 </details>
 
@@ -69,12 +69,12 @@ operating guide), or load the specific `SKILL.md` for the task. That's it.
 
 > [!WARNING]
 > **Authorized use only.** The first skill every engagement loads is **`tradecraft-scope-roe`** —
-> Ronin acts only inside a confirmed envelope: a signed pentest scope, a bug-bounty program you're
+> HackAgent acts only inside a confirmed envelope: a signed pentest scope, a bug-bounty program you're
 > in scope for, or systems you own. Never point it at anything else.
 
 ## How an agent works a target
 
-Ronin gives the agent a repeatable loop and a place to keep its work — so runs are consistent
+HackAgent gives the agent a repeatable loop and a place to keep its work — so runs are consistent
 whether it's Claude Code, Codex, or an open-source agent. (Full method: [`methodology.md`](methodology.md);
 agent guide: [`AGENTS.md`](AGENTS.md).)
 
@@ -140,7 +140,7 @@ cwe: [CWE-918]
 
 That shape is the house style — useful to a human *and* an agent.
 
-## Why Ronin
+## Why HackAgent
 
 - **Knowledge outlasts tools.** A library of skills encodes *how to think* — the mechanism, the
   exact command, the gotcha. Agents change every quarter; the tradecraft doesn't.
@@ -150,7 +150,7 @@ That shape is the house style — useful to a human *and* an agent.
 
 ## Contribute
 
-Ronin gets sharper with every skill added — and adding one is a single Markdown file, no code:
+HackAgent gets sharper with every skill added — and adding one is a single Markdown file, no code:
 
 ```bash
 cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md

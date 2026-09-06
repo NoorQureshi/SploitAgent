@@ -1,6 +1,6 @@
 # Roadmap & help wanted
 
-Ronin grows through contributions. This is the running list of skills we'd love to add — pick
+HackAgent grows through contributions. This is the running list of skills we'd love to add — pick
 one, write it (see [CONTRIBUTING.md](CONTRIBUTING.md)), open a PR. Struck-through items are done.
 
 **New to contributing?** Anything tagged 🟢 is a great first skill — a well-understood, single
