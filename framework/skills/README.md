@@ -1,27 +1,40 @@
-# Skills library — index
+# Skills library
 
-How skills are used: before acting, consult the matching skill for the current phase.
-Each skill lives in `<slug>/SKILL.md`; its `description:` line is written so it auto-loads
-on the right signals (service, vuln class, error string).
+The heart of Ronin: trigger-tagged skills an AI operator auto-loads for the task at hand.
+Each skill is `framework/skills/<domain>/<slug>/SKILL.md` with schema-validated frontmatter;
+its `description:` line is written so it loads on the right signals (service, vuln class,
+error string, port).
 
-The library has two halves — **locked** and **learning**:
+**Browse the full table in [`CATALOG.md`](../../CATALOG.md)** (generated). This file is the map.
 
-## 🔒 Reference skills — LOCKED (stable; don't edit during an engagement)
-Curated methodology + tool arsenals. Part of the stable core; change only deliberately
-(`bin/unlock.sh` → edit → `adapters/build.sh all` → `bin/lock.sh`).
+## How skills are organized — domain × type × stability
 
-- **htb-insane** — structure & rabbit-hole discipline for hard/Insane multi-stage boxes.
-- **tools-recon** — port/host/service discovery (nmap, rustscan, DNS/vhost, SMB/RPC, SNMP, NFS).
-- **tools-web** — web enum + exploitation (content/param discovery, nuclei, sqlmap, NoSQLi, LFI/SSTI/SSRF, JWT).
-- **tools-privesc** — Linux + Windows local privesc (linpeas/winPEAS, sudo/SUID/caps, potato family, shell/transfer).
-- **tools-ad-pivot** — Active Directory, pivoting/tunneling, password cracking (BloodHound, netexec, impacket, certipy, ligolo/chisel, hashcat).
+- **Domain** (the folder) — where the skill lives: `recon web api mobile cloud network ad
+  ai-ml code-review exploit-dev privesc defense payloads reporting automation tradecraft`.
+- **Type** (`type:`) — `arsenal` (tool selection), `technique` (a concrete chain),
+  `methodology` (how to operate), `checklist`, `reference` (payloads/tables).
+- **Stability** (`stability:`) — the locked/learning split that keeps Ronin reliable:
+  - 🔒 **locked** — curated core (arsenals, methodology, reference). Change deliberately
+    (`bin/unlock.sh` → edit → `ronin build` → `bin/lock.sh`).
+  - ✍️ **learning** — the open contribution surface. New techniques land here.
+- **Modes** (`modes:`) — the authorization envelope a skill is valid in: `ctf`, `bugbounty`,
+  `defense`. The scope rule in `tradecraft-scope-roe` gates these.
 
-## ✍️ Technique skills — LEARNING (this is where the framework grows)
-Narrow, trigger-tagged chains captured by the **learn** role as boxes teach them. This is the
-**only** part of the framework written to while working a box. Add one:
-`cp TECHNIQUE-TEMPLATE.md tech-<slug>/SKILL.md`, fill it in, add a line below, then
-`./adapters/build.sh all`.
+## Mappings power the coverage view
 
-- **tech-mongo-agg-facet-bypass** — MongoDB aggregation stage-allowlist bypass via `$facet`→`$unionWith` to read sibling collections (trigger: user-supplied `pipeline` param, "use the pipeline parameter" error, Node+Mongo). *[AEGIS]*
-- **tech-webauthn-software-authenticator** — register/log in to a WebAuthn RP with a self-built software authenticator when attestation is `none` (trigger: FIDO2/passkey login, `/webauthn/*/begin|finish`, an invite/enroll token in hand). *[AEGIS]*
-- **tech-gopher-redis-rce** — SSRF → internal unauth Redis → RCE via `gopher://` (cron / SSH key / webshell) (trigger: confirmed SSRF + Redis/6379 reachable).
+Skills carry optional `owasp` / `owasp_llm` / `owasp_api` / `mitre` / `cwe` / `severity`
+fields. `ronin catalog` rolls these into `data/skills_index.json` so coverage (OWASP Top 10,
+LLM Top 10, ATT&CK) can be measured and gaps found.
+
+## Add a skill (most welcome PR)
+
+```bash
+cp framework/skills/_templates/technique.md framework/skills/<domain>/<slug>/SKILL.md
+# fill in frontmatter (strong trigger signals!) + body, then:
+ronin validate      # schema check
+ronin catalog       # regenerate CATALOG.md + index + discovery symlinks
+```
+
+House voice: terse, teach-the-mechanism — *when it applies · why it works · method (exact
+commands + flag gloss) · gotchas · verify success*. No real targets/creds/flags. See each
+domain's `README.md` for what belongs there, and `CONTRIBUTING.md` for the checklist.

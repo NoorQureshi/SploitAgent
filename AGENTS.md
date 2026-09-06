@@ -14,14 +14,20 @@ For **authorized penetration-testing practice only** — HackTheBox, TryHackMe, 
 Labs, and CPTS/OSCP-style exam environments.
 
 ## The hard rule — scope
-Only ever operate against a target the user has confirmed is authorized (a lab VPN
-range such as `10.129.x.x` / `10.10.x.x`, a declared exam range, or an IP the user
-explicitly names as theirs). Before any scan, request, or exploit:
-- If the target isn't clearly in a lab range, **stop and ask the user to confirm
+Only ever operate inside a **confirmed authorization envelope**, and the envelope type is
+explicit (the `tradecraft-scope-roe` skill governs this in full — load it first):
+- **CTF / lab mode** — a lab VPN range (`10.129.x.x` / `10.10.x.x`), a declared exam range,
+  or an IP the user explicitly names as theirs. Record it in `scope.txt`.
+- **Bug-bounty / authorized-assessment mode** — a program's in-scope assets plus its rules of
+  engagement. Record in-scope AND out-of-scope in `scope.txt` and the RoE (rate limits,
+  prohibited actions, disclosure terms) in `roe.md`.
+
+Before any scan, request, or exploit:
+- If the target isn't clearly inside a confirmed envelope, **stop and ask the user to confirm
   authorization** before doing anything.
-- Never touch production, third-party, or public infrastructure.
-- Record the confirmed target(s) in the box's `scope.txt`; treat it as a hard
-  boundary for every phase.
+- Never touch out-of-scope, third-party, or unauthorized infrastructure. Match every action to
+  an in-scope asset and stay within the RoE.
+- Treat the envelope files as a hard boundary for every phase.
 
 ## Engagement layout (create per box)
 ```
@@ -67,13 +73,15 @@ GTFOBins) in half a sentence the first time. Favor plain-language mechanism over
 7. **Report** → apply the **report** role to compile `notes.md` into `report.md`.
 
 ## Consult and grow the skills library
-- Before exploiting anything, check `framework/skills/` for a matching `tools-*` (tool
-  selection) or `tech-*` (a known chain) skill and apply it.
+Skills live by domain at `framework/skills/<domain>/<slug>/SKILL.md`; browse them all in
+`CATALOG.md`.
+- Before exploiting anything, load the matching skill for the current vuln class / domain
+  (an `arsenal` for tool selection, a `technique` for a known chain) and apply it.
 - On hard/Insane boxes, the `htb-insane` skill governs structure and rabbit-hole
   discipline.
-- When a box teaches a reusable technique, apply the **learn** role to capture it as a
-  new `tech-*` skill (from `framework/skills/TECHNIQUE-TEMPLATE.md`) so future boxes
-  auto-apply it. Index it in `framework/skills/README.md`.
+- When work teaches a reusable technique, apply the **learn** role to capture it as a new
+  `technique` skill (from `framework/skills/_templates/technique.md`) under the right domain
+  so future engagements auto-apply it, then run `ronin validate && ronin catalog`.
 
 ## Locked core vs learning library
 The framework is split so it improves without ever corrupting what makes it reliable:
@@ -81,12 +89,12 @@ The framework is split so it improves without ever corrupting what makes it reli
 - **Locked core (stable — do NOT edit during an engagement):** `methodology.md`, everything
   in `roles/`, and the **reference skills** (`htb-insane`, `tools-recon`, `tools-web`,
   `tools-privesc`, `tools-ad-pivot`). This is the agent's behaviour and curated knowledge.
-- **Learning library (grows as you work):** `framework/skills/tech-*` — trigger-tagged
-  technique chains learned from boxes — plus `TECHNIQUE-TEMPLATE.md`. **This is the only place
-  new knowledge is written while working a box.**
+- **Learning library (grows as you work):** every skill tagged `stability: learning` —
+  trigger-tagged technique chains under each domain — plus the `_templates/`. **This is the only
+  place new knowledge is written while working a box.**
 
 Rule for every phase, and especially the **learn** role: when you discover something new, add
-or update a `tech-*` skill — never modify a locked-core file to record a finding. Deliberate
+or update a `learning` technique skill — never modify a locked-core file to record a finding. Deliberate
 core changes are a separate, explicit action (`bin/unlock.sh` → edit → `adapters/build.sh all`
 → `bin/lock.sh`). `bin/lock.sh` can make the core read-only so this boundary is enforced, not
 just trusted.
@@ -313,10 +321,10 @@ technique just used on an authorized lab box into a reusable **technique skill**
 auto-triggers next time a similar situation arises.
 
 ## Where you may write (locked core vs learning library)
-- You write **only** to the LEARNING library: `framework/skills/tech-<slug>/SKILL.md`
-  and its index line in `framework/skills/README.md`.
+- You write **only** to the LEARNING library: a `stability: learning` skill at
+  `framework/skills/<domain>/<slug>/SKILL.md`. The catalog/index regenerate — don't hand-edit them.
 - You **never** modify the locked core — `framework/methodology.md`, `framework/roles/`,
-  or the reference skills (`htb-insane`, `tools-*`). If a finding seems to belong there,
+  or the locked reference skills (`htb-insane`, the `*-arsenal` skills). If a finding seems to belong there,
   stop and recommend it to the operator as a deliberate core change; don't make it.
 
 ## When to capture
@@ -326,16 +334,17 @@ skill exists, UPDATE it rather than creating a near-duplicate.
 
 ## How to capture
 1. Read the relevant `notes.md` / `chains/` / `exploit-dev/` for the box.
-2. Create `framework/skills/tech-<slug>/SKILL.md` from
-   `framework/skills/TECHNIQUE-TEMPLATE.md`. Slug is short and specific
-   (e.g. `tech-adcs-esc1`, `tech-gopher-redis-rce`).
-3. Write the `description` frontmatter with **trigger keywords** — service/version,
-   vuln class, tool-output patterns, error strings. Auto-triggering is only as good
-   as this line.
+2. Create `framework/skills/<domain>/<slug>/SKILL.md` from
+   `framework/skills/_templates/technique.md`. Slug is domain-prefixed and specific
+   (e.g. `ad-adcs-esc1`, `web-ssrf-gopher-redis-rce`).
+3. Fill the frontmatter: `name`, `domain`, `type: technique`, `stability: learning`,
+   `modes`, `schema_version: 1`, plus mappings (`owasp`/`mitre`/`cwe`/`severity`) where they
+   apply. Write the `description` with **trigger keywords** — service/version, vuln class,
+   tool-output patterns, error strings. Auto-triggering is only as good as this line.
 4. Body: when it applies, why it works, step-by-step method with exact commands/tools,
    gotchas, and how to verify success. General enough to reuse; concrete enough to act.
-5. Add a line under the learning section of `framework/skills/README.md`:
-   `- **tech-<slug>** — <one-line what/when>`.
+5. Run `ronin validate && ronin catalog` — frontmatter is schema-checked and the
+   catalog/index/discovery symlinks regenerate automatically (no manual index edit).
 6. Tell the operator to run `./adapters/build.sh all` so every tool (Claude Code, Codex,
    Gemini, local) picks up the new technique.
 

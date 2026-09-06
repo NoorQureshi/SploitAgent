@@ -1,13 +1,13 @@
 <h1 align="center">🥷 Ronin</h1>
 
 <p align="center">
-  <b>A masterless AI operator for authorized CTF / HTB labs — bring your own blade.</b><br>
+  <b>A masterless AI operator for authorized CTF labs & bug-bounty — bring your own blade.</b><br>
   One engagement brain. Plug it into <b>Claude Code</b>, <b>Codex</b>, <b>Gemini CLI</b>, or a <b>local model</b>.
 </p>
 
 <p align="center">
   <a href="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/NoorQureshi/ronin/actions/workflows/ci.yml/badge.svg"></a>
-  <img alt="scope" src="https://img.shields.io/badge/scope-authorized_labs_only-red">
+  <img alt="scope" src="https://img.shields.io/badge/scope-authorized_use_only-red">
   <img alt="tools" src="https://img.shields.io/badge/works_with-Claude_Code_·_Codex_·_Gemini_·_local-6E56CF">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
 </p>
@@ -20,10 +20,11 @@ playbooks, and a growing library of tool arsenals and learned exploit techniques
 **one tool-neutral core** and compiled into a native entry file for **whatever AI CLI you
 already run**.
 
-> ⚠️ **Authorized lab practice only.** Scope discipline is the first instruction in every
-> component: Ronin refuses to act until a target is confirmed inside an authorized lab range
-> (HackTheBox / TryHackMe / Pro Labs / CPTS-OSCP). Don't point it at anything you don't own
-> or aren't explicitly authorized to test.
+> ⚠️ **Authorized use only.** Scope discipline is the first instruction in every component:
+> Ronin refuses to act until the target is inside a confirmed **authorization envelope** — a
+> lab range (HackTheBox / TryHackMe / Pro Labs / CPTS-OSCP) **or** a bug-bounty program you are
+> in-scope for, within its rules of engagement. Never point it at anything you don't own or
+> aren't explicitly authorized to test.
 
 ## How it works
 
@@ -37,14 +38,20 @@ setup.sh                      ← one-time bootstrap (build + put `ronin` on PAT
 framework/                    ← SINGLE SOURCE OF TRUTH
   methodology.md                the loop · scope rule · note-taking standard          🔒 locked
   roles/                        phase playbooks: recon·web·ad·privesc·report·learn     🔒 locked
-  skills/
-    tools-* · htb-insane        tool arsenals + hard-box discipline                    🔒 locked
-    tech-*                      learned exploit chains — the part that GROWS           ✍️  learning
+  skills/<domain>/<slug>/       skills by domain — recon web api mobile cloud network
+                                ad ai-ml code-review exploit-dev privesc defense
+                                payloads reporting automation tradecraft
+    SKILL.md                      arsenal · technique · methodology · checklist · reference
+                                  each tagged stability (🔒 locked / ✍️ learning) + modes
+  _templates/                   per-type skill templates
+schemas/skill.schema.json       the validated skill contract (versioned)
 adapters/
-  build.sh                      generator → writes the per-tool entry files below
+  build.sh                      generator → per-tool entry files + catalog + symlinks
+  gen_index.py                  skills indexer: validate · catalog · discovery symlinks
   local/ronin-advisor.py        offline advisor for Ollama / LM Studio
 bin/lock.sh · bin/unlock.sh     freeze / deliberately edit the locked core
 docs/                           SETUP · HOW-TO-CTF · LOCAL-MODELS
+CATALOG.md                      generated, browsable index of every skill
 CLAUDE.md   .claude/          ← Claude Code   (full multi-agent: subagents + Skill tool)
 AGENTS.md                     ← Codex, Cursor, Zed & other AGENTS.md-aware tools
 GEMINI.md                     ← Gemini CLI
@@ -134,54 +141,66 @@ web tools
 
 ## It sharpens itself
 
-When a box teaches a reusable trick, the **learn** role captures it as a new
-`framework/skills/tech-<slug>/SKILL.md` (from `TECHNIQUE-TEMPLATE.md`) and indexes it — so the
-next box with the same signal auto-applies it. Techniques already forged from real boxes:
+When a box or program teaches a reusable trick, the **learn** role captures it as a new
+`learning` skill under the right domain (`framework/skills/<domain>/<slug>/SKILL.md`); the
+catalog regenerates — so the next target with the same signal auto-applies it. A few of the
+techniques already forged from real work:
 
-- **`tech-mongo-agg-facet-bypass`** — MongoDB aggregation stage-allowlist bypass via
+- **`web-ssrf-gopher-redis-rce`** — SSRF → internal Redis → RCE via `gopher://`.
+- **`api-mongo-agg-facet-bypass`** — MongoDB aggregation stage-allowlist bypass via
   `$facet` → `$unionWith` to read sibling collections.
-- **`tech-webauthn-software-authenticator`** — register/log in to a WebAuthn RP with a
+- **`web-webauthn-software-authenticator`** — register/log in to a WebAuthn RP with a
   self-built software authenticator when attestation is `none`.
-- **`tech-gopher-redis-rce`** — SSRF → internal Redis → RCE via `gopher://`.
 
-Edit anything under `framework/`, then re-run `./adapters/build.sh all` to refresh every tool.
+Edit anything under `framework/`, then re-run `ronin build` (or `./adapters/build.sh all`) to
+refresh every tool. Browse the whole library in **[`CATALOG.md`](CATALOG.md)**.
 
 ## Locked core vs learning library
 
 The framework improves without ever corrupting what makes it reliable — it's split in two:
 
-- 🔒 **Locked core** — `methodology.md`, `roles/`, and the reference skills (`tools-*`,
-  `htb-insane`). Stable behaviour + curated knowledge. Run **`bin/lock.sh`** to make it
-  read-only so engagements can't touch it; **`bin/unlock.sh`** when you want to edit it on purpose.
-- ✍️ **Learning library** — `framework/skills/tech-*`. The **only** place new knowledge is
-  written while working a box. The `learn` role appends here; the core stays frozen.
+- 🔒 **Locked core** — `methodology.md`, `roles/`, and the locked reference skills (the
+  `*-arsenal` tool skills, `htb-insane`, the scope rule). Stable behaviour + curated
+  knowledge. Run **`bin/lock.sh`** to make it read-only so engagements can't touch it;
+  **`bin/unlock.sh`** when you want to edit it on purpose.
+- ✍️ **Learning library** — every skill tagged `stability: learning`. The **only** place new
+  knowledge is written while working a target. The `learn` role appends here; the core stays frozen.
 
 ## Docs
 - **[docs/SETUP.md](docs/SETUP.md)** — install & configure each tool (Claude Code, Codex, Gemini, local).
 - **[docs/HOW-TO-CTF.md](docs/HOW-TO-CTF.md)** — the box workflow end to end.
 - **[docs/LOCAL-MODELS.md](docs/LOCAL-MODELS.md)** — run fully offline on Ollama / LM Studio.
 
-## What's in the arsenal
+## What's in the library
 
-- **Reference skills (by phase):** `htb-insane` (hard-box discipline), `tools-recon`,
-  `tools-web`, `tools-privesc`, `tools-ad-pivot` — each entry: *tool · why over alternatives ·
-  exact command with flag gloss · gotcha*.
-- **Technique skills:** trigger-tagged `tech-*` exploit chains that auto-load on the right signal.
+Skills are organized by **domain** (`recon web api mobile cloud network ad ai-ml code-review
+exploit-dev privesc defense payloads reporting automation tradecraft`) and tagged by **type**
+and **mode**. Browse the generated **[`CATALOG.md`](CATALOG.md)**.
+
+- **Arsenals** (`type: arsenal`) — tool selection per domain: *tool · why over alternatives ·
+  exact command with flag gloss · gotcha* (`tools-recon`, `tools-web`, `tools-privesc`,
+  `tools-ad-pivot`).
+- **Techniques** (`type: technique`) — trigger-tagged exploit chains that auto-load on the
+  right signal, across web/api/cloud/ai-ml and more.
+- **Methodology / reporting / defense** — how to operate (dual-mode scope/RoE, hard-box
+  discipline), how to report (bug-bounty/CVSS), and the blue-team half (detection engineering).
 
 ## Roadmap
 
 - **Runtime engine (optional):** a provider-agnostic runner that drives the orchestration loop
   itself and calls Claude Code / Codex / Gemini / API / **local LLM** as interchangeable
   backends — real multi-agent + scope enforcement + audit logging for *every* tool.
-- More `tools-*` arsenals and community `tech-*` techniques (PRs welcome).
+- More domain skills across offensive + defensive (PRs welcome) — coverage matrix (OWASP/LLM/MITRE) next.
 
 ## Contributing
 
-PRs welcome — especially new `tech-*` techniques from boxes you've rooted. The quickest
-contribution: `cp framework/skills/TECHNIQUE-TEMPLATE.md framework/skills/tech-<slug>/SKILL.md`,
-fill it in, index it, `ronin build all`, open a PR. Full guide + PR checklist in
-**[CONTRIBUTING.md](CONTRIBUTING.md)**. CI checks build-drift, the scope rule, and CLI health
-on every push. Keep everything authorized-lab-framed.
+PRs welcome — especially new techniques from targets you've worked (CTF or bug bounty) and
+defensive skills. The quickest contribution:
+`cp framework/skills/_templates/technique.md framework/skills/<domain>/<slug>/SKILL.md`,
+fill it in, then `ronin validate && ronin catalog && ronin build`, and open a PR. Full guide +
+PR checklist in **[CONTRIBUTING.md](CONTRIBUTING.md)**. CI validates every skill against the
+schema and checks build-drift, the scope rule, and CLI health on every push. Keep everything
+authorized-use-framed.
 
 ## License
 
