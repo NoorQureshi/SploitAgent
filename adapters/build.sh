@@ -30,11 +30,12 @@ build_claude() {
     printf 'Subagents run in isolation and cannot spawn other subagents. On independent targets (multiple\n'
     printf 'vhosts/hosts), run subagents in **parallel**.\n'
   } > CLAUDE.md
-  # Claude Code discovers agents/skills under .claude/ — symlink to the single source (no duplication).
+  # Claude Code discovers agents under .claude/agents (symlink to roles) and skills under
+  # .claude/skills — flat discovery symlinks generated from the nested domain taxonomy.
   mkdir -p .claude
   ln -sfn "../$FW/roles"  .claude/agents
-  ln -sfn "../$FW/skills" .claude/skills
-  echo "  built CLAUDE.md + .claude/{agents,skills} -> $FW/{roles,skills}"
+  python3 adapters/gen_index.py symlinks >/dev/null
+  echo "  built CLAUDE.md + .claude/agents -> $FW/roles + .claude/skills discovery symlinks"
 }
 
 build_single() { # $1 = output file, $2 = tool title
@@ -51,9 +52,9 @@ build_single() { # $1 = output file, $2 = tool title
       printf '\n### Role: %s\n' "$r"
       strip_fm "$f"
     done
-    printf '\n## Skills index\n'
-    printf 'Open the matching file under `%s/skills/<name>/SKILL.md` when its trigger fits the phase.\n\n' "$FW"
-    strip_fm "$FW/skills/README.md"
+    printf '\n## Skills index (by domain)\n'
+    printf 'Open the matching `%s/skills/<domain>/<slug>/SKILL.md` when its trigger fits the phase. Full table: `CATALOG.md`.\n\n' "$FW"
+    python3 adapters/gen_index.py index
   } > "$1"
   echo "  built $1"
 }
@@ -69,4 +70,6 @@ case "$TARGET" in
     ;;
   *) echo "usage: adapters/build.sh [claude-code|codex|gemini|all]" >&2; exit 2 ;;
 esac
+# Always regenerate the browsable catalog + machine index from the taxonomy.
+python3 adapters/gen_index.py catalog >/dev/null
 echo "done ($TARGET)."

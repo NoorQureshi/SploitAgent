@@ -21,9 +21,9 @@ jobs:
 
       - name: No drift — generated files are committed & up to date
         run: |
-          if ! git diff --quiet -- CLAUDE.md AGENTS.md GEMINI.md; then
-            echo "::error::Generated entry files are stale. Run ./adapters/build.sh all and commit."
-            git --no-pager diff -- CLAUDE.md AGENTS.md GEMINI.md
+          if ! git diff --quiet -- CLAUDE.md AGENTS.md GEMINI.md CATALOG.md; then
+            echo "::error::Generated files are stale. Run ./adapters/build.sh all and commit."
+            git --no-pager diff -- CLAUDE.md AGENTS.md GEMINI.md CATALOG.md
             exit 1
           fi
 
@@ -33,14 +33,12 @@ jobs:
             grep -q "hard rule — scope" "$f" || { echo "::error::$f missing scope rule"; exit 1; }
           done
 
-      - name: Skills have valid frontmatter
-        run: |
-          for s in framework/skills/*/SKILL.md; do
-            grep -q "^name:" "$s" || { echo "::error::$s missing name:"; exit 1; }
-          done
+      - name: Skills pass schema validation
+        run: python3 adapters/gen_index.py validate
 
       - name: ronin CLI smoke test
         run: |
           ./ronin --help >/dev/null
           ./ronin doctor >/dev/null
+          ./ronin validate >/dev/null
           echo "ronin CLI OK"

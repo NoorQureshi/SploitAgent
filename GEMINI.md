@@ -350,33 +350,51 @@ skill exists, UPDATE it rather than creating a near-duplicate.
 Report back: the skill path created/updated, its trigger keywords, the
 `framework/skills/README.md` index line you added, and the reminder to rebuild.
 
-## Skills index
-Open the matching file under `framework/skills/<name>/SKILL.md` when its trigger fits the phase.
+## Skills index (by domain)
+Open the matching `framework/skills/<domain>/<slug>/SKILL.md` when its trigger fits the phase. Full table: `CATALOG.md`.
 
-# Skills library — index
+**Reconnaissance** (`recon`)
+- `recon-content-discovery` — Discover hidden paths, endpoints, params, and JS-exposed routes on a web target.
+- `recon-subdomain-enum` — Enumerate subdomains and live hosts to build the attack surface for a bug-bounty program or external assessment.
+- `tools-recon` — port/host/service discovery tool arsenal for authorized labs.
 
-How skills are used: before acting, consult the matching skill for the current phase.
-Each skill lives in `<slug>/SKILL.md`; its `description:` line is written so it auto-loads
-on the right signals (service, vuln class, error string).
+**Web application** (`web`)
+- `tools-web` — web enumeration + exploitation tool arsenal for authorized labs.
+- `web-auth-jwt` — Attack JWT/session authentication.
+- `web-file-upload` — Turn a file upload into RCE or stored XSS/SSRF.
+- `web-idor` — Insecure Direct Object Reference / broken access control on web objects.
+- `web-sqli` — Detect and exploit SQL injection (error-based, UNION, boolean/time blind, stacked).
+- `web-ssrf` — Discover and escalate Server-Side Request Forgery.
+- `web-ssrf-gopher-redis-rce` — Turn a server-side request (SSRF) into RCE by speaking the Redis protocol over gopher:// to an internal, unauthenticated Redis — write a cron job, an …
+- `web-ssti` — Server-Side Template Injection → RCE.
+- `web-webauthn-software-authenticator` — Register and authenticate against a WebAuthn/FIDO2 relying party using a self-built SOFTWARE authenticator (no hardware key) when the RP requests atte…
+- `web-xss` — Find and prove Cross-Site Scripting (reflected, stored, DOM).
 
-The library has two halves — **locked** and **learning**:
+**API** (`api`)
+- `api-bola` — Broken Object/Function Level Authorization in REST/JSON APIs (the #1 API risk).
+- `api-graphql` — Attack GraphQL APIs.
+- `api-mass-assignment` — Mass assignment / auto-binding privilege escalation.
+- `api-mongo-agg-facet-bypass` — Bypass a MongoDB aggregation-pipeline stage allowlist by nesting disallowed read stages inside $facet, then $unionWith/$lookup sibling collections to …
 
-## 🔒 Reference skills — LOCKED (stable; don't edit during an engagement)
-Curated methodology + tool arsenals. Part of the stable core; change only deliberately
-(`bin/unlock.sh` → edit → `adapters/build.sh all` → `bin/lock.sh`).
+**Cloud & containers** (`cloud`)
+- `cloud-imds-ssrf` — Escalate SSRF to cloud credential theft via the instance metadata service (IMDS).
+- `cloud-s3-exposure` — Find and prove misconfigured cloud object storage (S3/GCS/Azure Blob).
 
-- **htb-insane** — structure & rabbit-hole discipline for hard/Insane multi-stage boxes.
-- **tools-recon** — port/host/service discovery (nmap, rustscan, DNS/vhost, SMB/RPC, SNMP, NFS).
-- **tools-web** — web enum + exploitation (content/param discovery, nuclei, sqlmap, NoSQLi, LFI/SSTI/SSRF, JWT).
-- **tools-privesc** — Linux + Windows local privesc (linpeas/winPEAS, sudo/SUID/caps, potato family, shell/transfer).
-- **tools-ad-pivot** — Active Directory, pivoting/tunneling, password cracking (BloodHound, netexec, impacket, certipy, ligolo/chisel, hashcat).
+**Active Directory** (`ad`)
+- `tools-ad-pivot` — Active Directory, pivoting/tunneling, and password-cracking arsenal for authorized labs.
 
-## ✍️ Technique skills — LEARNING (this is where the framework grows)
-Narrow, trigger-tagged chains captured by the **learn** role as boxes teach them. This is the
-**only** part of the framework written to while working a box. Add one:
-`cp TECHNIQUE-TEMPLATE.md tech-<slug>/SKILL.md`, fill it in, add a line below, then
-`./adapters/build.sh all`.
+**AI / LLM** (`ai-ml`)
+- `ai-prompt-injection` — Test LLM-backed apps for prompt injection (direct + indirect) and its consequences: data exfil, tool/function abuse, guardrail bypass.
 
-- **tech-mongo-agg-facet-bypass** — MongoDB aggregation stage-allowlist bypass via `$facet`→`$unionWith` to read sibling collections (trigger: user-supplied `pipeline` param, "use the pipeline parameter" error, Node+Mongo). *[AEGIS]*
-- **tech-webauthn-software-authenticator** — register/log in to a WebAuthn RP with a self-built software authenticator when attestation is `none` (trigger: FIDO2/passkey login, `/webauthn/*/begin|finish`, an invite/enroll token in hand). *[AEGIS]*
-- **tech-gopher-redis-rce** — SSRF → internal unauth Redis → RCE via `gopher://` (cron / SSH key / webshell) (trigger: confirmed SSRF + Redis/6379 reachable).
+**Privilege escalation** (`privesc`)
+- `tools-privesc` — Linux + Windows local privilege-escalation tool arsenal for authorized labs.
+
+**Defense / blue-team** (`defense`)
+- `defense-detection-sigma` — Write portable detections as Sigma rules and map them to MITRE ATT&CK, then convert to your SIEM.
+
+**Reporting** (`reporting`)
+- `reporting-bug-bounty-writeup` — Turn a confirmed finding into a triage-friendly bug-bounty report (HackerOne/Bugcrowd) with correct severity and clean evidence.
+
+**Tradecraft & discipline** (`tradecraft`)
+- `htb-insane` — Structure and methodology for hard and Insane-rated lab machines (HackTheBox, Pro Labs, CPTS/OSCP-hard).
+- `tradecraft-scope-roe` — Establish and enforce the authorization envelope before any testing — the dual-mode scope rule.
