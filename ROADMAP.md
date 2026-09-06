@@ -12,8 +12,8 @@ technique with plenty of public references.
 - 🟢 `web-open-graph-ssrf` — link-preview/oEmbed SSRF variants
 - ✅ ~~`web-websocket` — WebSocket hijacking, message tampering, CSWSH~~
 - ✅ ~~`web-rate-limit-bypass` — the many ways rate limits fail (headers, casing, parallelism)~~
-- `web-dependency-confusion` — internal package name takeover
-- `web-saml` — SAML assertion/signature-wrapping attacks
+- ✅ ~~`web-dependency-confusion` — internal package name takeover~~
+- ✅ ~~`web-saml` — SAML assertion/signature-wrapping attacks~~
 - `web-dom-clobbering` — DOM clobbering to bootstrap XSS
 - `web-postmessage` — cross-window `postMessage` origin flaws
 
@@ -26,16 +26,16 @@ technique with plenty of public references.
 - ✅ ~~`mobile-webview` — Android/iOS WebView JS-bridge & file-access abuse~~
 
 ## Cloud
-- `cloud-gcp` — GCP-specific privesc & misconfig depth
-- `cloud-azure` — Entra ID / Azure RBAC attacks
+- ✅ ~~`cloud-gcp` — GCP-specific privesc & misconfig depth~~
+- ✅ ~~`cloud-azure` — Entra ID / Azure RBAC attacks~~
 - ✅ ~~`cloud-docker-registry` — exposed/unauth registries and image secrets~~
 
 ## AI / LLM
 - ✅ ~~`ai-llm-dos` — unbounded-consumption / cost-amplification (LLM10)~~
-- `ai-supply-chain` — poisoned models/datasets/plugins (LLM03/LLM05)
+- ✅ ~~`ai-supply-chain` — poisoned models/datasets/plugins (LLM03/LLM05)~~
 
 ## Code review
-- `code-review-python`, `code-review-nodejs`, `code-review-java`, `code-review-php`,
+- ✅ ~~`code-review-python`, `code-review-nodejs`, `code-review-java`, `code-review-php`,~~
   `code-review-go` — per-language sink/idiom guides
 - `code-review-iac` — Terraform/CloudFormation/K8s manifest review
 - ✅ ~~`code-review-cicd` — pipeline & GitHub Actions security (poisoned workflows, secrets)~~
@@ -46,8 +46,8 @@ technique with plenty of public references.
 
 ## Defense (blue team)
 - ✅ ~~`defense-threat-modeling` — STRIDE/attack-tree modeling for a design~~
-- `defense-log-analysis` — hunting in logs (auth, web, cloud) with concrete queries
-- `defense-purple-team` — turning each offensive skill into a detection test
+- ✅ ~~`defense-log-analysis` — hunting in logs (auth, web, cloud) with concrete queries~~
+- ✅ ~~`defense-purple-team` — turning each offensive skill into a detection test~~
 
 ## Exploit dev / RE
 - `exploit-binary-basics` — intro binary exploitation workflow (pwntools)
