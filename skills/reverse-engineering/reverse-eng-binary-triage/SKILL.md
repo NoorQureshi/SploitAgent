@@ -23,7 +23,7 @@ schema_version: 1
 You have a compiled binary — a thick desktop/mobile client, a network service, a setuid helper
 during `privesc`, or a firmware component (`reverse-eng-firmware`) — and no source. You need to
 understand what it does, where attacker input reaches, and whether that path is exploitable, before
-committing to `exploit-dev-poc-development`.
+committing to `exploit-poc-development`.
 
 ## Why it works
 A binary carries its logic in the code and its intent in the strings, imports, and symbols.

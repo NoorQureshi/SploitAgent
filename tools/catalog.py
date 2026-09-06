@@ -15,7 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKILLS = os.path.join(ROOT, "skills")
 
 REQUIRED = ["name", "description", "domain", "type", "stability", "modes", "schema_version"]
-DOMAINS = ["recon","web","api","mobile","cloud","network","ad","ai-ml","code-review",
+DOMAINS = ["recon","web","api","mobile","cloud","network","wireless","ad","ai-ml","code-review",
            "exploit-dev","reverse-engineering","privesc","defense","payloads","reporting",
            "automation","tradecraft","social-eng"]
 TYPES = ["technique","arsenal","methodology","checklist","reference"]
@@ -23,7 +23,8 @@ STABILITY = ["locked","learning"]
 MODES = ["pentest","bugbounty","defense"]
 DOMAIN_TITLES = {
     "recon":"Reconnaissance","web":"Web application","api":"API","mobile":"Mobile",
-    "cloud":"Cloud & containers","network":"Network & services","ad":"Active Directory",
+    "cloud":"Cloud & containers","network":"Network & services","wireless":"Wireless / Wi-Fi",
+    "ad":"Active Directory",
     "ai-ml":"AI / LLM","code-review":"Source-code review","exploit-dev":"Exploit development",
     "reverse-engineering":"Reverse engineering",
     "privesc":"Privilege escalation","defense":"Defense / blue-team","payloads":"Payloads",

@@ -5,8 +5,8 @@
 **A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-116-334155?style=flat-square)
-![domains](https://img.shields.io/badge/domains-18-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-121-334155?style=flat-square)
+![domains](https://img.shields.io/badge/domains-19-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
 
@@ -20,7 +20,7 @@
 
 ## Overview
 
-SploitAgent is a portable library of **116 security skills** an AI agent loads on demand. It is not a
+SploitAgent is a portable library of **121 security skills** an AI agent loads on demand. It is not a
 scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
 impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
 standard Agent-Skills format.
@@ -101,11 +101,11 @@ engagements/<target>/
 
 ## Skill coverage
 
-116 skills across 18 domains. The complete index is in [CATALOG.md](CATALOG.md).
+121 skills across 19 domains. The complete index is in [CATALOG.md](CATALOG.md).
 
 | Domain | Skills | Coverage |
 |---|:--:|---|
-| [`web`](skills/web) | 33 | XSS, SQLi, SSRF, SSTI, IDOR, XXE, CSRF, CORS, LFI, deserialization, OAuth, SAML, request smuggling, prototype pollution, cache poisoning, host-header, clickjacking, WebSocket, race conditions, business logic, file upload, JWT, account takeover, dependency confusion, client-side signing reversal, authenticated session handling |
+| [`web`](skills/web) | 36 | XSS, SQLi, SSRF, SSTI, IDOR, XXE, CSRF, CORS, LFI, deserialization, OAuth, SAML, request smuggling, prototype pollution, cache poisoning, host-header, clickjacking, WebSocket, race conditions, business logic, file upload, JWT, account takeover, dependency confusion, client-side signing reversal, authenticated session handling, Python sandbox escape, Cypher injection, JDBC/connection-string RCE |
 | [`ai-ml`](skills/ai-ml) | 9 | Prompt injection, jailbreaks, RAG poisoning, model extraction, agent/tool and MCP abuse, insecure output handling, supply chain, unbounded consumption |
 | [`cloud`](skills/cloud) | 9 | IMDS credential theft, object-storage exposure, Kubernetes, container escape, exposed Docker/daemon API abuse, IAM privilege escalation, registries, GCP, Azure / Entra ID |
 | [`api`](skills/api) | 8 | BOLA/BFLA, GraphQL, gRPC, mass assignment, authentication attacks, fuzzing, version drift, NoSQL injection |
@@ -115,6 +115,7 @@ engagements/<target>/
 | [`mobile`](skills/mobile) | 5 | Android and iOS assessment, certificate-pinning bypass, deep-link abuse, WebView abuse |
 | [`ad`](skills/ad) | 5 | Kerberoasting / AS-REP, ADCS (ESC1–8), ACL/DACL abuse, Kerberos delegation abuse (RBCD / S4U / coercion→relay), pivoting arsenal |
 | [`network`](skills/network) | 6 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing, perimeter appliance and VPN offensive, hash and credential cracking |
+| [`wireless`](skills/wireless) | 2 | WPA2-PSK handshake/PMKID capture and cracking, evil-twin / rogue-AP enterprise (PEAP-MSCHAPv2) credential harvesting |
 | [`privesc`](skills/privesc) | 3 | Linux arsenal, GTFOBins (sudo/SUID/capabilities), Windows token impersonation |
 | [`exploit-dev`](skills/exploit-dev) | 2 | Exploit chaining and impact amplification, PoC development |
 | [`reverse-engineering`](skills/reverse-engineering) | 3 | Native binary triage, deobfuscation (packed/JS/WASM/JSVMP), firmware extraction and analysis |
