@@ -22,7 +22,7 @@ A's network. You need to route your tools through A.
 
 ## Why it works
 The foothold sits inside the trust boundary. A tunnel turns that host into a router/proxy so
-your attack box can reach internal services as if it were on that subnet.
+your attack host can reach internal services as if it were on that subnet.
 
 ## Method
 1. **Discover internal reach** from the foothold: `ip a`/`ipconfig`, `arp -a`, and scan the
@@ -43,7 +43,7 @@ your attack box can reach internal services as if it were on that subnet.
 - Note every route/tunnel in `state.md` so you can tear them down and reproduce for the report.
 
 ## Verify success
-Your attack box reaches an internal-only host/service through the tunnel (a scan or login that
+Your attack host reaches an internal-only host/service through the tunnel (a scan or login that
 was impossible directly now works).
 
 ## References

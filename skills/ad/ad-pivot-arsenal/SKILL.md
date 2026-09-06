@@ -29,7 +29,7 @@ to `/etc/hosts` (`IP dc01.corp.local corp.local`) early — Kerberos needs the F
 - **enum4linux-ng** — modern rewrite of enum4linux; broad SMB/RPC/LDAP dump in one shot.
   `enum4linux-ng -A dc01.corp.local` — `-A` = all simple enumeration (users, groups, shares, pol).
 - **ldapsearch (anonymous)** — raw LDAP when null bind is allowed; great for descriptions
-  (passwords hide there). `ldapsearch -x -H ldap://dc01.corp.local -b "DC=corp,DC=htb"`
+  (passwords hide there). `ldapsearch -x -H ldap://dc01.corp.local -b "DC=corp,DC=local"`
   `-x` = simple auth, `-b` = search base. Add `"(objectClass=user)" sAMAccountName description`.
   Gotcha: no base? grab it from `ldapsearch -x -H ldap://IP -s base namingContexts`.
 - **rpcclient** — interactive MS-RPC; enumerate users/groups when SMB null is open.
@@ -57,7 +57,7 @@ to `/etc/hosts` (`IP dc01.corp.local corp.local`) early — Kerberos needs the F
 - **Password spraying (nxc)** — one password across many users beats many passwords per user.
   `nxc smb dc01.corp.local -u users.txt -p 'Winter2025!' --continue-on-success`
   Gotcha: check `--pass-pol` first — spraying past the lockout threshold locks accounts and burns
-  the box. Space attempts under the observation window; one password per round.
+  the domain. Space attempts under the observation window; one password per round.
 - **responder (LLMNR/NBT-NS/mDNS poison)** — answer broadcast name lookups, capture NetNTLMv2.
   `responder -I tun0` — passively grabs hashes when a host mistypes a share. Crack with hashcat **5600**.
   Authorized lab only. Gotcha: disable SMB/HTTP servers in `Responder.conf` if you plan to relay instead.
@@ -144,6 +144,6 @@ to `/etc/hosts` (`IP dc01.corp.local corp.local`) early — Kerberos needs the F
 - **proxychains + nmap** — always `-sT -Pn` (TCP connect, skip host discovery); SYN/UDP/ping don't
   traverse SOCKS and will hang or lie.
 - **Account lockout** — read `--pass-pol` before spraying; stay under the threshold and respect the
-  observation window, or you lock the accounts and poison the box for everyone.
+  observation window, or you lock the accounts and disrupt the domain for everyone.
 - **BloodHound first** — it shows the shortest path to Domain Admin; collect and analyze before
   blindly roasting/relaying. The graph usually names your next move.

@@ -2,7 +2,7 @@
 name: tools-recon
 description: >
   One line: port/host/service discovery tool arsenal for authorized engagements. Pack in trigger
-  signals so it auto-loads: "new box", "enumerate", "scan", an in-scope target,
+  signals so it auto-loads: "new target", "enumerate", "scan", an in-scope target,
   open-port lists needing deeper enum. Authorized, in-scope targets only.
 domain: recon
 type: arsenal
@@ -123,7 +123,7 @@ log the reasoning in `notes.md`.
 
 ## Gotchas / discipline
 - Hardened hosts frequently show ports `filtered` and drop ICMP → always add `-Pn`, and `--min-rate 5000` so scans don't stall.
-- Always run a full `-p-` scan AFTER the top-1000 — the flag on the box (WinRM 5985, a dev port, a hidden vhost) is usually up high.
+- Always run a full `-p-` scan AFTER the top-1000 — the interesting service (WinRM 5985, a dev port, a hidden vhost) is often up in the high ports.
 - UDP is slow and unreliable — scan `--top-ports 100` only, don't wait on a full `-sU -p-`.
 - Re-scan discovered ports with `-sC -sV`; a fast sweep tells you *what's open*, not *what it is*.
 - Golden rule: **when stuck, enumerate more** — a missed service, subdomain, or share is far more likely than a missing exploit.

@@ -74,5 +74,5 @@ catches a shell (cron) or the SSH key logs in. `CONFIG GET dir` echoing your pat
 the write target was accepted.
 
 ## Learned on
-Reference technique (common SSRF-chain pattern). Capture the box-specific SSRF sink and the
-exact writable path in that box's `notes.md` when you use it.
+Reference technique (common SSRF-chain pattern). Capture the target-specific SSRF sink and the
+exact writable path in your engagement notes when you use it.

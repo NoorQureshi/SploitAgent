@@ -1,6 +1,6 @@
 # Tradecraft & discipline — `tradecraft` skills
 
-How to operate: the dual-mode scope/RoE rule, complex, multi-stage-box discipline, rabbit-hole tracking, and multi-host method.
+How to operate: the dual-mode scope/RoE rule, complex multi-stage engagement discipline, rabbit-hole tracking, and multi-host method.
 
 Add a skill here:
 ```bash

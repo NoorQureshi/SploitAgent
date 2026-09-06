@@ -34,7 +34,7 @@ kernel or token exploits.
 - **PATH hijack** — a root SUID/cron program calling a binary by bare name (no absolute path). Prepend a writable dir to `PATH` and drop a malicious binary with that name. `export PATH=/tmp:$PATH` after `echo '/bin/bash' > /tmp/<name>; chmod +x`.
 - **NFS no_root_squash** — an export mounted with `no_root_squash` lets a remote root write root-owned SUID files. `showmount -e <target>`, mount it, place a SUID root shell as your own root, execute on target.
 - **docker / lxd group** — membership = root-equivalent. Docker: `docker run -v /:/mnt -it alpine chroot /mnt sh`. lxd: import an alpine image, launch a privileged container mounting `/`.
-- **Kernel exploits** — last resort. `uname -r` → `searchsploit linux kernel <ver>` (e.g. DirtyPipe, DirtyCow, PwnKit/pkexec). Gotcha: can panic/crash the box — only after `sudo -l`, SUID, and caps are exhausted; verify the exact kernel/distro match before running.
+- **Kernel exploits** — last resort. `uname -r` → `searchsploit linux kernel <ver>` (e.g. DirtyPipe, DirtyCow, PwnKit/pkexec). Gotcha: can panic/crash the host — only after `sudo -l`, SUID, and caps are exhausted; verify the exact kernel/distro match before running.
 
 ## Windows
 
@@ -64,6 +64,6 @@ kernel or token exploits.
 
 ## Discipline
 - Always run `sudo -l` and check SUID + capabilities (Linux) / `whoami /priv` (Windows) before anything heavier.
-- Kernel exploits are the **last resort** — they can crash/panic the box; exhaust config-based vectors first and match the exact kernel/build.
+- Kernel exploits are the **last resort** — they can crash/panic the host; exhaust config-based vectors first and match the exact kernel/build.
 - On Windows, enabled privileges in `whoami /priv` usually beat hunting for CVEs — check them first.
 - Cross-reference every sudo/SUID/capability finding against **GTFOBins**; every Windows service/registry finding against PowerUp output.
