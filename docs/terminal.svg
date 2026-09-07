@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 586" width="880" height="586" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" role="img" aria-label="A Claude Code terminal session using SploitAgent: describe a task in plain English and the matching skill loads to work an authorized target from recon to report.">
+<style>text{font-size:15px;white-space:pre}</style>
+<rect x="0.5" y="0.5" width="879" height="585" rx="12" fill="#0d1117" stroke="#2a3038"/>
+<rect x="0" y="0" width="880" height="42" fill="#161b22"/>
+<rect x="0" y="30" width="880" height="12" fill="#161b22"/>
+<circle cx="24" cy="21" r="6" fill="#ff5f56"/><circle cx="46" cy="21" r="6" fill="#ffbd2e"/><circle cx="68" cy="21" r="6" fill="#27c93f"/>
+<text x="440" y="26" text-anchor="middle" fill="#9aa4b2" font-size="13">SploitAgent · Claude Code</text>
+<text x="26" y="70"><tspan fill="#39d353" xml:space="preserve">$ </tspan><tspan fill="#e6edf3" xml:space="preserve">git clone github.com/NoorQureshi/SploitAgent &amp;&amp; cd SploitAgent</tspan></text>
+<text x="26" y="95"><tspan fill="#39d353" xml:space="preserve">$ </tspan><tspan fill="#e6edf3" xml:space="preserve">claude</tspan></text>
+<text x="26" y="145"><tspan fill="#6b7688" xml:space="preserve"># just describe the task in plain English — the matching skill loads itself</tspan></text>
+<text x="26" y="170"><tspan fill="#58a6ff" xml:space="preserve">› </tspan><tspan fill="#e6edf3" xml:space="preserve">recon acme.tld, then test the API for broken access control (authorized)</tspan></text>
+<text x="26" y="220"><tspan fill="#a371f7" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">tradecraft-scope-roe          </tspan><tspan fill="#9aa4b2" xml:space="preserve">scope confirmed · *.acme.tld</tspan></text>
+<text x="26" y="245"><tspan fill="#a371f7" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">recon-subdomain-enum          </tspan><tspan fill="#9aa4b2" xml:space="preserve">37 hosts · api.acme.tld live</tspan></text>
+<text x="26" y="270"><tspan fill="#a371f7" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">recon-techstack-fingerprinting</tspan><tspan fill="#9aa4b2" xml:space="preserve">Django + DRF · Cloudflare WAF</tspan></text>
+<text x="26" y="295"><tspan fill="#a371f7" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">api-bola                      </tspan><tspan fill="#9aa4b2" xml:space="preserve">probing object references…</tspan></text>
+<text x="26" y="320"><tspan fill="#39d353" xml:space="preserve">    ✓ </tspan><tspan fill="#9aa4b2" xml:space="preserve">/api/v1/orders/{id} → returns other tenants' orders</tspan></text>
+<text x="26" y="345"><tspan fill="#a371f7" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">web-idor                      </tspan><tspan fill="#9aa4b2" xml:space="preserve">cross-tenant read confirmed (2 accounts)</tspan></text>
+<text x="26" y="370"><tspan fill="#a371f7" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">reporting-triage-validation   </tspan><tspan fill="#9aa4b2" xml:space="preserve">CVSS 8.1 · High · deduped</tspan></text>
+<text x="26" y="395"><tspan fill="#39d353" xml:space="preserve">✔ </tspan><tspan fill="#e6edf3" xml:space="preserve">report </tspan><tspan fill="#9aa4b2" xml:space="preserve">→ engagements/acme/findings/bola-orders.md</tspan></text>
+<text x="26" y="445"><tspan fill="#6b7688" xml:space="preserve"># more ways to talk to it — one plain-English ask, the right skill answers</tspan></text>
+<text x="26" y="470"><tspan fill="#58a6ff" xml:space="preserve">›  </tspan><tspan fill="#e6edf3" xml:space="preserve">"review ./src for injection sinks"        </tspan><tspan fill="#6b7688" xml:space="preserve">→ </tspan><tspan fill="#a371f7" xml:space="preserve">code-review-dangerous-sinks</tspan></text>
+<text x="26" y="495"><tspan fill="#58a6ff" xml:space="preserve">›  </tspan><tspan fill="#e6edf3" xml:space="preserve">"is this JWT forgeable?"                  </tspan><tspan fill="#6b7688" xml:space="preserve">→ </tspan><tspan fill="#a371f7" xml:space="preserve">web-auth-jwt</tspan></text>
+<text x="26" y="520"><tspan fill="#58a6ff" xml:space="preserve">›  </tspan><tspan fill="#e6edf3" xml:space="preserve">"find secrets in this firmware.bin"       </tspan><tspan fill="#6b7688" xml:space="preserve">→ </tspan><tspan fill="#a371f7" xml:space="preserve">reverse-eng-firmware</tspan></text>
+<text x="26" y="545"><tspan fill="#58a6ff" xml:space="preserve">›  </tspan><tspan fill="#e6edf3" xml:space="preserve">"kerberoast the DC (authorized pentest)"  </tspan><tspan fill="#6b7688" xml:space="preserve">→ </tspan><tspan fill="#a371f7" xml:space="preserve">ad-kerberoasting</tspan></text>
+</svg>

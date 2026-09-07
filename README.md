@@ -12,7 +12,7 @@
 
 <sub>[Documentation](https://noorqureshi.github.io/SploitAgent/) · [Catalog](CATALOG.md) · [Coverage](COVERAGE.md) · [Using](docs/USING.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)</sub>
 
-<img src="docs/demo.gif" width="720" alt="A terminal session: clone the repository, open an agent, and it loads the relevant skills to work an authorized target from recon to report.">
+<img src="docs/terminal.svg" width="820" alt="A Claude Code terminal session: describe a task in plain English and the matching SploitAgent skill loads to work an authorized target from recon to report.">
 
 </div>
 
