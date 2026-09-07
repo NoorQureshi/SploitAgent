@@ -185,7 +185,22 @@ def cmd_catalog():
     os.makedirs(os.path.join(ROOT,"data"), exist_ok=True)
     idx = [{k:s["fm"].get(k) for k in ["name","domain","type","stability","modes","severity","owasp","owasp_llm","owasp_api","mitre","cwe"]} | {"path": s["reldir"]} for s in skills]
     json.dump({"count":len(skills),"skills":idx}, open(os.path.join(ROOT,"data","skills_index.json"),"w"), indent=2)
-    print(f"  wrote CATALOG.md ({len(skills)} skills) + data/skills_index.json")
+    # docs/skills.json — powers the searchable catalog page on the site (committed, unlike data/)
+    os.makedirs(os.path.join(ROOT,"docs"), exist_ok=True)
+    web = [{
+        "name": s["fm"].get("name",""),
+        "domain": s["fm"].get("domain",""),
+        "type": s["fm"].get("type",""),
+        "modes": s["fm"].get("modes") or [],
+        "severity": s["fm"].get("severity",""),
+        "summary": short_desc(s["fm"]),
+        "tags": (s["fm"].get("owasp") or []) + (s["fm"].get("owasp_llm") or [])
+                + (s["fm"].get("owasp_api") or []) + (s["fm"].get("mitre") or []) + (s["fm"].get("cwe") or []),
+        "path": s["reldir"],
+    } for s in sorted(skills, key=lambda x: (x["fm"].get("domain",""), x["fm"].get("name","")))]
+    json.dump({"count":len(skills),"generated_by":"tools/catalog.py","skills":web},
+              open(os.path.join(ROOT,"docs","skills.json"),"w"), indent=1)
+    print(f"  wrote CATALOG.md ({len(skills)} skills) + data/skills_index.json + docs/skills.json")
     return 0
 
 def cmd_coverage():

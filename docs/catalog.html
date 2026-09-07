@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalog — SploitAgent</title>
+<meta name="description" content="Search all SploitAgent skills by keyword, domain, and mode.">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0 18px}
+  #q{flex:1;min-width:240px;background:var(--panel);border:1px solid var(--border);border-radius:9px;
+    color:var(--text);font-size:15px;padding:11px 14px}
+  #q:focus{outline:none;border-color:var(--green)}
+  select{background:var(--panel);border:1px solid var(--border);border-radius:9px;color:var(--text);
+    font-size:14px;padding:10px 12px}
+  .count{color:var(--muted);font-size:14px;margin:0 0 14px}
+  .list{display:grid;gap:10px}
+  .row{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+  .row a{color:var(--text);font-weight:600;font-family:ui-monospace,monospace;font-size:14.5px}
+  .row .meta{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .row .sum{color:var(--muted);font-size:13.5px;margin-top:6px}
+  .badge2{display:inline-block;font-size:11px;border:1px solid var(--border);border-radius:999px;
+    padding:1px 8px;margin-left:6px;color:var(--muted)}
+  .dom{color:var(--purple)}
+  mark{background:rgba(57,211,83,.25);color:var(--text);border-radius:2px}
+  .empty{color:var(--muted);padding:24px 0}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Sploit<span class="a">Agent</span></a>
+  <a class="link" href="index.html">Home</a>
+  <a class="link" href="start.html">Getting Started</a>
+  <a class="link" href="interact.html">How it works</a>
+  <a class="link" href="skills.html">Skills</a>
+  <a class="link active" href="catalog.html">Catalog</a>
+  <a class="link" href="safety.html">Authorized Use</a>
+  <a class="link" href="contributing.html">Contribute</a>
+  <a class="gh" href="https://github.com/NoorQureshi/SploitAgent">GitHub ★</a>
+</div></nav>
+
+<main class="wrap page">
+  <p class="kicker">CATALOG</p>
+  <h1 class="title">Search the skills</h1>
+  <p class="lead">Every skill in the library, searchable by keyword, domain, and mode. Type a vuln
+    class, tool, or standard (e.g. <code>ssrf</code>, <code>kerberoast</code>, <code>OWASP</code>,
+    <code>T1190</code>). Each result links to the skill on GitHub.</p>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search 127 skills…" autocomplete="off" autofocus>
+    <select id="domain"><option value="">All domains</option></select>
+    <select id="mode">
+      <option value="">All modes</option>
+      <option value="pentest">pentest</option>
+      <option value="bugbounty">bugbounty</option>
+      <option value="defense">defense</option>
+    </select>
+  </div>
+  <p class="count" id="count"></p>
+  <div class="list" id="list"></div>
+  <p class="empty" id="empty" hidden>No skills match — try a broader term.</p>
+
+  <div class="pager">
+    <a href="skills.html"><span class="lbl">← Back</span>Skills overview</a>
+    <a href="contributing.html"><span class="lbl">Next →</span>Contribute</a>
+  </div>
+</main>
+
+<footer>
+  <p>SploitAgent · MIT · for authorized security work only.<br>
+  <a href="https://github.com/NoorQureshi/SploitAgent">github.com/NoorQureshi/SploitAgent</a></p>
+</footer>
+
+<script>
+const REPO="https://github.com/NoorQureshi/SploitAgent/blob/main/";
+const $=s=>document.querySelector(s);
+let SKILLS=[];
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function hi(s,q){ if(!q) return esc(s); const i=s.toLowerCase().indexOf(q); if(i<0) return esc(s);
+  return esc(s.slice(0,i))+"<mark>"+esc(s.slice(i,i+q.length))+"</mark>"+esc(s.slice(i+q.length)); }
+function render(){
+  const q=$("#q").value.trim().toLowerCase(), dom=$("#domain").value, mode=$("#mode").value;
+  const out=SKILLS.filter(s=>{
+    if(dom && s.domain!==dom) return false;
+    if(mode && !(s.modes||[]).includes(mode)) return false;
+    if(!q) return true;
+    const hay=(s.name+" "+s.domain+" "+s.summary+" "+(s.tags||[]).join(" ")+" "+(s.modes||[]).join(" ")).toLowerCase();
+    return hay.includes(q);
+  });
+  $("#count").textContent=`${out.length} of ${SKILLS.length} skills`;
+  $("#empty").hidden=out.length>0;
+  $("#list").innerHTML=out.map(s=>{
+    const tags=(s.tags||[]).slice(0,4).map(t=>`<span class="badge2">${esc(t)}</span>`).join("");
+    return `<div class="row">
+      <a href="${REPO}${s.path}/SKILL.md">${hi(s.name,q)}</a>
+      <span class="badge2 dom">${esc(s.domain)}</span>
+      <span class="badge2">${esc(s.type)}</span>
+      <span class="badge2">${esc((s.modes||[]).join(' · '))}</span>${s.severity?`<span class="badge2">${esc(s.severity)}</span>`:""}
+      <div class="sum">${hi(s.summary||"",q)}</div>
+      <div class="meta">${tags}</div>
+    </div>`;
+  }).join("");
+}
+fetch("skills.json").then(r=>r.json()).then(d=>{
+  SKILLS=d.skills||[];
+  const domains=[...new Set(SKILLS.map(s=>s.domain))].sort();
+  $("#domain").insertAdjacentHTML("beforeend",domains.map(x=>`<option value="${x}">${x}</option>`).join(""));
+  $("#q").placeholder=`Search ${SKILLS.length} skills…`;
+  ["input","change"].forEach(e=>{$("#q").addEventListener(e,render);$("#domain").addEventListener(e,render);$("#mode").addEventListener(e,render);});
+  render();
+}).catch(()=>{ $("#count").textContent="Could not load the catalog — browse it on GitHub instead.";
+  $("#list").innerHTML=`<div class="row"><a href="${REPO}CATALOG.md">Open CATALOG.md →</a></div>`; });
+</script>
+</body>
+</html>
