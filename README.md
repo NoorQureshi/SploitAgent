@@ -52,11 +52,12 @@ git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
 claude
 ```
 
-Or expose the skills to every project once:
+Or expose every skill to Claude Code once (installs into `~/.claude/skills/` in the one-directory-deep
+layout Claude Code expects; `--project` scopes it to the current repo, `--uninstall` removes it):
 
 ```bash
 git clone https://github.com/NoorQureshi/SploitAgent
-ln -s "$PWD/SploitAgent/skills" ~/.claude/skills/sploitagent
+cd SploitAgent && ./install.sh
 ```
 </details>
 
@@ -170,6 +171,7 @@ request is schema-validated by CI.
 
 ```text
 skills/<domain>/<slug>/SKILL.md   the library
+install.sh                        link the skills into ~/.claude/skills (Claude Code)
 AGENTS.md · CLAUDE.md             operating guide read by any in-repo agent
 methodology.md                    engagement loop, scope rule, note-taking standard
 schemas/skill.schema.json         the skill contract (validated in CI)

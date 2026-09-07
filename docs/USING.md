@@ -24,11 +24,12 @@ claude
 Then, e.g.:
 > *"My authorized target is the bug-bounty program acme.com (wildcard in scope). Load SploitAgent's recon skills and map the surface, then hunt the API."*
 
-**Option B — make the skills available in every project.** Symlink them into your user scope once;
-Claude Code discovers them everywhere:
+**Option B — make the skills available in every project.** Run the installer once; it links each
+skill into `~/.claude/skills/` in the one-directory-deep layout Claude Code expects (a plain
+`ln -s` of the whole `skills/` tree won't work, because the skills are nested under domain folders):
 ```bash
 git clone https://github.com/NoorQureshi/SploitAgent
-ln -s "$PWD/SploitAgent/skills" ~/.claude/skills/sploitagent
+cd SploitAgent && ./install.sh          # --project scopes to one repo · --uninstall removes
 ```
 Now in any project: `"Use the web-ssrf skill on https://app.example.com (authorized)."`
 
