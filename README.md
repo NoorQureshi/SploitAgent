@@ -2,7 +2,8 @@
 
 # SploitAgent
 
-**A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
+**Security skills for AI agents.**
+Give Claude Code (or any agent) senior-operator tradecraft — 127 skills across 20 domains, offense and defense, for **authorized** pentest, bug-bounty, and blue-team work.
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
 ![skills](https://img.shields.io/badge/skills-127-334155?style=flat-square)
@@ -10,7 +11,7 @@
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
 
-<sub>[Documentation](https://noorqureshi.github.io/SploitAgent/) · [Catalog](CATALOG.md) · [Coverage](COVERAGE.md) · [Using](docs/USING.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)</sub>
+<sub>[Docs & site](https://noorqureshi.github.io/SploitAgent/) · [How it works](https://noorqureshi.github.io/SploitAgent/interact.html) · [Search skills](https://noorqureshi.github.io/SploitAgent/catalog.html) · [Contributing](CONTRIBUTING.md)</sub>
 
 <img src="docs/terminal.svg" width="820" alt="A Claude Code terminal session: describe a task in plain English and the matching SploitAgent skill loads to work an authorized target from recon to report.">
 
@@ -18,98 +19,84 @@
 
 ---
 
-## Overview
+## What is this?
 
-SploitAgent is a portable library of **127 security skills** an AI agent loads on demand. It is not a
-scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
-impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
-standard Agent-Skills format.
+An AI agent is only as good as what it knows. **SploitAgent is that knowledge** — the security work
+itself (find the bug, prove impact, escalate, pivot, report, defend) written as small, trigger-tagged
+`SKILL.md` files an agent loads on demand.
 
-Any agent — Claude Code, Codex, Gemini, or a local model — reads a skill's trigger line, loads the one
-that matches the task, and follows its method. The skills are plain Markdown: no runtime, no build step,
-no lock-in. Each is mapped to OWASP, MITRE ATT&CK, and CWE, so coverage is measurable ([COVERAGE.md](COVERAGE.md)).
-
-**Design principles**
-
-- **Knowledge over tooling.** Skills encode *how to reason* — the mechanism, the exact command, the
-  failure modes — which outlasts any individual tool or model version.
-- **Offense and defense.** Every offensive class has its defensive counterpart: detection, hardening, DFIR.
-- **Consistency by contract.** A JSON schema (`schemas/skill.schema.json`) validates every skill in CI.
-- **Distilled from real work.** Techniques are mined from write-ups, disclosed reports, and authorized
-  engagements — generalized to the underlying class, never copied as walkthroughs ([CONTRIBUTING.md](CONTRIBUTING.md)).
-- **Authorized use, enforced first.** Every engagement begins with scope confirmation.
+- **You don't learn commands — you describe the task.** The agent matches your words to the right
+  skill and follows its method.
+- **Not a tool or scanner.** Plain Markdown: no runtime, no build step, no lock-in. Works with Claude
+  Code, Codex, Gemini, or a local model.
+- **Scope first, always.** Every engagement starts by confirming authorization and refuses anything
+  out of scope.
 
 ## Quick start
 
-Three commands from clone to working — `./sploit new` scaffolds a per-target **engagement
-workspace**, then you open your agent inside it and just describe the task:
-
 ```bash
+# 1. Get it
 git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
-./sploit new acme.com                 # scaffold engagements/acme.com/ (scope, notes, findings…)
-cd engagements/acme.com && claude     # or: codex · gemini
+
+# 2. Make a workspace for your target (creates engagements/acme.com/)
+./sploit new acme.com
+
+# 3. Open your agent inside it
+cd engagements/acme.com && claude        # or: codex · gemini
 ```
 
-Then tell the agent: *"Start an authorized assessment of acme.com. Confirm scope, then recon."* It
-loads `tradecraft-scope-roe` first, refuses anything not in your `scope.txt`, and works the loop.
+Then just say what you want:
 
-<details open>
-<summary><b>Claude Code — details</b></summary>
+> **"Start an authorized assessment of acme.com. Confirm scope, then recon."**
 
-Opening the agent inside the repo is enough (`CLAUDE.md` tells it how to use the library). To expose
-every skill to Claude Code in **all** your projects, run the installer once — it links each skill into
-`~/.claude/skills/` in the one-directory-deep layout Claude Code expects (`--project` scopes to the
-current repo, `--uninstall` removes):
+That's it. The agent confirms your `scope.txt`, loads the matching skills, and works the loop.
+New here? Read the **[full walkthrough](https://noorqureshi.github.io/SploitAgent/interact.html)**.
 
-```bash
-./sploit install        # same as ./install.sh
-```
-</details>
+## Ask it things like…
 
-<details>
-<summary><b>Codex, Gemini, and other agents</b></summary>
+| You say… | It loads |
+|---|---|
+| "recon acme.com and map the attack surface" | `recon-*` |
+| "test this API for IDOR / BOLA (I'm authorized)" | `api-bola`, `web-idor` |
+| "is this login's JWT forgeable?" | `web-auth-jwt` |
+| "review ./src for injection sinks before we ship" | `code-review-*` |
+| "I got a shell — what now?" | `privesc-enumeration` → `privesc-arsenal` |
+| "kerberoast the DC (authorized pentest)" | `ad-kerberoasting` |
+| "turn this finding into a report" | `reporting-triage-validation` → `reporting-*` |
+| "write a Sigma rule to detect this" | `defense-detection-sigma` |
 
-Clone the repository and open your agent inside it — it reads `AGENTS.md`, the tool-agnostic operating
-guide. For a one-off, load a single `SKILL.md` into context.
+## How it works
 
-```bash
-git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
-```
-</details>
-
-<details>
-<summary><b>Local models and other frameworks</b></summary>
-
-There is no runtime to install. Give the agent read access to `skills/` and `AGENTS.md`, or load the
-specific `SKILL.md` for the task. Per-agent instructions, including an Ollama `Modelfile` that embeds
-the operating guide, are in [docs/USING.md](docs/USING.md).
-</details>
-
-## Operating model
-
-An agent works a target through a consistent loop and keeps its work in a per-engagement workspace.
-The full method is in [`methodology.md`](methodology.md); the agent guide is [`AGENTS.md`](AGENTS.md).
+Every engagement follows one loop; which skills fire is driven by what the target reveals.
 
 ```
-1. Scope       confirm authorization; record scope.txt     → tradecraft-scope-roe
-2. Recon       map the attack surface                       → recon-*
-3. Attack      route by domain (web / api / cloud / ad / …) → web-*, api-*, cloud-*, …
-4. Foothold    drive a weakness to proven impact            → exploit-chaining
-5. Escalate    privilege escalation and lateral movement    → privesc-*, ad-*, network-*
-6. Report      findings with severity and evidence          → reporting-*
-7. Defend      convert findings into detections             → defense-*
+Scope → Recon → Attack surface → Foothold → Escalate & pivot → Report → (Defend)
+  │        │           │              │            │              │          │
+  tradecraft recon-*   web/api/cloud  exploit-     privesc-*    reporting-* defense-*
+  -scope-roe           /ad/wireless…  chaining     ad-* network-*
 ```
+
+Work stays in a per-target workspace (`./sploit new` creates it), git-ignored so nothing leaks:
 
 ```
 engagements/<target>/
-  scope.txt   roe.md   notes.md   findings/   loot/     # git-ignored — never committed
+  scope.txt  roe.md  notes.md  findings/  loot/  START-HERE.md
 ```
 
-## Skill coverage
+Full method: [`methodology.md`](methodology.md) · agent guide: [`AGENTS.md`](AGENTS.md).
 
-127 skills across 20 domains. The complete index is in [CATALOG.md](CATALOG.md).
+## What's inside
 
-| Domain | Skills | Coverage |
+**127 skills across 20 domains.** Search them all on the **[catalog page](https://noorqureshi.github.io/SploitAgent/catalog.html)**, or browse [CATALOG.md](CATALOG.md).
+
+`web` · `api` · `cloud` · `ad` · `network` · `wireless` · `recon` · `mobile` · `ai-ml` ·
+`code-review` · `reverse-engineering` · `cryptography` · `exploit-dev` · `privesc` · `payloads` ·
+`defense` · `reporting` · `automation` · `tradecraft` · `social-eng`
+
+<details>
+<summary><b>Full coverage by domain</b></summary>
+
+| Domain | # | Covers |
 |---|:--:|---|
 | [`web`](skills/web) | 36 | XSS, SQLi, SSRF, SSTI, IDOR, XXE, CSRF, CORS, LFI, deserialization, OAuth, SAML, request smuggling, prototype pollution, cache poisoning, host-header, clickjacking, WebSocket, race conditions, business logic, file upload, JWT, account takeover, dependency confusion, client-side signing reversal, authenticated session handling, Python sandbox escape, Cypher injection, JDBC/connection-string RCE |
 | [`ai-ml`](skills/ai-ml) | 9 | Prompt injection, jailbreaks, RAG poisoning, model extraction, agent/tool and MCP abuse, insecure output handling, supply chain, unbounded consumption |
@@ -130,63 +117,55 @@ engagements/<target>/
 | [`reporting`](skills/reporting) | 3 | Finding triage and validation, bug-bounty write-up, penetration-test report |
 | [`automation`](skills/automation) | 2 | Recon pipelines, custom nuclei templates |
 | [`tradecraft`](skills/tradecraft) | 2 | Scope and rules of engagement, complex multi-stage engagements |
-| [`social-eng`](skills/social-eng) | 4 | Authorized human-factor testing: methodology, phishing, vishing/pretexting, physical assessment |
+| [`social-eng`](skills/social-eng) | 4 | Authorized human-factor testing: methodology, phishing, vishing/pretexting, physical assessment (pentest-only) |
 
-## Skill format
+</details>
 
-Each skill is a single `SKILL.md`: a frontmatter block whose `description` is the load trigger, and a
-body that explains the mechanism rather than pasting a payload.
+## Use it with other agents
 
-```markdown
----
-name: web-ssrf
-description: Discover and escalate Server-Side Request Forgery. Load when the app
-  fetches a URL you influence: webhooks, "import from URL", PDF/image rendering, …
-domain: web
-type: technique
-modes: [pentest, bugbounty]
-owasp: [A10:2021-SSRF]
-cwe: [CWE-918]
----
-## When it applies · Why it works · Method (exact commands) · Gotchas · Verify success
-```
+<details>
+<summary><b>Codex · Gemini · Ollama · any framework</b></summary>
 
-## Authorized use
+The skills are plain Markdown, so any agent can use them. Clone the repo and open your agent inside
+it — it reads [`AGENTS.md`](AGENTS.md), the tool-agnostic operating guide. For a one-off, paste a
+single `SKILL.md` into the chat. To expose every skill to Claude Code across all projects, run
+`./sploit install`. Per-agent setup (including an Ollama `Modelfile`) is in [docs/USING.md](docs/USING.md).
 
-SploitAgent is intended solely for authorized security work: penetration-testing engagements under a
-signed scope, bug-bounty programs whose scope covers the target, and defensive assessment of systems
-you own or operate. The first skill loaded in any engagement is `tradecraft-scope-roe`, which requires
-an explicit authorization envelope before any activity. Do not use it against systems you are not
-authorized to test.
+</details>
+
+## Authorized use only
+
+SploitAgent is for security work you are permitted to do: a signed pentest scope, a bug-bounty program
+whose scope covers the target, or systems you own. The first skill in every engagement,
+`tradecraft-scope-roe`, requires an explicit authorization envelope before anything runs. Don't point
+it at systems you aren't authorized to test.
 
 ## Contributing
 
-Contributions are single Markdown files — no code required:
+A contribution is a single Markdown file — no code:
 
 ```bash
 cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
-python3 tools/catalog.py            # validate frontmatter and regenerate the indexes
+python3 tools/catalog.py            # validate + regenerate the indexes
 ```
 
-Wanted skills are listed in [ROADMAP.md](ROADMAP.md) (entries marked as good first contributions).
-The full guide, house style, and PR checklist are in [CONTRIBUTING.md](CONTRIBUTING.md). Every pull
-request is schema-validated by CI.
+Wanted skills are in [ROADMAP.md](ROADMAP.md); the full guide and house style are in
+[CONTRIBUTING.md](CONTRIBUTING.md). Every PR is schema-validated by CI.
 
 ## Repository layout
 
 ```text
+sploit                            front door: new <target> · install · list
+install.sh                        link skills into ~/.claude/skills (Claude Code)
 skills/<domain>/<slug>/SKILL.md   the library
-sploit                            front door: `new <target>` · `install` · `list`
-install.sh                        link the skills into ~/.claude/skills (Claude Code)
-engagements/<target>/             per-target workspace `sploit new` creates (git-ignored)
+engagements/<target>/             per-target workspace sploit new creates (git-ignored)
 AGENTS.md · CLAUDE.md             operating guide read by any in-repo agent
 methodology.md                    engagement loop, scope rule, note-taking standard
-schemas/skill.schema.json         the skill contract (validated in CI)
-tools/catalog.py                  validation and index generation
+tools/catalog.py                  validation + index generation (schema in schemas/)
 CATALOG.md · COVERAGE.md          generated indexes
 docs/                             usage guide and project site
 ```
 
 ## License
 
-[MIT](LICENSE).
+[MIT](LICENSE). Built for authorized security work.

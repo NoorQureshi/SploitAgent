@@ -55,7 +55,33 @@
   </section>
 
   <section>
-    <h2><span class="hash">#</span> Start here</h2>
+    <h2><span class="hash">#</span> Quick start</h2>
+    <p class="lead">Three commands from clone to working. <code>./sploit new</code> scaffolds a
+      per-target workspace; then open your agent inside it and describe the task.</p>
+<pre>git clone https://github.com/NoorQureshi/SploitAgent &amp;&amp; cd SploitAgent
+./sploit new acme.com                 <span class="c"># creates engagements/acme.com/</span>
+cd engagements/acme.com &amp;&amp; claude     <span class="c"># or: codex · gemini</span></pre>
+    <p style="margin-top:14px">Then say: <span style="color:var(--green)">"Start an authorized assessment of acme.com. Confirm scope, then recon."</span>
+      <a class="more" href="start.html">Full setup →</a></p>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Ask it things like…</h2>
+    <p class="lead">You don't learn commands — you describe the task, and the matching skill loads itself.</p>
+    <table>
+      <tr><th>You say…</th><th>It loads</th></tr>
+      <tr><td>"recon acme.com and map the attack surface"</td><td><code>recon-*</code></td></tr>
+      <tr><td>"test this API for IDOR / BOLA (I'm authorized)"</td><td><code>api-bola</code>, <code>web-idor</code></td></tr>
+      <tr><td>"is this login's JWT forgeable?"</td><td><code>web-auth-jwt</code></td></tr>
+      <tr><td>"review ./src for injection sinks"</td><td><code>code-review-*</code></td></tr>
+      <tr><td>"I got a shell — what now?"</td><td><code>privesc-enumeration</code></td></tr>
+      <tr><td>"turn this finding into a report"</td><td><code>reporting-*</code></td></tr>
+      <tr><td>"write a Sigma rule to detect this"</td><td><code>defense-detection-sigma</code></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Explore</h2>
     <p class="lead">Pick the page that matches what you want to do.</p>
     <div class="grid cols3">
       <div class="card">
