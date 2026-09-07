@@ -5,7 +5,7 @@
 **A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-121-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-123-334155?style=flat-square)
 ![domains](https://img.shields.io/badge/domains-19-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
@@ -20,7 +20,7 @@
 
 ## Overview
 
-SploitAgent is a portable library of **121 security skills** an AI agent loads on demand. It is not a
+SploitAgent is a portable library of **123 security skills** an AI agent loads on demand. It is not a
 scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
 impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
 standard Agent-Skills format.
@@ -101,7 +101,7 @@ engagements/<target>/
 
 ## Skill coverage
 
-121 skills across 19 domains. The complete index is in [CATALOG.md](CATALOG.md).
+123 skills across 19 domains. The complete index is in [CATALOG.md](CATALOG.md).
 
 | Domain | Skills | Coverage |
 |---|:--:|---|
@@ -119,7 +119,7 @@ engagements/<target>/
 | [`privesc`](skills/privesc) | 3 | Linux arsenal, GTFOBins (sudo/SUID/capabilities), Windows token impersonation |
 | [`exploit-dev`](skills/exploit-dev) | 2 | Exploit chaining and impact amplification, PoC development |
 | [`reverse-engineering`](skills/reverse-engineering) | 3 | Native binary triage, deobfuscation (packed/JS/WASM/JSVMP), firmware extraction and analysis |
-| [`payloads`](skills/payloads) | 2 | WAF/filter bypass, XSS polyglots |
+| [`payloads`](skills/payloads) | 4 | WAF/filter bypass, XSS polyglots, reverse shells and TTY upgrade, file transfers |
 | [`reporting`](skills/reporting) | 3 | Finding triage and validation, bug-bounty write-up, penetration-test report |
 | [`automation`](skills/automation) | 2 | Recon pipelines, custom nuclei templates |
 | [`tradecraft`](skills/tradecraft) | 2 | Scope and rules of engagement, complex multi-stage engagements |

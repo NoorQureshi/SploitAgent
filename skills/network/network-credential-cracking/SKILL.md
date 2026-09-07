@@ -46,12 +46,17 @@ mutated by rules) at millions/billions of guesses per second — no lockout, no 
    | Werkzeug PBKDF2-SHA256 | 10900 |
    | WPA/WPA2 (hcxtools `.22000`) | 22000 |
 
-3. **Run wordlist + rules:** `hashcat -m <mode> hashes.txt rockyou.txt -r rules/best64.rule` (start
+3. **Extract a hash from a protected file** when the "hash" is a locked artifact, then crack that:
+   `ssh2john id_rsa`, `zip2john f.zip`, `rar2john f.rar`, `keepass2john db.kdbx`,
+   `office2john doc.docx`, `pdf2john f.pdf`, `pfx2john cert.pfx` → feed the output to john/hashcat.
+   An encrypted SSH key, Office doc, KeePass DB, or ZIP found on a target is often the fastest win.
+4. **Run wordlist + rules:** `hashcat -m <mode> hashes.txt rockyou.txt -r rules/best64.rule` (start
    with `best64`, escalate to `OneRuleToRuleThemAll`). Add target-specific words (company, seasons,
-   app names) to the wordlist — context beats a bigger dictionary.
-4. **Mask/brute** only when the keyspace is small or a pattern is known:
+   app names) to the wordlist — context beats a bigger dictionary. Build one with `cewl <url> -m5`
+   (words from the site), `crunch` (patterns), or `username-anarchy` (name → username permutations).
+5. **Mask/brute** only when the keyspace is small or a pattern is known:
    `hashcat -m <mode> hashes.txt -a 3 '?u?l?l?l?l?d?d!'`.
-5. **Reuse and pivot** — a cracked password is worth spraying elsewhere (`network-password-spraying`)
+6. **Reuse and pivot** — a cracked password is worth spraying elsewhere (`network-password-spraying`)
    and checking for reuse across accounts/services.
 
 ## Gotchas

