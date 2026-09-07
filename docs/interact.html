@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works — SploitAgent</title>
+<meta name="description" content="How to interact with SploitAgent's skills: what you say, what the agent outputs, how it pivots from one skill to the next, and what an engagement produces.">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .term{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:16px 18px;
+    overflow-x:auto;font:13.5px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:6px 0 4px}
+  .term .u{color:#58a6ff}      /* you */
+  .term .s{color:#a371f7}      /* skill loading */
+  .term .ok{color:#39d353}     /* result */
+  .term .c{color:#6b7688}      /* comment */
+  .term .m{color:#9aa4b2}      /* muted detail */
+  .term .p{color:#39d353}      /* prompt $ */
+  .ann{border-left:2px solid var(--border);padding:2px 0 2px 16px;margin:10px 0 22px;color:var(--muted);font-size:14px}
+  .ann b{color:var(--text)}
+  .k{color:var(--purple);font-family:ui-monospace,monospace}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Sploit<span class="a">Agent</span></a>
+  <a class="link" href="index.html">Home</a>
+  <a class="link" href="start.html">Getting Started</a>
+  <a class="link active" href="interact.html">How it works</a>
+  <a class="link" href="skills.html">Skills</a>
+  <a class="link" href="safety.html">Authorized Use</a>
+  <a class="link" href="contributing.html">Contribute</a>
+  <a class="gh" href="https://github.com/NoorQureshi/SploitAgent">GitHub ★</a>
+</div></nav>
+
+<main class="wrap page">
+  <p class="kicker">HOW IT WORKS</p>
+  <h1 class="title">Interacting with the skills</h1>
+  <p class="lead">You don't call skills by name or learn any commands. You <b>describe the task in plain
+    English</b>; the agent matches your request to a skill's trigger line, loads that one
+    <code>SKILL.md</code>, and follows its method — proving impact, then pivoting to the next skill as
+    new leads appear. This page walks through exactly what that looks like: what you say, what comes
+    back, how it chains, and what it leaves behind.</p>
+
+  <section>
+    <h2><span class="hash">#</span> The mental model</h2>
+    <div class="grid cols3">
+      <div class="card"><h3>1 · You describe</h3><p>State the target, that it's authorized, and what you
+        want ("test this API for access-control bugs"). No skill names, no flags.</p></div>
+      <div class="card"><h3>2 · It matches &amp; loads</h3><p>Each skill's <code>description</code> is a
+        trigger line packed with signals. The agent loads the one that fits and works its
+        <em>Method</em> section.</p></div>
+      <div class="card"><h3>3 · It proves &amp; pivots</h3><p>It confirms impact with the least action,
+        writes it down, and the finding becomes the lead that loads the next skill.</p></div>
+    </div>
+    <p class="warn" style="margin-top:18px"><b>Scope is always first.</b> Before anything touches a
+      target, the agent loads <code>tradecraft-scope-roe</code> and confirms authorization. If scope is
+      unclear it stops and asks. See <a href="safety.html" style="color:#ffd0cc">Authorized Use</a>.</p>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> How to talk to it</h2>
+    <p class="lead">Good requests carry three things: the <b>target</b>, that it's <b>authorized</b>, and
+      the <b>goal</b>. The more concrete the signals (URL, tech, vuln class), the more precisely the
+      right skill loads.</p>
+    <div class="grid cols2">
+      <div class="card"><h3>Reaches the right skill</h3>
+<div class="term"><span class="u">›</span> test <span class="m">https://api.acme.tld</span> (I'm authorized) for BOLA / IDOR on the orders API
+<span class="u">›</span> recon acme.tld — subdomains, live hosts, tech stack
+<span class="u">›</span> review ./src for injection sinks before we ship
+<span class="u">›</span> is this JWT forgeable? <span class="m">eyJhbGci…</span></div>
+      </div>
+      <div class="card"><h3>Too vague — it'll ask first</h3>
+<div class="term"><span class="u">›</span> hack this <span class="c"># which target? authorized how?</span>
+<span class="u">›</span> find all bugs <span class="c"># on what? in scope?</span>
+<span class="c"># it will load tradecraft-scope-roe and ask you to</span>
+<span class="c"># confirm the target and authorization before acting</span></div>
+      </div>
+    </div>
+    <p class="note">You can also name a skill if you want to force it — "use <span class="k">web-ssrf</span>
+      on the import feature" — but you rarely need to. Describing the situation is enough.</p>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> A full session, annotated</h2>
+    <p class="lead">Here is one authorized engagement from first message to report. Each block is what you'd
+      actually see; the notes explain what happened and where it pivots.</p>
+
+    <div class="term"><span class="u">›</span> assess api.acme.tld — I'm authorized (HackerOne: acme). Look for broken access control.</div>
+    <div class="ann"><b>You describe the task.</b> Target + authorization + goal. Nothing else needed.</div>
+
+    <div class="term"><span class="s">●</span> tradecraft-scope-roe        <span class="m">scope confirmed · *.acme.tld in program · rate-limited</span>
+<span class="m">  wrote engagements/acme/scope.txt + roe.md</span></div>
+    <div class="ann"><b>Scope first, every time.</b> It records the authorization envelope before touching
+      anything. If <code>*.acme.tld</code> weren't in the program, it would refuse here.</div>
+
+    <div class="term"><span class="s">●</span> recon-techstack-fingerprinting   <span class="m">Django + DRF · Cloudflare WAF · /api/v1</span>
+<span class="s">●</span> recon-content-discovery          <span class="m">found /api/v1/orders, /api/v1/users, /api/v1/admin</span></div>
+    <div class="ann"><b>Recon output becomes the map.</b> Django REST Framework + numeric IDs in
+      <code>/api/v1/orders</code> is a strong BOLA signal — that <em>lead</em> is what loads the next skill.</div>
+
+    <div class="term"><span class="s">●</span> api-bola        <span class="m">two test accounts · swapping object IDs</span>
+    <span class="ok">✓</span> <span class="m">GET /api/v1/orders/1041 with account B's token → returns account A's order</span>
+    <span class="ok">✓</span> <span class="m">IDs are sequential → 20k orders enumerable (not hoarded)</span></div>
+    <div class="ann"><b>This is the proof, minimally.</b> It confirms cross-tenant read with two accounts
+      and <em>stops</em> — it sizes impact without hoarding real data. The confirmed bug is now a lead to
+      escalate and to validate.</div>
+
+    <div class="term"><span class="s">●</span> web-idor        <span class="m">same class on PATCH /api/v1/users/{id} → can change another user's email</span>
+<span class="s">●</span> exploit-chaining <span class="m">email change → password-reset takeover (account takeover path)</span></div>
+    <div class="ann"><b>Pivot: small bug → bigger impact.</b> A read IDOR plus a write IDOR chains into
+      account takeover. <code>exploit-chaining</code> is loaded when several findings combine into
+      something worse than any one alone.</div>
+
+    <div class="term"><span class="s">●</span> reporting-triage-validation   <span class="m">reproduced from a clean session · CVSS 8.1 (High) · not a duplicate</span>
+<span class="s">●</span> reporting-bug-bounty-writeup  <span class="m">wrote the report with steps + evidence</span>
+<span class="ok">✔</span> report → <span class="m">engagements/acme/findings/idor-orders-ato.md</span></div>
+    <div class="ann"><b>Validate, then report.</b> Before writing it up, it re-proves the bug from scratch,
+      kills false-positive/duplicate risk, and assigns a defensible severity — then produces the writeup.</div>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> How pivoting works</h2>
+    <p class="lead">A "pivot" is just: a result becomes the trigger for the next skill. The agent works
+      one lead at a time and loads the next skill as the evidence points to it. The routing is signal-driven:</p>
+    <table>
+      <tr><th>What it just saw (the lead)</th><th>What loads next</th></tr>
+      <tr><td>A new in-scope domain, nothing mapped yet</td><td><code>recon-*</code> → <code>recon-techstack-fingerprinting</code></td></tr>
+      <tr><td>Numeric/UUID object IDs in an API</td><td><code>api-bola</code>, <code>web-idor</code></td></tr>
+      <tr><td>App fetches a URL you control (webhook, "import")</td><td><code>web-ssrf</code></td></tr>
+      <tr><td>A parameter names a file/template</td><td><code>web-lfi-path-traversal</code>, <code>web-ssti</code></td></tr>
+      <tr><td>Two small bugs that combine</td><td><code>exploit-chaining</code></td></tr>
+      <tr><td>Valid creds / a foothold on an internal net</td><td><code>privesc-*</code>, <code>ad-*</code>, <code>network-pivoting-tunneling</code></td></tr>
+      <tr><td>A captured hash or handshake</td><td><code>network-credential-cracking</code></td></tr>
+      <tr><td>A confirmed finding, ready to write up</td><td><code>reporting-triage-validation</code> → <code>reporting-*</code></td></tr>
+    </table>
+    <p class="note">The overall shape is always the same loop — <b>scope → recon → attack → foothold →
+      escalate → report → (defend)</b> — but which skills fire, and in what order, is driven entirely by
+      what the target reveals.</p>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> What an engagement produces</h2>
+    <p class="lead">Everything is kept in a per-target workspace so notes and loot never mix between
+      engagements. These paths are git-ignored — they never end up in the repo.</p>
+<pre>engagements/acme/
+  scope.txt     <span class="c"># the authorized targets — the hard boundary</span>
+  roe.md        <span class="c"># rate limits, don'ts, disclosure terms</span>
+  notes.md      <span class="c"># timestamped running log — the source of truth</span>
+  findings/     <span class="c"># one file per confirmed finding + evidence</span>
+  loot/         <span class="c"># captured artifacts (kept minimal)</span></pre>
+    <p style="margin:16px 0 6px;color:var(--muted)">A <code>notes.md</code> entry reads like the mechanism, not just a command:</p>
+<pre><span class="c"># 14:32  goal: confirm cross-tenant read on /api/v1/orders</span>
+cmd:    GET /api/v1/orders/1041   (account B token)
+result: 200 — returns account A's order (name, address, total)
+why:    object id trusted; ownership never re-checked at the data layer
+next:   test PATCH /users/{id} for write-IDOR → possible ATO chain</pre>
+    <p class="note">Because the log records <em>why it worked</em> and the <em>next lead</em>, the report
+      almost writes itself — and you can hand the workspace to a teammate and they can continue.</p>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Steering it</h2>
+    <div class="grid cols2">
+      <div class="card"><h3>Modes</h3><p>Each skill is tagged <code>pentest</code>, <code>bugbounty</code>,
+        and/or <code>defense</code>. Say which you're doing — a destructive step safe in a lab won't run
+        against a live bug-bounty target, and human-factor (<code>social-eng-*</code>) is pentest-only.</p></div>
+      <div class="card"><h3>Keep it in bounds</h3><p>It refuses out-of-scope and third-party targets, honors
+        rate limits, and proves impact with the least data. Tell it to "stop at proof" or "don't touch
+        <span class="m">X</span>" and it will.</p></div>
+      <div class="card"><h3>Force or skip a skill</h3><p>"Use <span class="k">web-ssti</span> here" loads it
+        directly; "skip cracking, just report the weak PSK" steers past a step you don't want.</p></div>
+      <div class="card"><h3>Go defensive</h3><p>The same library turns findings into detections and
+        hardening — "convert this into a Sigma rule" loads <code>defense-detection-sigma</code>.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> Using one skill on its own</h2>
+    <p class="lead">You don't need a whole engagement. Any single <code>SKILL.md</code> is readable on its
+      own — open it, or paste it into any agent, to get the mechanism, the exact commands, the gotchas,
+      and how to verify success for that one technique.</p>
+<pre><span class="c"># read a skill directly</span>
+cat skills/web/web-ssrf/SKILL.md
+
+<span class="c"># or ask the agent for just that technique</span>
+› walk me through testing this import feature for SSRF</pre>
+  </section>
+
+  <div class="pager">
+    <a href="start.html"><span class="lbl">← Back</span>Getting Started</a>
+    <a href="skills.html"><span class="lbl">Next →</span>Skills</a>
+  </div>
+</main>
+
+<footer>
+  <p>SploitAgent · MIT · for authorized security work only.<br>
+  <a href="https://github.com/NoorQureshi/SploitAgent">github.com/NoorQureshi/SploitAgent</a></p>
+</footer>
+
+</body>
+</html>
