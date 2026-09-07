@@ -5,8 +5,8 @@
 **A security-skills library for AI agents — offensive and defensive, for authorized pentest, bug-bounty, and blue-team work.**
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-124-334155?style=flat-square)
-![domains](https://img.shields.io/badge/domains-19-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-127-334155?style=flat-square)
+![domains](https://img.shields.io/badge/domains-20-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
 
@@ -20,7 +20,7 @@
 
 ## Overview
 
-SploitAgent is a portable library of **124 security skills** an AI agent loads on demand. It is not a
+SploitAgent is a portable library of **127 security skills** an AI agent loads on demand. It is not a
 scanner or a framework — it is the operating knowledge of the work itself (find the issue, prove the
 impact, escalate, pivot, report, and defend) captured as small, trigger-tagged `SKILL.md` files in the
 standard Agent-Skills format.
@@ -101,7 +101,7 @@ engagements/<target>/
 
 ## Skill coverage
 
-124 skills across 19 domains. The complete index is in [CATALOG.md](CATALOG.md).
+127 skills across 20 domains. The complete index is in [CATALOG.md](CATALOG.md).
 
 | Domain | Skills | Coverage |
 |---|:--:|---|
@@ -117,8 +117,9 @@ engagements/<target>/
 | [`network`](skills/network) | 6 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing, perimeter appliance and VPN offensive, hash and credential cracking |
 | [`wireless`](skills/wireless) | 2 | WPA2-PSK handshake/PMKID capture and cracking, evil-twin / rogue-AP enterprise (PEAP-MSCHAPv2) credential harvesting |
 | [`privesc`](skills/privesc) | 4 | Post-foothold enumeration and credential hunting, Linux arsenal, GTFOBins (sudo/SUID/capabilities), Windows token impersonation |
-| [`exploit-dev`](skills/exploit-dev) | 2 | Exploit chaining and impact amplification, PoC development |
+| [`exploit-dev`](skills/exploit-dev) | 3 | Exploit chaining and impact amplification, PoC development, memory-corruption exploitation (ROP / format string / ret2libc) |
 | [`reverse-engineering`](skills/reverse-engineering) | 3 | Native binary triage, deobfuscation (packed/JS/WASM/JSVMP), firmware extraction and analysis |
+| [`cryptography`](skills/cryptography) | 2 | Weak/textbook RSA (JWT RS256, custom signatures), symmetric oracles (CBC padding, ECB, hash length extension) |
 | [`payloads`](skills/payloads) | 4 | WAF/filter bypass, XSS polyglots, reverse shells and TTY upgrade, file transfers |
 | [`reporting`](skills/reporting) | 3 | Finding triage and validation, bug-bounty write-up, penetration-test report |
 | [`automation`](skills/automation) | 2 | Recon pipelines, custom nuclei templates |
