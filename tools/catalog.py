@@ -84,6 +84,42 @@ def short_desc(fm):
         return d[:cut+1]
     return (d[:150] + "…") if len(d) > 150 else d
 
+def _lev(a, b):
+    """Small Levenshtein distance for typo detection."""
+    if a == b: return 0
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+def check_xrefs(skills):
+    """Flag a backtick `skill-ref` in a body only when it's clearly a broken skill
+    reference — a domain-prefixed token that isn't a real skill but is within a
+    small edit distance of one (i.e. a typo or a stale name after a rename).
+    Ordinary compound words (api-key, web-server) are far from any slug and ignored."""
+    slugs = {os.path.basename(s["reldir"]) for s in skills}
+    names = {s["fm"].get("name","") for s in skills if s["fm"].get("name")}
+    valid = slugs | names | set(DOMAINS)
+    prefixes = {sl.split("-")[0] for sl in slugs}
+    token_re = re.compile(r'`([a-z0-9]+(?:-[a-z0-9]+)+)`')
+    errors = []
+    for s in skills:
+        try:
+            body = open(s["path"], encoding="utf-8").read()
+        except OSError:
+            continue
+        for tok in set(token_re.findall(body)):
+            if tok in valid or tok.split("-")[0] not in prefixes:
+                continue
+            near = min((_lev(tok, v) for v in slugs), default=99)
+            if near <= 4:  # close to a real slug ⇒ almost certainly a broken ref
+                closest = min(slugs, key=lambda v: _lev(tok, v))
+                errors.append(f"{s['reldir']}: broken skill reference `{tok}` — did you mean `{closest}`?")
+    return errors
+
 def cmd_validate():
     skills = collect(); errors = []
     seen = {}
@@ -115,6 +151,7 @@ def cmd_validate():
         folder_domain = parts[1] if len(parts) > 2 else ""
         if folder_domain and fm.get("domain") and folder_domain != fm.get("domain"):
             errors.append(f"{where}: folder domain '{folder_domain}' != frontmatter domain '{fm.get('domain')}'")
+    errors += check_xrefs(skills)
     if errors:
         print("SKILL VALIDATION FAILED:", file=sys.stderr)
         for e in errors: print("  - "+e, file=sys.stderr)
