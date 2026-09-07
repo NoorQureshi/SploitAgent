@@ -22,7 +22,8 @@ to `/etc/hosts` (`IP dc01.corp.local corp.local`) early — Kerberos needs the F
 - **netexec / nxc (smb)** — the swiss-army first pass; null session, shares, users, policy.
   `nxc smb dc01.corp.local -u '' -p '' --shares --users --pass-pol`
   `-u '' -p ''` = null/anonymous auth; `--pass-pol` reveals the lockout threshold you must
-  respect when spraying. Add `-M spider_plus` to loot readable shares.
+  respect when spraying. Add `-M spider_plus` to loot readable shares, and `--rid-brute` to
+  enumerate domain users over SAMR when null LDAP is closed but SMB null is open.
 - **netexec (ldap)** — pull AS-REP-roastable and SPN users without touching Kerberos yet.
   `nxc ldap dc01.corp.local -u user -p pass --asreproast asrep.txt --kerberoasting kerb.txt`
   Also `--users --groups --password-not-required` for quick wins.
