@@ -84,7 +84,7 @@ operating guide wired in so any agent opened there can use them:
 ```
 <your target folder>/
   scope.txt  roe.md  notes.md  findings/  loot/  START-HERE.md
-  .claude/skills/   skills/   CLAUDE.md   AGENTS.md      # skills + guide, wired in
+  skills/   CLAUDE.md   AGENTS.md      # the library + operating guide, wired in
 ```
 
 Full method: [`methodology.md`](methodology.md) · agent guide: [`AGENTS.md`](AGENTS.md).
