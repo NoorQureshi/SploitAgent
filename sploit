@@ -1,70 +1,91 @@
 #!/usr/bin/env bash
 # sploit — the friendly front door to SploitAgent.
 #
-#   ./sploit new <target>   scaffold an engagement workspace for a target
-#   ./sploit install        expose the skills to Claude Code (runs install.sh)
-#   ./sploit list           list your engagement workspaces
-#   ./sploit help           show this help
+#   sploit new <target> [dir]   create an engagement workspace (anywhere) with the skills wired in
+#   sploit install              expose skills to Claude Code everywhere + put `sploit` on PATH
+#   sploit list                 list engagements under the current directory
+#   sploit help                 show this help
 #
-# Typical first run:
+# The workspace can live ANYWHERE — it doesn't need to be inside this repo. Whatever
+# folder you create, opening Claude Code (or Codex/Gemini) there can use the skills,
+# because `sploit new` links the library into that folder.
+#
+# Typical:
 #   git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
-#   ./sploit new acme.com          # creates engagements/acme.com/
-#   cd engagements/acme.com && claude
-#   then tell the agent:  "Start an authorized assessment of acme.com. Confirm scope, then recon."
+#   ./sploit install                       # once: skills everywhere + `sploit` on PATH
+#   sploit new acme.com ~/work/acme        # workspace anywhere you like
+#   cd ~/work/acme && claude               # then: "Start an authorized assessment of acme.com…"
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-G=$'\033[32m'; P=$'\033[35m'; D=$'\033[2m'; B=$'\033[1m'; R=$'\033[0m'   # colors
+G=$'\033[32m'; P=$'\033[35m'; D=$'\033[2m'; B=$'\033[1m'; R=$'\033[0m'
 say(){ printf '%s\n' "$*"; }
 
 usage(){
   cat <<EOF
 ${B}SploitAgent${R} — security skills for AI agents (authorized use only)
 
-  ${G}./sploit new <target>${R}   scaffold an engagement workspace for a target
-  ${G}./sploit install${R}        expose all skills to Claude Code (~/.claude/skills)
-  ${G}./sploit list${R}           list your engagement workspaces
-  ${G}./sploit help${R}           show this help
+  ${G}sploit new <target> [dir]${R}   create an engagement workspace with the skills wired in
+                              ${D}dir defaults to ./<target>; pass any path to put it elsewhere${R}
+      ${D}--copy${R}                  copy the skills into the workspace (portable; survives moving the repo)
+  ${G}sploit install${R}              expose skills to Claude Code everywhere + put 'sploit' on PATH
+  ${G}sploit list${R}                 list engagement workspaces under the current directory
+  ${G}sploit help${R}                 show this help
 
 Quick start:
-  ${D}./sploit new acme.com${R}
-  ${D}cd engagements/acme.com && claude${R}
-  ${D}then say:${R} "Start an authorized assessment of acme.com. Confirm scope, then recon."
+  ${D}./sploit install${R}
+  ${D}sploit new acme.com ~/work/acme${R}
+  ${D}cd ~/work/acme && claude${R}   →   ${P}"Start an authorized assessment of acme.com. Confirm scope, then recon."${R}
 EOF
 }
 
 new_engagement(){
-  local target="${1:-}"
-  [ -n "$target" ] || { say "usage: ./sploit new <target>   (e.g. acme.com, 10.10.10.5, \"Acme pentest\")"; exit 2; }
-  # safe folder name from the target
+  local target="" dest="" copy=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --copy) copy=1 ;;
+      -*) say "unknown option: $1"; exit 2 ;;
+      *) if [ -z "$target" ]; then target="$1"; elif [ -z "$dest" ]; then dest="$1"; fi ;;
+    esac; shift
+  done
+  [ -n "$target" ] || { say "usage: sploit new <target> [dir]   (e.g. sploit new acme.com ~/work/acme)"; exit 2; }
+
   local slug; slug="$(printf '%s' "$target" | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9._-')"
   [ -n "$slug" ] || slug="engagement"
-  local dir="$REPO_DIR/engagements/$slug"
-  if [ -e "$dir" ]; then say "${B}!${R} engagements/$slug already exists — open it, or pick another name."; exit 1; fi
+  if [ -z "$dest" ]; then                               # no path given → sensible default
+    case "$PWD/" in
+      "$REPO_DIR"/*) dest="$REPO_DIR/engagements/$slug" ;;  # inside the repo → git-ignored engagements/
+      *)             dest="$slug" ;;                        # elsewhere → ./<slug> right here
+    esac
+  fi
+  mkdir -p "$dest"
+  dest="$(cd "$dest" && pwd)"                           # absolute
+  if [ -n "$(ls -A "$dest" 2>/dev/null || true)" ]; then
+    say "${B}!${R} $dest is not empty — pick an empty/new folder for the engagement."; exit 1
+  fi
 
-  mkdir -p "$dir/findings" "$dir/loot"
+  mkdir -p "$dest/findings" "$dest/loot"
 
-  cat > "$dir/scope.txt" <<EOF
+  # --- engagement files ---------------------------------------------------
+  cat > "$dest/scope.txt" <<EOF
 # scope.txt — the hard boundary. The agent refuses anything not listed here.
-# One authorized target per line (domain, wildcard, IP, or CIDR). Delete the examples.
+# One authorized target per line (domain, wildcard, IP, or CIDR). Delete the example.
 #
 # authorization: <pentest SoW | bug-bounty program + URL | I own these systems>
 # window:        <testing window / any>
 
 $target
 EOF
-
-  cat > "$dir/roe.md" <<EOF
+  cat > "$dest/roe.md" <<EOF
 # Rules of engagement — $target
 
-- **Authorization:** _state it here (signed scope / in-scope bug-bounty program / systems you own)._
+- **Authorization:** _state it (signed scope / in-scope bug-bounty program / systems you own)._
 - **In scope:** see \`scope.txt\`.
-- **Out of scope:** _list anything explicitly off-limits (third parties, prod data, subdomains)._
+- **Out of scope:** _anything explicitly off-limits (third parties, prod data)._
 - **Rate limits / don'ts:** _e.g. no DoS, no social engineering, throttle to N req/s._
 - **Disclosure / safe harbor:** _program terms or client contact._
 EOF
-
-  cat > "$dir/notes.md" <<EOF
+  cat > "$dest/notes.md" <<EOF
 # Notes — $target
 # Running log. One entry per lead: goal · command · result · why it worked · next lead.
 
@@ -73,62 +94,91 @@ goal:   set scope and begin recon
 next:   confirm authorization in scope.txt / roe.md, then run recon
 EOF
 
-  cat > "$dir/START-HERE.md" <<EOF
+  # --- wire the skill library into the workspace --------------------------
+  local mode_flag=""; [ "$copy" -eq 1 ] && mode_flag="--copy"
+  # Claude Code: flat .claude/skills for auto-discovery in this folder
+  "$REPO_DIR/install.sh" --dest "$dest/.claude/skills" --quiet $mode_flag >/dev/null
+  # Everyone else + browsing: the full domain-organised library
+  if [ "$copy" -eq 1 ]; then cp -R "$REPO_DIR/skills" "$dest/skills"; else ln -s "$REPO_DIR/skills" "$dest/skills"; fi
+  # operating guide travels with the folder
+  cp "$REPO_DIR/AGENTS.md" "$dest/AGENTS.md"
+  cat > "$dest/CLAUDE.md" <<EOF
+# SploitAgent engagement — $target
+
+You are in an **authorized** engagement workspace. The SploitAgent skill library is wired into this
+folder, so this works even though the repo lives elsewhere. Operating guide:
+
+@AGENTS.md
+
+- Skills auto-load from \`.claude/skills/\`; the full domain-organised library is at \`./skills/\`.
+- **Load \`tradecraft-scope-roe\` first**, obey \`scope.txt\` / \`roe.md\`, and never touch anything out of scope.
+- Keep the running log in \`notes.md\`; write confirmed findings into \`findings/\`.
+EOF
+  printf 'repo=%s\ncreated=%s\ntarget=%s\nmode=%s\n' \
+    "$REPO_DIR" "$(date '+%Y-%m-%dT%H:%M:%S')" "$target" "$([ "$copy" -eq 1 ] && echo copy || echo link)" > "$dest/.sploitagent"
+
+  cat > "$dest/START-HERE.md" <<EOF
 # Start here — $target
 
-You're in an engagement workspace. Everything about this target lives here (and it's
-git-ignored, so it never leaks into the repo).
+This is a self-contained engagement workspace. The SploitAgent skills are wired in
+($([ "$copy" -eq 1 ] && echo 'copied — fully portable' || echo 'linked from the repo')), so any agent you open here can use them.
 
 ## 1. Set the boundary
-Edit **scope.txt** — put only the targets you're **authorized** to test, and note the
-authorization. The agent loads \`tradecraft-scope-roe\` first and refuses anything not listed.
+Edit **scope.txt** — only targets you're **authorized** to test, plus the authorization. The agent
+loads \`tradecraft-scope-roe\` first and refuses anything not listed.
 
 ## 2. Open your agent here
 \`\`\`bash
 claude          # or: codex · gemini · your agent of choice
 \`\`\`
 
-## 3. Just describe the task — the right skill loads itself
-Copy-paste one of these to begin:
+## 3. Describe the task — the right skill loads itself
+> Start an authorized assessment of **$target**. Confirm scope from scope.txt, then recon the
+> attack surface and tell me the highest-value leads.
 
-> Start an authorized assessment of **$target**. Confirm scope from scope.txt, then recon
-> the attack surface and tell me the highest-value leads.
-
-> I'm authorized (see roe.md). Test **$target** for access-control bugs (IDOR/BOLA) and
-> prove impact with the least data.
-
-> Review this codebase for injection sinks and secrets before we ship.
-
-The agent works one lead at a time, proves impact, and writes confirmed findings into
-\`findings/\`. Keep the running log in \`notes.md\`. See the full walkthrough:
-https://noorqureshi.github.io/SploitAgent/interact.html
+Full walkthrough: https://noorqureshi.github.io/SploitAgent/interact.html
 EOF
 
   say ""
-  say "${G}✔${R} Engagement ready: ${B}engagements/$slug/${R}"
-  say "   ${D}scope.txt  roe.md  notes.md  findings/  loot/  START-HERE.md${R}"
+  say "${G}✔${R} Engagement ready: ${B}$dest${R}"
+  say "   ${D}scope.txt roe.md notes.md findings/ loot/ START-HERE.md  +  skills wired in ($([ "$copy" -eq 1 ] && echo copied || echo linked))${R}"
   say ""
   say "Next:"
-  say "  ${G}1.${R} edit ${B}engagements/$slug/scope.txt${R}  — your authorized targets + authorization"
-  say "  ${G}2.${R} ${B}cd engagements/$slug && claude${R}   ${D}(or codex / gemini)${R}"
+  say "  ${G}1.${R} edit ${B}$dest/scope.txt${R}  — your authorized targets + authorization"
+  say "  ${G}2.${R} ${B}cd $dest && claude${R}   ${D}(or codex / gemini)${R}"
   say "  ${G}3.${R} say: ${P}\"Start an authorized assessment of $target. Confirm scope, then recon.\"${R}"
   say ""
-  say "  ${D}new here? open engagements/$slug/START-HERE.md${R}"
+  say "  ${D}new here? open $dest/START-HERE.md${R}"
+}
+
+do_install(){
+  "$REPO_DIR/install.sh" "$@"          # global skills (~/.claude/skills), passes through --copy/--uninstall
+  # put `sploit` on PATH so `sploit new` works from anywhere
+  local bindir="$HOME/.local/bin"
+  mkdir -p "$bindir"
+  ln -sf "$REPO_DIR/sploit" "$bindir/sploit"
+  say ""
+  say "${G}✔${R} linked ${B}sploit${R} → $bindir/sploit"
+  case ":$PATH:" in
+    *":$bindir:"*) say "  you can now run ${B}sploit new <target>${R} from anywhere." ;;
+    *) say "  add it to PATH:  ${B}export PATH=\"\$HOME/.local/bin:\$PATH\"${R}  (add to ~/.bashrc or ~/.zshrc)" ;;
+  esac
 }
 
 list_engagements(){
-  local base="$REPO_DIR/engagements"
-  if [ ! -d "$base" ] || [ -z "$(ls -A "$base" 2>/dev/null | grep -v '^\.' || true)" ]; then
-    say "No engagements yet. Create one:  ./sploit new <target>"; return 0
-  fi
-  say "${B}Engagements${R} (in engagements/):"
-  for d in "$base"/*/; do [ -d "$d" ] || continue; say "  • $(basename "$d")"; done
+  local found=0
+  for m in ./*/.sploitagent; do
+    [ -e "$m" ] || continue
+    [ "$found" -eq 0 ] && { say "${B}Engagements here${R} (in $(pwd)):"; found=1; }
+    say "  • $(basename "$(dirname "$m")")"
+  done
+  [ "$found" -eq 0 ] && say "No engagements in $(pwd). Create one:  sploit new <target> [dir]"
 }
 
 cmd="${1:-help}"
 case "$cmd" in
-  new)     shift || true; new_engagement "${1:-}" ;;
-  install) shift || true; exec "$REPO_DIR/install.sh" "$@" ;;
+  new)     shift || true; new_engagement "$@" ;;
+  install) shift || true; do_install "$@" ;;
   list|ls) list_engagements ;;
   help|-h|--help|"") usage ;;
   *) say "unknown command: $cmd"; say ""; usage; exit 2 ;;

@@ -35,14 +35,15 @@ itself (find the bug, prove impact, escalate, pivot, report, defend) written as 
 ## Quick start
 
 ```bash
-# 1. Get it
+# 1. Get it, and expose the skills to Claude Code everywhere (once)
 git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
+./sploit install
 
-# 2. Make a workspace for your target (creates engagements/acme.com/)
-./sploit new acme.com
+# 2. Make a workspace for your target — anywhere you like
+sploit new acme.com ~/work/acme          # the folder gets the skills wired in
 
-# 3. Open your agent inside it
-cd engagements/acme.com && claude        # or: codex · gemini
+# 3. Open your agent inside that folder
+cd ~/work/acme && claude                 # or: codex · gemini
 ```
 
 Then just say what you want:
@@ -50,7 +51,8 @@ Then just say what you want:
 > **"Start an authorized assessment of acme.com. Confirm scope, then recon."**
 
 That's it. The agent confirms your `scope.txt`, loads the matching skills, and works the loop.
-New here? Read the **[full walkthrough](https://noorqureshi.github.io/SploitAgent/interact.html)**.
+The workspace is **self-contained** — it doesn't need to live inside the repo, and any agent opened
+there can use the skills. New here? Read the **[full walkthrough](https://noorqureshi.github.io/SploitAgent/interact.html)**.
 
 ## Ask it things like…
 
@@ -76,11 +78,13 @@ Scope → Recon → Attack surface → Foothold → Escalate & pivot → Report 
   -scope-roe           /ad/wireless…  chaining     ad-* network-*
 ```
 
-Work stays in a per-target workspace (`./sploit new` creates it), git-ignored so nothing leaks:
+Work stays in a per-target workspace `sploit new` creates — **anywhere on disk**, with the skills and
+operating guide wired in so any agent opened there can use them:
 
 ```
-engagements/<target>/
+<your target folder>/
   scope.txt  roe.md  notes.md  findings/  loot/  START-HERE.md
+  .claude/skills/   skills/   CLAUDE.md   AGENTS.md      # skills + guide, wired in
 ```
 
 Full method: [`methodology.md`](methodology.md) · agent guide: [`AGENTS.md`](AGENTS.md).
@@ -155,10 +159,11 @@ Wanted skills are in [ROADMAP.md](ROADMAP.md); the full guide and house style ar
 ## Repository layout
 
 ```text
-sploit                            front door: new <target> · install · list
+sploit                            front door: new <target> [dir] · install · list
 install.sh                        link skills into ~/.claude/skills (Claude Code)
 skills/<domain>/<slug>/SKILL.md   the library
-engagements/<target>/             per-target workspace sploit new creates (git-ignored)
+engagements/<target>/             default workspace spot when run inside the repo (git-ignored;
+                                  pass a path to `sploit new` to put it anywhere instead)
 AGENTS.md · CLAUDE.md             operating guide read by any in-repo agent
 methodology.md                    engagement loop, scope rule, note-taking standard
 tools/catalog.py                  validation + index generation (schema in schemas/)

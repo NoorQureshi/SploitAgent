@@ -10,7 +10,9 @@
 # Usage:
 #   ./install.sh              # install for your user  (~/.claude/skills)
 #   ./install.sh --project    # install into ./.claude/skills (current project)
-#   ./install.sh --copy       # copy instead of symlink (for throwaway clones)
+#   ./install.sh --dest DIR   # install into DIR (used by `sploit new` for a workspace)
+#   ./install.sh --copy       # copy instead of symlink (for throwaway/portable clones)
+#   ./install.sh --quiet      # only print the summary line
 #   ./install.sh --uninstall  # remove only the skills this installer created
 #
 # Re-running is safe: it refreshes our links and never touches other skills.
@@ -19,18 +21,25 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC="$REPO_DIR/skills"
 
-MODE="link"; SCOPE="user"; ACTION="install"
-for arg in "${@:-}"; do
-  case "$arg" in
+MODE="link"; SCOPE="user"; ACTION="install"; DEST_OVERRIDE=""; QUIET=0
+while [ $# -gt 0 ]; do
+  case "${1:-}" in
     --project)   SCOPE="project" ;;
     --copy)      MODE="copy" ;;
+    --quiet)     QUIET=1 ;;
     --uninstall) ACTION="uninstall" ;;
-    ""|-h|--help) sed -n '2,17p' "$0"; [ "$arg" = "" ] || exit 0 ;;
-    *) echo "unknown option: $arg" >&2; exit 2 ;;
+    --dest)      DEST_OVERRIDE="${2:-}"; shift ;;
+    --dest=*)    DEST_OVERRIDE="${1#--dest=}" ;;
+    -h|--help)   sed -n '2,19p' "$0"; exit 0 ;;
+    "")          : ;;
+    *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
+  shift
 done
 
-if [ "$SCOPE" = "project" ]; then DEST="$PWD/.claude/skills"; else DEST="$HOME/.claude/skills"; fi
+if   [ -n "$DEST_OVERRIDE" ]; then DEST="$DEST_OVERRIDE"
+elif [ "$SCOPE" = "project" ]; then DEST="$PWD/.claude/skills"
+else DEST="$HOME/.claude/skills"; fi
 MANIFEST="$DEST/.sploitagent-manifest"   # records the slugs we created, for clean uninstall
 
 if [ "$ACTION" = "uninstall" ]; then
@@ -68,6 +77,7 @@ mv "$MANIFEST.tmp" "$MANIFEST"
 
 echo "SploitAgent: installed $count skill(s) into $DEST"
 [ "$skipped" -gt 0 ] && echo "  ($skipped skipped — a different skill already occupies that name)"
+[ "$QUIET" -eq 1 ] && exit 0
 cat <<EOF
 
 Done. Open Claude Code and it loads the matching skill for each task.

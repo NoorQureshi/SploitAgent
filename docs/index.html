@@ -56,11 +56,12 @@
 
   <section>
     <h2><span class="hash">#</span> Quick start</h2>
-    <p class="lead">Three commands from clone to working. <code>./sploit new</code> scaffolds a
-      per-target workspace; then open your agent inside it and describe the task.</p>
+    <p class="lead">Install once, then scaffold a per-target workspace <b>anywhere</b> — the folder gets
+      the skills wired in, so any agent opened there can use them.</p>
 <pre>git clone https://github.com/NoorQureshi/SploitAgent &amp;&amp; cd SploitAgent
-./sploit new acme.com                 <span class="c"># creates engagements/acme.com/</span>
-cd engagements/acme.com &amp;&amp; claude     <span class="c"># or: codex · gemini</span></pre>
+./sploit install                       <span class="c"># skills everywhere + `sploit` on PATH</span>
+sploit new acme.com ~/work/acme        <span class="c"># workspace anywhere you like</span>
+cd ~/work/acme &amp;&amp; claude               <span class="c"># or: codex · gemini</span></pre>
     <p style="margin-top:14px">Then say: <span style="color:var(--green)">"Start an authorized assessment of acme.com. Confirm scope, then recon."</span>
       <a class="more" href="start.html">Full setup →</a></p>
   </section>

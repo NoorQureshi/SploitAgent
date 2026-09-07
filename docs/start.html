@@ -31,19 +31,19 @@
   <section>
     <h2><span class="hash">#</span> Three commands to your first engagement</h2>
     <div class="step"><div class="num">1</div><div class="body">
-      <p>Clone the repo and scaffold a workspace for your target. <code>./sploit new</code> creates a
-        tidy <b>engagement folder</b> — <code>scope.txt</code>, <code>roe.md</code>,
-        <code>notes.md</code>, <code>findings/</code>, <code>loot/</code> — that stays git-ignored so
-        nothing leaks.</p>
+      <p>Clone the repo and run the installer once — it exposes the skills to Claude Code everywhere
+        and puts the <code>sploit</code> command on your <code>PATH</code>.</p>
 <pre>git clone https://github.com/NoorQureshi/SploitAgent
 cd SploitAgent
-./sploit new acme.com          <span class="c"># creates engagements/acme.com/</span></pre>
+./sploit install</pre>
     </div></div>
     <div class="step"><div class="num">2</div><div class="body">
-      <p>Put your authorized targets in <code>scope.txt</code>, then open your agent <b>inside that
-        folder</b> — it reads the operating guide and confirms scope first.</p>
-<pre>cd engagements/acme.com
-claude          <span class="c"># or: codex · gemini</span></pre>
+      <p>Scaffold a workspace for your target <b>anywhere you like</b>. The folder gets the skills and
+        operating guide wired in, so it's self-contained — it doesn't have to live inside the repo.</p>
+<pre>sploit new acme.com ~/work/acme     <span class="c"># or just: sploit new acme.com</span>
+cd ~/work/acme</pre>
+      <p style="margin-top:6px">Put your authorized targets in <code>scope.txt</code>, then open your agent here.</p>
+<pre>claude          <span class="c"># or: codex · gemini</span></pre>
     </div></div>
     <div class="step"><div class="num">3</div><div class="body">
       <p>Just describe the task — the matching skill loads itself and works the loop
