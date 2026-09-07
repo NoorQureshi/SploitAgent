@@ -24,7 +24,8 @@ grep `skills/`). Load that one `SKILL.md` and work its sections in order:
 Work one lead at a time; load the next skill as new leads appear.
 
 ## The loop (how to work a target)
-1. **Set up** — create the engagement workspace (below); write `scope.txt` (+ `roe.md` for bug bounty).
+1. **Set up** — create the engagement workspace (below), or run `./sploit new <target>` to scaffold
+   it; write `scope.txt` (+ `roe.md` for bug bounty).
 2. **Recon** — `recon-*` (subdomains, DNS, content/JS discovery, OSINT, services).
 3. **Attack surface** — route by domain: web → `web-*`, APIs → `api-*`, cloud → `cloud-*`,
    mobile → `mobile-*`, Active Directory → `ad-*`, perimeter/appliances → `network-*`,

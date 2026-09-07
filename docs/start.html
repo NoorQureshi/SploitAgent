@@ -29,20 +29,29 @@
     each task on its own. Below is the one-minute setup for the common agents.</p>
 
   <section>
-    <h2><span class="hash">#</span> Step 1 — get the library</h2>
+    <h2><span class="hash">#</span> Three commands to your first engagement</h2>
     <div class="step"><div class="num">1</div><div class="body">
-      <p>Clone the repository anywhere on your machine.</p>
+      <p>Clone the repo and scaffold a workspace for your target. <code>./sploit new</code> creates a
+        tidy <b>engagement folder</b> — <code>scope.txt</code>, <code>roe.md</code>,
+        <code>notes.md</code>, <code>findings/</code>, <code>loot/</code> — that stays git-ignored so
+        nothing leaks.</p>
 <pre>git clone https://github.com/NoorQureshi/SploitAgent
-cd SploitAgent</pre>
+cd SploitAgent
+./sploit new acme.com          <span class="c"># creates engagements/acme.com/</span></pre>
     </div></div>
     <div class="step"><div class="num">2</div><div class="body">
-      <p>Open your agent <b>inside that folder</b>. It reads the operating guide
-        (<code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for everyone else),
-        which tells it how to pick skills and to confirm scope first.</p>
+      <p>Put your authorized targets in <code>scope.txt</code>, then open your agent <b>inside that
+        folder</b> — it reads the operating guide and confirms scope first.</p>
+<pre>cd engagements/acme.com
+claude          <span class="c"># or: codex · gemini</span></pre>
     </div></div>
     <div class="step"><div class="num">3</div><div class="body">
-      <p>Give it a target you are authorized to test, and it works the loop — recon, attack, report.
-        That's it.</p>
+      <p>Just describe the task — the matching skill loads itself and works the loop
+        (recon → attack → report).</p>
+<pre><span class="c"># say to the agent:</span>
+Start an authorized assessment of acme.com.
+Confirm scope, then recon the attack surface.</pre>
+      <p style="margin-top:8px"><a class="more" href="interact.html">See a full session, annotated →</a></p>
     </div></div>
   </section>
 

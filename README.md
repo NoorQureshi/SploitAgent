@@ -41,23 +41,28 @@ no lock-in. Each is mapped to OWASP, MITRE ATT&CK, and CWE, so coverage is measu
 
 ## Quick start
 
-<details open>
-<summary><b>Claude Code</b></summary>
-
-Open it in the repository — `CLAUDE.md` instructs the agent on how to use the library and to confirm
-scope first:
+Three commands from clone to working — `./sploit new` scaffolds a per-target **engagement
+workspace**, then you open your agent inside it and just describe the task:
 
 ```bash
 git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
-claude
+./sploit new acme.com                 # scaffold engagements/acme.com/ (scope, notes, findings…)
+cd engagements/acme.com && claude     # or: codex · gemini
 ```
 
-Or expose every skill to Claude Code once (installs into `~/.claude/skills/` in the one-directory-deep
-layout Claude Code expects; `--project` scopes it to the current repo, `--uninstall` removes it):
+Then tell the agent: *"Start an authorized assessment of acme.com. Confirm scope, then recon."* It
+loads `tradecraft-scope-roe` first, refuses anything not in your `scope.txt`, and works the loop.
+
+<details open>
+<summary><b>Claude Code — details</b></summary>
+
+Opening the agent inside the repo is enough (`CLAUDE.md` tells it how to use the library). To expose
+every skill to Claude Code in **all** your projects, run the installer once — it links each skill into
+`~/.claude/skills/` in the one-directory-deep layout Claude Code expects (`--project` scopes to the
+current repo, `--uninstall` removes):
 
 ```bash
-git clone https://github.com/NoorQureshi/SploitAgent
-cd SploitAgent && ./install.sh
+./sploit install        # same as ./install.sh
 ```
 </details>
 
@@ -171,7 +176,9 @@ request is schema-validated by CI.
 
 ```text
 skills/<domain>/<slug>/SKILL.md   the library
+sploit                            front door: `new <target>` · `install` · `list`
 install.sh                        link the skills into ~/.claude/skills (Claude Code)
+engagements/<target>/             per-target workspace `sploit new` creates (git-ignored)
 AGENTS.md · CLAUDE.md             operating guide read by any in-repo agent
 methodology.md                    engagement loop, scope rule, note-taking standard
 schemas/skill.schema.json         the skill contract (validated in CI)
