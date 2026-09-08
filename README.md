@@ -13,11 +13,24 @@ Claude Code — or any AI agent — loads on demand to work an **authorized** ta
 
 <sub>[Docs & site](https://noorqureshi.github.io/SploitAgent/) · [How it works](https://noorqureshi.github.io/SploitAgent/interact.html) · [Search skills](https://noorqureshi.github.io/SploitAgent/catalog.html) · [Contributing](CONTRIBUTING.md)</sub>
 
-<img src="docs/terminal.svg" width="820" alt="A Claude Code terminal session: describe a task in plain English and the matching SploitAgent skill loads to work an authorized target from recon to report.">
-
 </div>
 
----
+```console
+$ git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
+$ ./sploit install                     # links the skills into Claude Code + sploit on PATH
+$ sploit new acme.com ~/work/acme       # scaffold a workspace for your target (anywhere)
+$ cd ~/work/acme && claude
+
+  > Start an authorized assessment of acme.com. Confirm scope, then recon.
+
+  ● tradecraft-scope-roe             scope confirmed · *.acme.tld (in scope)
+  ● recon-techstack-fingerprinting   Django REST Framework · Cloudflare WAF
+  ● api-bola                         probing object references on /api/v1/orders
+      ✓ GET /api/v1/orders/1044  (account B's token)  →  returns account A's order
+  ● web-idor                         confirmed cross-tenant read with 2 accounts
+  ● reporting-triage-validation      CVSS 8.1 (High) · reproduced from a clean session
+  ✔ wrote findings/idor-orders.md
+```
 
 ## What it is
 
@@ -57,25 +70,9 @@ Then type your goal:
 Start an authorized assessment of acme.com. Confirm scope, then recon.
 ```
 
-## What it does — example run
+## What you get on disk
 
-The agent confirms scope, then loads skills as the target reveals leads. Abridged session:
-
-```text
-> Start an authorized assessment of acme.com. Confirm scope, then recon.
-
-● tradecraft-scope-roe             scope confirmed · *.acme.tld (bug-bounty, in scope)
-● recon-subdomain-enum             41 hosts found · api.acme.tld is live
-● recon-techstack-fingerprinting   Django REST Framework · Cloudflare WAF · /api/v1
-● api-bola                         testing object references on /api/v1/orders
-    ✓ GET /api/v1/orders/1044  (account B's token)  → returns account A's order
-    ✓ IDs are sequential → ~20k orders enumerable (not hoarded)
-● web-idor                         confirmed cross-tenant read with 2 accounts
-● reporting-triage-validation      reproduced from a clean session · CVSS 8.1 (High) · not a dup
-✔ wrote findings/idor-orders.md
-```
-
-**What you get on disk** — the workspace, updated as it works:
+As the agent works (see the session up top), it writes everything into the workspace:
 
 ```text
 ~/work/acme/
