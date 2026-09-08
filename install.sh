@@ -18,7 +18,15 @@
 # Re-running is safe: it refreshes our links and never touches other skills.
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve this script's real location even when invoked via a symlink.
+# BSD/macOS-safe: no `readlink -f`.
+__src="${BASH_SOURCE[0]}"
+while [ -h "$__src" ]; do
+  __dir="$(cd -P "$(dirname "$__src")" && pwd)"
+  __src="$(readlink "$__src")"
+  case "$__src" in /*) ;; *) __src="$__dir/$__src" ;; esac
+done
+REPO_DIR="$(cd -P "$(dirname "$__src")" && pwd)"
 SRC="$REPO_DIR/skills"
 
 MODE="link"; SCOPE="user"; ACTION="install"; DEST_OVERRIDE=""; QUIET=0

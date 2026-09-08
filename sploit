@@ -17,7 +17,15 @@
 #   cd ~/work/acme && claude               # then: "Start an authorized assessment of acme.com…"
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve this script's real location even when invoked via a PATH symlink
+# (~/.local/bin/sploit -> the repo). BSD/macOS-safe: no `readlink -f`.
+__src="${BASH_SOURCE[0]}"
+while [ -h "$__src" ]; do
+  __dir="$(cd -P "$(dirname "$__src")" && pwd)"
+  __src="$(readlink "$__src")"
+  case "$__src" in /*) ;; *) __src="$__dir/$__src" ;; esac
+done
+REPO_DIR="$(cd -P "$(dirname "$__src")" && pwd)"
 G=$'\033[32m'; P=$'\033[35m'; D=$'\033[2m'; B=$'\033[1m'; R=$'\033[0m'
 say(){ printf '%s\n' "$*"; }
 
@@ -220,11 +228,21 @@ do_watch(){
     open_url "http://127.0.0.1:${p:-$port}"; return
   fi
   command -v python3 >/dev/null 2>&1 || { say "${B}!${R} python3 is required for the console (install Xcode CLT or 'brew install python')."; exit 1; }
-  if [ "$fg" -eq 1 ]; then exec python3 "$REPO_DIR/tools/console/server.py" --port "$port"; fi
+  local server="$REPO_DIR/tools/console/server.py"
+  [ -f "$server" ] || { say "${B}!${R} console server not found at $server"; say "  ${D}re-run 'git pull' in the repo, or './sploit install' to relink.${R}"; exit 1; }
+  if [ "$fg" -eq 1 ]; then exec python3 "$server" --port "$port"; fi
 
-  nohup python3 "$REPO_DIR/tools/console/server.py" --port "$port" --no-open >"$HOME/.sploit/console.log" 2>&1 &
-  printf '%s %s\n' "$!" "$port" > "$pidf"
-  sleep 0.5
+  nohup python3 "$server" --port "$port" --no-open >"$HOME/.sploit/console.log" 2>&1 &
+  local newpid=$!
+  printf '%s %s\n' "$newpid" "$port" > "$pidf"
+  sleep 0.7
+  if ! kill -0 "$newpid" 2>/dev/null; then       # died on startup (port in use, bad python, …)
+    rm -f "$pidf"
+    say "${B}!${R} console failed to start. Last output:"
+    tail -n 15 "$HOME/.sploit/console.log" 2>/dev/null | sed 's/^/  /'
+    say "  ${D}try a different port: sploit watch --port 8788${R}"
+    exit 1
+  fi
   say "${G}✔${R} console running in the background → ${B}http://127.0.0.1:$port${R}"
   say "  your terminal is free. ${D}stop: sploit watch --stop · log: ~/.sploit/console.log${R}"
   open_url "http://127.0.0.1:$port"
