@@ -45,7 +45,7 @@ knowledge the agent didn't have.
 
 ## Install
 
-**Requirements:** an AI coding agent ([Claude Code](https://claude.com/claude-code) recommended; Codex/Gemini/local also work), `git`, a terminal.
+**Requirements:** an AI coding agent — [Claude Code](https://claude.com/claude-code) or [OpenCode](https://opencode.ai) (Codex, Gemini, or your own API script also work) — plus `git`, a terminal, and `python3` (only for the optional console).
 
 ```bash
 git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
@@ -59,16 +59,24 @@ finds them in **any** directory) and puts the `sploit` command on your `PATH`. U
 ## Use
 
 ```bash
-sploit new acme.com ~/work/acme     # 1. make a workspace for the target (put it anywhere)
-cd ~/work/acme                      # 2. edit scope.txt with your authorized targets
-claude                              # 3. open your agent here (or: codex · gemini)
+sploit new acme.com ~/work/acme     # 1. scaffold a workspace (put it anywhere)
+cd ~/work/acme                      # 2. edit scope.txt with your authorized target(s)
+sploit watch                        # 3. (optional) console in your browser — runs in the background
+claude                              # 4. open your agent here: claude · opencode · codex · gemini
 ```
 
-Then type your goal:
+Then type your goal to the agent:
 
 ```
 Start an authorized assessment of acme.com. Confirm scope, then recon.
 ```
+
+**How the pieces fit — one terminal is enough:**
+
+- Your **terminal** runs the agent. It's an interactive session, so it holds that tab while you work — that's normal for `claude`, `opencode`, etc.
+- **`sploit watch` runs the console in the background** and opens it in your **browser**, so the same terminal stays free. Stop it with `sploit watch --stop`.
+- Everything the agent does lands in the **workspace folder** — `scope.txt`, `plan.md`, `notes.md`, `findings/`. That folder is the source of truth, and what the console reads.
+- Same flow with **Claude Code, OpenCode, Codex, Gemini, or your own API script** — they all read `AGENTS.md` and the skills; none of it is Claude-specific.
 
 ## What you get on disk
 
@@ -105,10 +113,11 @@ Enforce object-level authorization: check the order's owner == the caller on eve
 That's the whole point: **you describe the task, the agent does the work and hands you evidence.**
 See a fully annotated run → **[How it works](https://noorqureshi.github.io/SploitAgent/interact.html)**.
 
-**Watch it live (optional).** Run `sploit watch` for a small read-only local dashboard
-(`http://127.0.0.1:8787`) that shows the agent's **plan**, a live **activity timeline** (skills
-loaded → commands → results → findings), and the findings — for every engagement on your machine.
-It reads the workspace on disk, so it works the same with Claude Code, OpenCode, Codex, or Gemini.
+**Watch it live (optional).** `sploit watch` starts a small read-only dashboard
+(`http://127.0.0.1:8787`) **in the background** — your terminal stays free — showing the agent's
+**plan**, a live **activity timeline** (skills loaded → commands → results → findings), and the
+findings, for every engagement on your machine. Stop it with `sploit watch --stop`. It just reads
+the workspace on disk, so it works the same whichever agent you run.
 
 ## Common requests
 

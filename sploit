@@ -28,7 +28,8 @@ ${B}SploitAgent${R} — security skills for AI agents (authorized use only)
   ${G}sploit new <target> [dir]${R}   create an engagement workspace with the skills wired in
                               ${D}dir defaults to ./<target>; pass any path to put it elsewhere${R}
       ${D}--copy${R}                  copy the skills into the workspace (portable; survives moving the repo)
-  ${G}sploit watch${R}                open the read-only console to see what the agent is doing (local)
+  ${G}sploit watch${R}                open the console (runs in the background — your terminal stays free)
+      ${D}--stop${R}                  stop the background console      ${D}--fg${R}  run it in the foreground
   ${G}sploit install${R}              expose skills to Claude Code everywhere + put 'sploit' on PATH
   ${G}sploit list${R}                 list engagement workspaces under the current directory
   ${G}sploit help${R}                 show this help
@@ -154,10 +155,12 @@ This is a self-contained engagement workspace. The SploitAgent skills are wired 
 Edit **scope.txt** — only targets you're **authorized** to test, plus the authorization. The agent
 loads \`tradecraft-scope-roe\` first and refuses anything not listed.
 
-## 2. Open your agent here
+## 2. Open your agent here (any of them)
 \`\`\`bash
-claude          # or: codex · gemini · your agent of choice
+claude          # or: opencode · codex · gemini — whatever you use
 \`\`\`
+Optional: run \`sploit watch\` first (it runs in the background) to see the plan and live
+activity in your browser while the agent works.
 
 ## 3. Describe the task — the right skill loads itself
 > Start an authorized assessment of **$target**. Confirm scope from scope.txt, then recon the
@@ -192,6 +195,41 @@ do_install(){
   esac
 }
 
+open_url(){ python3 -c "import webbrowser,sys; webbrowser.open(sys.argv[1])" "$1" >/dev/null 2>&1 || true; }
+
+do_watch(){
+  local port=8787 action=run fg=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --stop)   action=stop ;;
+      --fg)     fg=1 ;;
+      --port)   port="${2:-8787}"; shift ;;
+      --port=*) port="${1#--port=}" ;;
+    esac; shift
+  done
+  mkdir -p "$HOME/.sploit"
+  local pidf="$HOME/.sploit/console.pid" pid="" p=""
+  [ -f "$pidf" ] && read -r pid p < "$pidf" 2>/dev/null || true
+
+  if [ "$action" = stop ]; then
+    if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then kill "$pid" 2>/dev/null; rm -f "$pidf"; say "console stopped."; else say "console is not running."; rm -f "$pidf"; fi
+    return
+  fi
+  if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+    say "console already running → ${B}http://127.0.0.1:${p:-$port}${R}   ${D}(stop: sploit watch --stop)${R}"
+    open_url "http://127.0.0.1:${p:-$port}"; return
+  fi
+  command -v python3 >/dev/null 2>&1 || { say "${B}!${R} python3 is required for the console (install Xcode CLT or 'brew install python')."; exit 1; }
+  if [ "$fg" -eq 1 ]; then exec python3 "$REPO_DIR/tools/console/server.py" --port "$port"; fi
+
+  nohup python3 "$REPO_DIR/tools/console/server.py" --port "$port" --no-open >"$HOME/.sploit/console.log" 2>&1 &
+  printf '%s %s\n' "$!" "$port" > "$pidf"
+  sleep 0.5
+  say "${G}✔${R} console running in the background → ${B}http://127.0.0.1:$port${R}"
+  say "  your terminal is free. ${D}stop: sploit watch --stop · log: ~/.sploit/console.log${R}"
+  open_url "http://127.0.0.1:$port"
+}
+
 list_engagements(){
   local found=0
   for m in ./*/.sploitagent; do
@@ -206,7 +244,7 @@ cmd="${1:-help}"
 case "$cmd" in
   new)         shift || true; new_engagement "$@" ;;
   install)     shift || true; do_install "$@" ;;
-  watch|ui|console) shift || true; exec python3 "$REPO_DIR/tools/console/server.py" "$@" ;;
+  watch|ui|console) shift || true; do_watch "$@" ;;
   list|ls)     list_engagements ;;
   help|-h|--help|"") usage ;;
   *) say "unknown command: $cmd"; say ""; usage; exit 2 ;;
