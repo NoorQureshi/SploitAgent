@@ -5,133 +5,429 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SploitAgent Console</title>
 <style>
-  :root{--bg:#0d1117;--panel:#131a24;--panel2:#161b22;--border:#2a3038;--text:#e6edf3;--muted:#9aa4b2;
-    --green:#39d353;--purple:#a371f7;--blue:#58a6ff;--red:#ff6b6b;--yellow:#ffbd2e}
+  :root{
+    --bg:#0b0f14; --bg2:#0e131a; --panel:#121821; --panel2:#161d27; --hover:#1a222e;
+    --border:#232c38; --border2:#2c3745; --text:#e6edf3; --dim:#aeb8c4; --muted:#7d8896;
+    --accent:#39d353; --purple:#b48cff; --blue:#5aa9ff; --green:#3fd67a; --red:#ff6b6b;
+    --yellow:#ffcf4a; --orange:#ff9f43;
+    --crit:#ff5c5c; --high:#ff9f43; --med:#ffcf4a; --low:#5aa9ff; --info:#8a94a2;
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-  a{color:var(--green);text-decoration:none} code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  header{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--panel2)}
-  header .b{font-weight:700} header .b .a{color:var(--green)}
-  header .tag{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:2px 10px}
-  header .sp{margin-left:auto;font-size:12px;color:var(--muted)}
-  .wrap{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 49px)}
-  aside{border-right:1px solid var(--border);overflow:auto;background:var(--panel2)}
-  .tabs{display:flex;border-bottom:1px solid var(--border)}
-  .tabs button{flex:1;background:none;border:0;color:var(--muted);padding:10px;cursor:pointer;font-size:13px}
-  .tabs button.on{color:var(--text);box-shadow:inset 0 -2px 0 var(--green)}
-  .item{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer}
-  .item:hover{background:var(--panel)} .item.on{background:var(--panel);box-shadow:inset 3px 0 0 var(--green)}
-  .item .t{font-weight:600} .item .m{font-size:12px;color:var(--muted);margin-top:2px}
-  main{overflow:auto;padding:20px 24px}
-  h2{font-size:16px;margin:22px 0 8px} h2:first-child{margin-top:0}
-  .muted{color:var(--muted)} .empty{color:var(--muted);padding:40px 0;text-align:center}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin:8px 0}
-  pre{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;font-size:12.5px}
-  .md h1{font-size:17px;margin:.4em 0} .md h2{font-size:15px} .md h3{font-size:14px;color:var(--muted)}
-  .md ul{margin:.3em 0;padding-left:20px} .md code{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:0 5px}
-  .chk{color:var(--green)} .unchk{color:var(--muted)}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+
+  /* ---- header ---- */
+  header{display:flex;align-items:center;gap:12px;padding:0 18px;height:52px;
+    border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:5}
+  .brand{font-weight:700;font-size:15px;letter-spacing:.2px}
+  .brand .a{color:var(--accent)}
+  .tag{font-size:11.5px;color:var(--dim);border:1px solid var(--border2);border-radius:999px;padding:3px 10px}
+  .live{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(57,211,83,.6);animation:pulse 2s infinite}
+  .dot.stale{background:var(--muted);animation:none;box-shadow:none}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(57,211,83,.5)}70%{box-shadow:0 0 0 7px rgba(57,211,83,0)}100%{box-shadow:0 0 0 0 rgba(57,211,83,0)}}
+
+  /* ---- shell ---- */
+  .shell{display:grid;grid-template-columns:288px 1fr;height:calc(100vh - 52px)}
+  aside{border-right:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;overflow:hidden}
+  .tabs{display:flex;border-bottom:1px solid var(--border);flex:0 0 auto}
+  .tabs button{flex:1;background:none;border:0;color:var(--muted);padding:11px;cursor:pointer;
+    font-size:13px;font-weight:600;transition:color .15s}
+  .tabs button:hover{color:var(--dim)}
+  .tabs button.on{color:var(--text);box-shadow:inset 0 -2px 0 var(--accent)}
+  .side-scroll{overflow:auto;flex:1}
+
+  .item{padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s}
+  .item:hover{background:var(--hover)}
+  .item.on{background:var(--panel);box-shadow:inset 3px 0 0 var(--accent)}
+  .item .t{font-weight:600;display:flex;align-items:center;gap:8px}
+  .item .m{font-size:12px;color:var(--muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
+  .cnt{font-variant-numeric:tabular-nums}
+
+  /* skills side */
+  .skwrap{padding:12px}
+  #skillq{width:100%;background:var(--panel);border:1px solid var(--border2);border-radius:8px;
+    color:var(--text);padding:9px 12px;font-size:13px;outline:none}
+  #skillq:focus{border-color:var(--accent)}
+  .skcount{font-size:12px;color:var(--muted);margin:10px 2px 6px}
+  .srow{padding:9px 10px;border-radius:8px;border:1px solid transparent}
+  .srow:hover{background:var(--panel);border-color:var(--border)}
+  .srow .n{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--text)}
+  .srow .pill{color:var(--purple);font-family:ui-monospace,monospace;font-size:11px;margin-left:6px}
+  .srow .d{font-size:12px;color:var(--muted);margin-top:2px}
+
+  /* ---- main ---- */
+  main{overflow:auto;position:relative}
+  .empty{color:var(--muted);padding:64px 24px;text-align:center;font-size:14px}
+  .empty code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--dim)}
+
+  .summary{padding:18px 24px 14px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,var(--bg2),var(--bg))}
+  .summary h1{font-size:19px;margin:0;display:flex;align-items:center;gap:10px}
+  .path{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted);font-weight:400}
+  .scope{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
+  .chip{font-family:ui-monospace,monospace;font-size:12px;background:var(--panel2);border:1px solid var(--border2);
+    border-radius:6px;padding:2px 8px;color:var(--dim)}
+  .sevbar{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .sevpill{display:flex;align-items:center;gap:7px;font-size:12px;background:var(--panel);border:1px solid var(--border);
+    border-radius:999px;padding:4px 11px 4px 8px;color:var(--dim)}
+  .sevpill b{font-variant-numeric:tabular-nums;color:var(--text)}
+  .sq{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .sq.critical{background:var(--crit)} .sq.high{background:var(--high)} .sq.medium{background:var(--med)}
+  .sq.low{background:var(--low)} .sq.info{background:var(--info)} .sq.steps{background:var(--muted)}
+
+  /* subtabs */
+  .subtabs{display:flex;gap:2px;padding:0 24px;border-bottom:1px solid var(--border);
+    position:sticky;top:0;background:var(--bg);z-index:3}
+  .subtabs button{background:none;border:0;color:var(--muted);padding:13px 4px;margin-right:20px;cursor:pointer;
+    font-size:13.5px;font-weight:600;border-bottom:2px solid transparent;transition:color .15s}
+  .subtabs button:hover{color:var(--dim)}
+  .subtabs button.on{color:var(--text);border-bottom-color:var(--accent)}
+  .subtabs .badge{font-size:11px;background:var(--panel2);border:1px solid var(--border2);border-radius:999px;
+    padding:0 6px;margin-left:6px;color:var(--dim);font-weight:600;vertical-align:1px}
+  .pane{padding:18px 24px 40px}
+
+  /* activity */
+  .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .fchip{font-size:12px;border:1px solid var(--border2);border-radius:999px;padding:4px 11px;cursor:pointer;
+    color:var(--muted);background:var(--panel);user-select:none;transition:all .12s}
+  .fchip:hover{color:var(--dim)}
+  .fchip.on{color:var(--text);border-color:var(--accent);background:rgba(57,211,83,.08)}
+  #actq{margin-left:auto;background:var(--panel);border:1px solid var(--border2);border-radius:8px;color:var(--text);
+    padding:6px 11px;font-size:12.5px;outline:none;min-width:180px}
+  #actq:focus{border-color:var(--accent)}
+
   .tl{list-style:none;margin:0;padding:0}
-  .tl li{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
-  .tl .ts{color:var(--muted);font-size:11px;white-space:nowrap;font-family:ui-monospace,monospace;min-width:74px}
-  .tl .ev{font-size:11px;text-transform:uppercase;letter-spacing:.4px;min-width:92px}
-  .tl .dt{flex:1}
+  .tl li{display:grid;grid-template-columns:64px 104px 1fr;gap:12px;padding:9px 4px;border-bottom:1px solid var(--border);
+    align-items:baseline}
+  .tl li.fresh{animation:fade .9s ease}
+  @keyframes fade{from{background:rgba(57,211,83,.10)}to{background:transparent}}
+  .tl .ts{color:var(--muted);font-size:11px;font-family:ui-monospace,monospace;white-space:nowrap}
+  .tl .ev{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;white-space:nowrap}
+  .tl .ev .sk{display:block;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);font-size:11px;margin-top:1px}
+  .tl .dt{color:var(--dim);word-break:break-word}
+  .tl .dt .cmd{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--text)}
   .ev.plan,.ev.skill_load{color:var(--purple)} .ev.command{color:var(--blue)} .ev.result{color:var(--green)}
   .ev.finding{color:var(--red)} .ev.decision{color:var(--yellow)} .ev.note{color:var(--muted)}
-  .sev{font-size:11px;border:1px solid var(--border);border-radius:999px;padding:1px 8px;margin-left:8px}
-  .sev.critical,.sev.high{color:var(--red);border-color:var(--red)} .sev.medium{color:var(--yellow)}
-  .sev.low,.sev.info{color:var(--muted)}
-  .find{cursor:pointer} .find:hover{background:var(--panel2)}
-  #skillq{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;margin-bottom:10px}
-  .srow{padding:8px 10px;border-bottom:1px solid var(--border)} .srow .n{font-family:ui-monospace,monospace;color:var(--text)}
-  .srow .d{font-size:12px;color:var(--muted)} .pill{color:var(--purple);font-family:ui-monospace,monospace;font-size:12px;margin-left:6px}
+  .sev{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-radius:999px;
+    padding:1px 8px;margin-left:8px;border:1px solid;white-space:nowrap;vertical-align:1px}
+  .sev.critical{color:var(--crit);border-color:var(--crit);background:rgba(255,92,92,.08)}
+  .sev.high{color:var(--high);border-color:var(--high);background:rgba(255,159,67,.08)}
+  .sev.medium{color:var(--med);border-color:var(--med);background:rgba(255,207,74,.08)}
+  .sev.low{color:var(--low);border-color:var(--low);background:rgba(90,169,255,.08)}
+  .sev.info{color:var(--info);border-color:var(--border2)}
+
+  /* findings list */
+  .fcard{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--info);
+    border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:background .12s,border-color .12s}
+  .fcard:hover{background:var(--panel2);border-color:var(--border2)}
+  .fcard.critical{border-left-color:var(--crit)} .fcard.high{border-left-color:var(--high)}
+  .fcard.medium{border-left-color:var(--med)} .fcard.low{border-left-color:var(--low)}
+  .fcard .h{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14.5px}
+  .fcard .file{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted);margin-top:4px}
+  .fcard .go{margin-left:auto;color:var(--muted);font-size:18px;line-height:1}
+
+  /* drawer */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100vh;width:min(760px,92vw);background:var(--panel);
+    border-left:1px solid var(--border2);box-shadow:-16px 0 40px rgba(0,0,0,.4);transform:translateX(100%);
+    transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:21;display:flex;flex-direction:column}
+  .drawer.on{transform:translateX(0)}
+  .drawer .dhead{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+  .drawer .dhead .file{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted)}
+  .drawer .x{margin-left:auto;background:none;border:1px solid var(--border2);color:var(--dim);border-radius:8px;
+    width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1}
+  .drawer .x:hover{background:var(--hover);color:var(--text)}
+  .drawer .dbody{overflow:auto;padding:20px 24px 48px}
+
+  /* markdown */
+  .md{color:var(--dim);font-size:13.5px}
+  .md h1{font-size:20px;color:var(--text);margin:.2em 0 .5em;padding-bottom:.3em;border-bottom:1px solid var(--border)}
+  .md h2{font-size:16px;color:var(--text);margin:1.4em 0 .5em}
+  .md h3{font-size:14px;color:var(--dim);margin:1.2em 0 .4em}
+  .md p{margin:.6em 0}
+  .md ul,.md ol{margin:.5em 0;padding-left:22px} .md li{margin:.25em 0}
+  .md code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:12.5px}
+  .md pre{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;overflow:auto;
+    margin:.7em 0;line-height:1.5}
+  .md pre code{background:none;border:0;padding:0;font-size:12.5px;color:var(--text)}
+  .md blockquote{border-left:3px solid var(--border2);margin:.7em 0;padding:.2em 0 .2em 14px;color:var(--muted)}
+  .md a{color:var(--accent)}
+  .md hr{border:0;border-top:1px solid var(--border);margin:1.3em 0}
+  .md table{border-collapse:collapse;margin:.8em 0;width:100%;font-size:13px;display:block;overflow:auto}
+  .md th,.md td{border:1px solid var(--border2);padding:6px 11px;text-align:left}
+  .md th{background:var(--panel2);color:var(--text);font-weight:600}
+  .md .chk{color:var(--accent)} .md .unchk{color:var(--muted)}
+  .md strong{color:var(--text)}
 </style>
 </head>
 <body>
 <header>
-  <span class="b">Sploit<span class="a">Agent</span></span>
+  <span class="brand">Sploit<span class="a">Agent</span></span>
   <span class="tag">Console</span>
   <span class="tag">read-only · local</span>
-  <span class="sp" id="clock"></span>
+  <span class="live"><span class="dot" id="dot"></span><span id="livetxt">live</span></span>
 </header>
-<div class="wrap">
+
+<div class="shell">
   <aside>
     <div class="tabs">
       <button id="tab-eng" class="on" onclick="showTab('eng')">Engagements</button>
       <button id="tab-sk" onclick="showTab('sk')">Skills</button>
     </div>
-    <div id="englist"></div>
-    <div id="sklist" hidden style="padding:12px">
-      <input id="skillq" placeholder="Search skills…" autocomplete="off">
-      <div id="skrows"></div>
+    <div class="side-scroll">
+      <div id="englist"></div>
+      <div id="sklist" class="skwrap" hidden>
+        <input id="skillq" placeholder="Search 127 skills…" autocomplete="off" spellcheck="false">
+        <div id="skrows"></div>
+      </div>
     </div>
   </aside>
-  <main id="main"><div class="empty">Select an engagement, or run <code>sploit new &lt;target&gt;</code> to create one.</div></main>
+  <main id="main"><div class="empty">Select an engagement on the left, or run <code>sploit new &lt;target&gt;</code> to create one.</div></main>
+</div>
+
+<div class="scrim" id="scrim" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Finding detail">
+  <div class="dhead">
+    <span id="d-sev"></span>
+    <span class="file" id="d-file"></span>
+    <button class="x" onclick="closeDrawer()" aria-label="Close">×</button>
+  </div>
+  <div class="dbody md" id="d-body"></div>
 </div>
 
 <script>
+"use strict";
 const $=s=>document.querySelector(s);
 const esc=s=>(s||"").replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-let CUR=null, SKILLS=[];
+const SEV_ORDER={critical:0,high:1,medium:2,low:3,info:4,"":5};
 
-function md(t){ // tiny markdown → html (headings, checkboxes, bullets, bold, code)
-  const lines=(t||"").split("\n"); let h="",inUl=false;
-  const inline=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`(.+?)`/g,"<code>$1</code>");
-  const closeUl=()=>{ if(inUl){h+="</ul>";inUl=false;} };
-  for(const ln of lines){
-    let m;
-    if(m=ln.match(/^###\s+(.*)/)){closeUl();h+=`<h3>${inline(m[1])}</h3>`;continue;}
-    if(m=ln.match(/^##\s+(.*)/)){closeUl();h+=`<h2>${inline(m[1])}</h2>`;continue;}
-    if(m=ln.match(/^#\s+(.*)/)){closeUl();h+=`<h1>${inline(m[1])}</h1>`;continue;}
-    if(m=ln.match(/^\s*-\s+\[( |x|X)\]\s+(.*)/)){ if(!inUl){h+="<ul>";inUl=true;}
-      const on=m[1].toLowerCase()==="x"; h+=`<li><span class="${on?'chk':'unchk'}">${on?'☑':'☐'}</span> ${inline(m[2])}</li>`;continue;}
-    if(m=ln.match(/^\s*-\s+(.*)/)){ if(!inUl){h+="<ul>";inUl=true;} h+=`<li>${inline(m[1])}</li>`;continue;}
-    closeUl();
-    if(ln.trim()==="") h+=""; else h+=`<p>${inline(ln)}</p>`;
+let CUR=null, CUROBJ=null, SKILLS=[], SUBTAB="activity";
+let sigEng="", sigDetail={}, prevMaxTs="", curActivity=[], curFindings=[];
+let actFilter=new Set(["command","result","finding","decision","plan","skill_load","note"]);
+let actQuery="";
+
+/* ---------- markdown ---------- */
+function inlineMd(s){
+  return esc(s)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/(^|[^\*_])[\*_]([^\*_]+)[\*_]([^\*_]|$)/g,'$1<em>$2</em>$3');
+}
+function renderMd(src){
+  const lines=(src||"").replace(/\r\n/g,"\n").split("\n");
+  let out="", i=0;
+  const isTableSep=l=>/^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)+\|?\s*$/.test(l);
+  const cells=l=>l.replace(/^\s*\|/,"").replace(/\|\s*$/,"").split("|").map(c=>c.trim());
+  while(i<lines.length){
+    let ln=lines[i];
+    // fenced code
+    let m=ln.match(/^\s*```/);
+    if(m){ i++; let buf=[]; while(i<lines.length && !/^\s*```/.test(lines[i])){ buf.push(lines[i]); i++; } i++;
+      out+=`<pre><code>${esc(buf.join("\n"))}</code></pre>`; continue; }
+    // hr
+    if(/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(ln)){ out+="<hr>"; i++; continue; }
+    // heading
+    if(m=ln.match(/^(#{1,6})\s+(.*)$/)){ const h=Math.min(m[1].length,3); out+=`<h${h}>${inlineMd(m[2])}</h${h}>`; i++; continue; }
+    // table
+    if(ln.includes("|") && i+1<lines.length && isTableSep(lines[i+1])){
+      const head=cells(ln); i+=2; let rows=[];
+      while(i<lines.length && lines[i].includes("|") && lines[i].trim()!==""){ rows.push(cells(lines[i])); i++; }
+      out+="<table><thead><tr>"+head.map(c=>`<th>${inlineMd(c)}</th>`).join("")+"</tr></thead><tbody>"+
+        rows.map(r=>"<tr>"+r.map(c=>`<td>${inlineMd(c)}</td>`).join("")+"</tr>").join("")+"</tbody></table>";
+      continue;
+    }
+    // blockquote
+    if(/^\s*>\s?/.test(ln)){ let buf=[]; while(i<lines.length && /^\s*>\s?/.test(lines[i])){ buf.push(lines[i].replace(/^\s*>\s?/,"")); i++; }
+      out+=`<blockquote>${renderMd(buf.join("\n"))}</blockquote>`; continue; }
+    // unordered / checkbox list
+    if(/^\s*[-*+]\s+/.test(ln)){ let buf="<ul>";
+      while(i<lines.length && /^\s*[-*+]\s+/.test(lines[i])){
+        let it=lines[i].replace(/^\s*[-*+]\s+/,""); const cb=it.match(/^\[( |x|X)\]\s+(.*)/);
+        if(cb){ const on=cb[1].toLowerCase()==="x"; buf+=`<li style="list-style:none;margin-left:-18px"><span class="${on?'chk':'unchk'}">${on?'☑':'☐'}</span> ${inlineMd(cb[2])}</li>`; }
+        else buf+=`<li>${inlineMd(it)}</li>`;
+        i++;
+      } out+=buf+"</ul>"; continue; }
+    // ordered list
+    if(/^\s*\d+\.\s+/.test(ln)){ let buf="<ol>";
+      while(i<lines.length && /^\s*\d+\.\s+/.test(lines[i])){ buf+=`<li>${inlineMd(lines[i].replace(/^\s*\d+\.\s+/,""))}</li>`; i++; }
+      out+=buf+"</ol>"; continue; }
+    // blank
+    if(ln.trim()===""){ i++; continue; }
+    // paragraph (gather until blank / block)
+    let buf=[ln]; i++;
+    while(i<lines.length && lines[i].trim()!=="" && !/^\s*(#{1,6}\s|[-*+]\s|\d+\.\s|>|```|(-{3,}|\*{3,})\s*$)/.test(lines[i])){ buf.push(lines[i]); i++; }
+    out+=`<p>${inlineMd(buf.join(" "))}</p>`;
   }
-  closeUl(); return h;
+  return out;
 }
-function shortTs(ts){ if(!ts) return ""; return ts.replace("T"," ").replace("Z","").slice(5,16); }
 
+/* ---------- time ---------- */
+function relTime(ts){
+  if(!ts) return "";
+  const t=Date.parse(ts.endsWith("Z")||ts.includes("+")?ts:ts+"Z"); if(isNaN(t)) return ts;
+  const s=Math.max(0,(Date.now()-t)/1000);
+  if(s<60) return Math.floor(s)+"s ago";
+  if(s<3600) return Math.floor(s/60)+"m ago";
+  if(s<86400) return Math.floor(s/3600)+"h ago";
+  return Math.floor(s/86400)+"d ago";
+}
+function clockTime(ts){ if(!ts) return ""; const p=ts.replace("T"," ").replace("Z",""); return p.slice(11,19)||p.slice(5,16); }
+
+/* ---------- engagements ---------- */
 async function loadEngagements(){
-  const d=await fetch("/api/engagements").then(r=>r.json()).catch(()=>({engagements:[]}));
+  const d=await fetch("/api/engagements").then(r=>r.json()).then(x=>{setLive(true);return x;}).catch(()=>{setLive(false);return null;});
+  if(!d) return;
+  const sig=JSON.stringify(d.engagements);
+  if(sig===sigEng) return; sigEng=sig;
   const el=$("#englist");
-  if(!d.engagements.length){ el.innerHTML=`<div class="empty" style="padding:24px 14px">No engagements yet.</div>`; return; }
-  el.innerHTML=d.engagements.map(e=>`<div class="item ${CUR===e.path?'on':''}" onclick="openEng('${encodeURIComponent(e.path)}')">
-    <div class="t">${esc(e.target)}</div>
-    <div class="m">${e.findings} finding${e.findings==1?'':'s'} · ${e.events} steps · ${shortTs(e.last)||'—'}</div></div>`).join("");
+  if(!d.engagements.length){ el.innerHTML=`<div class="empty" style="padding:28px 16px;font-size:13px">No engagements yet.<br><br>Run <code>sploit new &lt;target&gt;</code>.</div>`; return; }
+  el.innerHTML=d.engagements.map(e=>{
+    return `<div class="item ${CUR===e.path?'on':''}" onclick='openEng(${JSON.stringify(e)})'>
+      <div class="t">${esc(e.target)}</div>
+      <div class="m">
+        <span class="cnt">${e.findings} finding${e.findings==1?'':'s'}</span>
+        <span class="cnt">${e.events} steps</span>
+        <span>${relTime(e.last)||'—'}</span>
+      </div></div>`;
+  }).join("");
 }
-async function openEng(enc){
-  const path=decodeURIComponent(enc); CUR=path;
-  await loadEngagements();
-  await refreshDetail();
+function openEng(e){ CUR=e.path; CUROBJ=e; sigDetail={}; prevMaxTs=""; closeDrawer();
+  document.querySelectorAll("#englist .item").forEach(n=>n.classList.remove("on"));
+  loadEngagements(); refreshDetail(true); }
+
+/* ---------- detail ---------- */
+function severityCounts(finds){
+  const c={critical:0,high:0,medium:0,low:0,info:0};
+  finds.forEach(f=>{ const s=(f.severity||"info").toLowerCase(); if(c[s]!==undefined)c[s]++; else c.info++; });
+  return c;
 }
-async function refreshDetail(){
-  if(!CUR) return;
-  const d=await fetch("/api/engagement?path="+encodeURIComponent(CUR)).then(r=>r.json()).catch(()=>null);
-  if(!d||d.error){ return; }
-  const scope=(d.scope||"").split("\n").filter(l=>l.trim()&&!l.trim().startsWith("#"));
-  const acts=(d.activity||[]);
-  const tl=acts.map(a=>`<li><span class="ts">${shortTs(a.ts)}</span>
-      <span class="ev ${esc(a.event||'note')}">${esc(a.event||'note')}${a.skill?` ${esc(a.skill)}`:''}</span>
-      <span class="dt">${esc(a.detail||'')}${a.severity?`<span class="sev ${esc(a.severity)}">${esc(a.severity)}</span>`:''}</span></li>`).reverse().join("");
-  const finds=(d.findings||[]).map(f=>`<div class="card find" onclick="openFinding('${esc(f.file)}')">
-      <b>${esc(f.title)}</b>${f.severity?`<span class="sev ${esc(f.severity)}">${esc(f.severity)}</span>`:''}
-      <div class="muted mono" style="font-size:12px">${esc(f.file)}</div></div>`).join("") || `<div class="muted">No confirmed findings yet.</div>`;
+function buildShell(d){
+  const scope=(d.scope||"").split("\n").map(l=>l.trim()).filter(l=>l&&!l.startsWith("#"));
+  const c=severityCounts(d.findings||[]);
+  const pill=(k,lab)=>c[k]?`<span class="sevpill"><span class="sq ${k}"></span>${lab} <b>${c[k]}</b></span>`:"";
   $("#main").innerHTML=`
-    <h2>${esc(d.target)} <span class="muted mono" style="font-size:12px;font-weight:400">${esc(d.path)}</span></h2>
-    <div class="muted" style="font-size:12px;margin-bottom:6px">Scope: ${scope.map(s=>`<code>${esc(s)}</code>`).join(" ")||'<span class="muted">not set</span>'}</div>
-    <h2># Plan</h2><div class="card md">${md(d.plan)||'<span class="muted">No plan.md yet.</span>'}</div>
-    <h2># Activity</h2><ul class="tl">${tl||'<li class="muted">No steps logged yet.</li>'}</ul>
-    <h2># Findings</h2>${finds}
-    <div id="findmodal"></div>`;
+    <div class="summary">
+      <h1>${esc(CUROBJ?CUROBJ.target:d.target)} <span class="path">${esc(d.path)}</span></h1>
+      <div class="scope">scope: ${scope.length?scope.map(s=>`<span class="chip">${esc(s)}</span>`).join(""):'<span style="color:var(--muted)">not set</span>'}</div>
+      <div class="sevbar">
+        <span class="sevpill"><span class="sq steps"></span>steps <b id="stepcount">${(d.activity||[]).length}</b></span>
+        ${pill('critical','critical')}${pill('high','high')}${pill('medium','medium')}${pill('low','low')}${pill('info','info')}
+      </div>
+    </div>
+    <div class="subtabs">
+      <button data-st="activity" onclick="setSub('activity')">Activity</button>
+      <button data-st="plan" onclick="setSub('plan')">Plan</button>
+      <button data-st="findings" onclick="setSub('findings')">Findings<span class="badge" id="fbadge">${(d.findings||[]).length}</span></button>
+    </div>
+    <div class="pane" id="pane-activity" hidden>
+      <div class="filters" id="filters"></div>
+      <ul class="tl" id="tl"></ul>
+    </div>
+    <div class="pane md" id="pane-plan" hidden></div>
+    <div class="pane" id="pane-findings" hidden></div>`;
+  $("#pane-plan").innerHTML=(d.plan&&d.plan.trim())?renderMd(d.plan)
+    :`<div class="empty" style="padding:40px 0">No <code>plan.md</code> yet. The agent writes its strategy here as it works.</div>`;
+  renderFilters();
+  applySub();
 }
+function renderFilters(){
+  const defs=[["command","commands"],["result","results"],["finding","findings"],["decision","decisions"],["plan","plan/skills"],["note","notes"]];
+  // 'plan' chip toggles both plan & skill_load
+  $("#filters").innerHTML=defs.map(([k,lab])=>{
+    const on=actFilter.has(k)||(k==="plan"&&actFilter.has("skill_load"));
+    return `<span class="fchip ${on?'on':''}" data-f="${k}" onclick="toggleFilter('${k}')">${lab}</span>`;
+  }).join("")+`<input id="actq" placeholder="filter steps…" value="${esc(actQuery)}" oninput="onActQuery(this.value)">`;
+}
+function toggleFilter(k){
+  const keys=k==="plan"?["plan","skill_load"]:[k];
+  const has=keys.every(x=>actFilter.has(x));
+  keys.forEach(x=>has?actFilter.delete(x):actFilter.add(x));
+  renderFilters(); renderActivity(true);
+}
+function onActQuery(v){ actQuery=v; renderActivity(true); }
+
+function setSub(t){ SUBTAB=t; applySub(); }
+function applySub(){
+  ["activity","plan","findings"].forEach(t=>{ const p=$("#pane-"+t); if(p)p.hidden=(t!==SUBTAB); });
+  document.querySelectorAll(".subtabs button").forEach(b=>b.classList.toggle("on",b.dataset.st===SUBTAB));
+}
+
+function renderActivity(force){
+  const tl=$("#tl"); if(!tl) return;
+  const rows=curActivity.filter(a=>{
+    const ev=a.event||"note"; if(!actFilter.has(ev)) return false;
+    if(actQuery){ const hay=((a.detail||"")+" "+(a.skill||"")+" "+ev).toLowerCase(); if(!hay.includes(actQuery.toLowerCase())) return false; }
+    return true;
+  });
+  const maxTs=curActivity.reduce((m,a)=>a.ts&&a.ts>m?a.ts:m,"");
+  tl.innerHTML=rows.slice().reverse().map(a=>{
+    const ev=a.event||"note";
+    const fresh=(a.ts&&prevMaxTs&&a.ts>prevMaxTs)?" fresh":"";
+    const detail=ev==="command"?`<span class="cmd">${esc(a.detail||"")}</span>`:esc(a.detail||"");
+    const sev=a.severity?`<span class="sev ${esc(a.severity.toLowerCase())}">${esc(a.severity)}</span>`:"";
+    return `<li class="${fresh.trim()}"><span class="ts">${clockTime(a.ts)}</span>
+      <span class="ev ${esc(ev)}">${esc(ev.replace("_"," "))}${a.skill?`<span class="sk">${esc(a.skill)}</span>`:""}</span>
+      <span class="dt">${detail}${sev}</span></li>`;
+  }).join("") || `<li style="color:var(--muted);grid-template-columns:1fr;display:block;padding:22px 0">No steps match the current filter.</li>`;
+  if(!force) prevMaxTs=maxTs;
+}
+function renderFindings(){
+  const p=$("#pane-findings"); if(!p) return;
+  const finds=(curFindings||[]).slice().sort((a,b)=>(SEV_ORDER[(a.severity||"").toLowerCase()]??5)-(SEV_ORDER[(b.severity||"").toLowerCase()]??5));
+  p.innerHTML=finds.length?finds.map(f=>{
+    const sv=(f.severity||"info").toLowerCase();
+    return `<div class="fcard ${sv}" onclick='openFinding(${JSON.stringify(f.file)})'>
+      <div class="h"><span class="sev ${sv}">${esc(f.severity||"info")}</span>${esc(f.title)}<span class="go">›</span></div>
+      <div class="file">${esc(f.file)}</div></div>`;
+  }).join(""):`<div class="empty" style="padding:40px 0">No confirmed findings yet. They appear here as the agent writes <code>findings/*.md</code>.</div>`;
+}
+
+async function refreshDetail(force){
+  if(!CUR){ return; }
+  const d=await fetch("/api/engagement?path="+encodeURIComponent(CUR)).then(r=>{setLive(true);return r.json();}).catch(()=>{setLive(false);return null;});
+  if(!d||d.error) return;
+  // rebuild shell only if structure-affecting bits changed (scope / path / find count / target)
+  const shellSig=JSON.stringify([CUROBJ&&CUROBJ.target,d.path,d.scope,(d.findings||[]).map(f=>[f.file,f.severity,f.title])]);
+  if(force||shellSig!==sigDetail.shell){
+    curActivity=d.activity||[]; curFindings=d.findings||[];
+    buildShell(d);
+    renderActivity(false); renderFindings();
+    sigDetail.shell=shellSig; sigDetail.act=JSON.stringify(curActivity); sigDetail.plan=d.plan;
+    return;
+  }
+  // otherwise just refresh the volatile bits in place (no flicker, keeps drawer + scroll)
+  const actSig=JSON.stringify(d.activity||[]);
+  if(actSig!==sigDetail.act){ curActivity=d.activity||[]; renderActivity(false); sigDetail.act=actSig;
+    const sc=$("#stepcount"); if(sc) sc.textContent=curActivity.length; }
+  if(d.plan!==sigDetail.plan){ sigDetail.plan=d.plan;
+    const pp=$("#pane-plan"); if(pp) pp.innerHTML=(d.plan&&d.plan.trim())?renderMd(d.plan)
+      :`<div class="empty" style="padding:40px 0">No <code>plan.md</code> yet. The agent writes its strategy here as it works.</div>`; }
+}
+
+/* ---------- finding drawer ---------- */
 async function openFinding(file){
   const d=await fetch(`/api/finding?path=${encodeURIComponent(CUR)}&file=${encodeURIComponent(file)}`).then(r=>r.json()).catch(()=>null);
   if(!d||!d.markdown) return;
-  $("#findmodal").innerHTML=`<h2># ${esc(file)}</h2><div class="card md">${md(d.markdown)}</div>`;
-  $("#findmodal").scrollIntoView({behavior:"smooth"});
+  const f=(curFindings||[]).find(x=>x.file===file)||{};
+  $("#d-sev").innerHTML=f.severity?`<span class="sev ${esc((f.severity||'').toLowerCase())}">${esc(f.severity)}</span>`:"";
+  $("#d-file").textContent=file;
+  $("#d-body").innerHTML=renderMd(d.markdown);
+  $("#drawer").dataset.file=file;
+  $("#drawer").classList.add("on"); $("#scrim").classList.add("on");
 }
+function closeDrawer(){ $("#drawer").classList.remove("on"); $("#scrim").classList.remove("on"); $("#drawer").dataset.file=""; }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeDrawer(); });
 
+/* ---------- skills ---------- */
 function showTab(t){
   $("#tab-eng").classList.toggle("on",t==='eng'); $("#tab-sk").classList.toggle("on",t==='sk');
   $("#englist").hidden=t!=='eng'; $("#sklist").hidden=t!=='sk';
@@ -139,21 +435,26 @@ function showTab(t){
 }
 async function loadSkills(){
   const d=await fetch("/api/skills").then(r=>r.json()).catch(()=>({skills:[]}));
-  SKILLS=d.skills||[]; renderSkills();
+  SKILLS=(d.skills||[]).sort((a,b)=>(a.domain+a.name).localeCompare(b.domain+b.name)); renderSkills();
 }
 function renderSkills(){
   const q=($("#skillq").value||"").toLowerCase();
   const rows=SKILLS.filter(s=>!q||(s.name+" "+s.domain+" "+(s.summary||"")+" "+(s.tags||[]).join(" ")).toLowerCase().includes(q));
-  $("#skrows").innerHTML=rows.slice(0,300).map(s=>`<div class="srow"><span class="n">${esc(s.name)}</span><span class="pill">${esc(s.domain)}</span>
-     <div class="d">${esc(s.summary||"")}</div></div>`).join("") || `<div class="muted">No matches.</div>`;
-  $("#skrows").insertAdjacentHTML("afterbegin",`<div class="muted" style="font-size:12px;margin-bottom:6px">${rows.length} skills</div>`);
+  $("#skrows").innerHTML=`<div class="skcount">${rows.length} skill${rows.length==1?'':'s'}</div>`+
+    rows.slice(0,400).map(s=>`<div class="srow"><span class="n">${esc(s.name)}</span><span class="pill">${esc(s.domain)}</span>
+      <div class="d">${esc(s.summary||"")}</div></div>`).join("") || `<div class="skcount">No matches.</div>`;
 }
-
 document.addEventListener("input",e=>{ if(e.target.id==="skillq") renderSkills(); });
-setInterval(()=>{ $("#clock").textContent=new Date().toLocaleTimeString(); },1000);
+
+/* ---------- live indicator ---------- */
+let liveOk=true;
+function setLive(ok){ if(ok===liveOk) return; liveOk=ok;
+  $("#dot").classList.toggle("stale",!ok); $("#livetxt").textContent=ok?"live":"reconnecting…"; }
+
+/* ---------- boot ---------- */
 loadEngagements();
-setInterval(loadEngagements, 4000);   // refresh the list
-setInterval(refreshDetail, 2000);     // live-refresh the open engagement
+setInterval(loadEngagements,4000);
+setInterval(()=>refreshDetail(false),1500);
 </script>
 </body>
 </html>

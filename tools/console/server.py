@@ -60,7 +60,8 @@ def findings(path):
         m = re.search(r'^#\s+(.+)$', txt, re.M)
         title = m.group(1).strip() if m else os.path.basename(f)
         sev = ""
-        s = re.search(r'(?im)^\s*severity[:*\s]+([A-Za-z]+)', txt)
+        # match "Severity: High", "**Severity:** High", "## Severity\nHigh", etc.
+        s = re.search(r'(?im)^\s*[*_>#\s]*severity[*_:\s]+([A-Za-z]+)', txt)
         if s:
             sev = s.group(1).lower()
         out.append({"file": os.path.basename(f), "title": title, "severity": sev})
