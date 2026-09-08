@@ -94,6 +94,31 @@ goal:   set scope and begin recon
 next:   confirm authorization in scope.txt / roe.md, then run recon
 EOF
 
+  # --- plan + activity log (tool-agnostic; drives the `sploit watch` console) ---
+  mkdir -p "$dest/.sploit"
+  cat > "$dest/plan.md" <<EOF
+# Plan — $target
+_The agent's living strategy. It fills this in and keeps it current._
+
+## Objective
+_What you asked for (e.g. find access-control bugs on the API)._
+
+## Strategy
+- [ ] Scope confirmed (scope.txt / roe.md)
+- [ ] Recon — subdomains, live hosts, tech stack
+- [ ] Attack surface — by area (web / api / cloud / ad / …)
+- [ ] Escalate & pivot
+- [ ] Report
+
+## Current focus
+_—_
+EOF
+  local now; now="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+  printf '{"ts":"%s","event":"note","detail":"engagement created for %s"}\n' "$now" "$target" > "$dest/.sploit/activity.jsonl"
+  # register this workspace machine-wide so `sploit watch` can find it wherever it lives
+  mkdir -p "$HOME/.sploit"
+  printf '{"ts":"%s","target":"%s","path":"%s"}\n' "$now" "$target" "$dest" >> "$HOME/.sploit/engagements.jsonl"
+
   # --- wire the skill library into the workspace (same mechanism the repo uses) ---
   # A folder with CLAUDE.md/AGENTS.md + skills/ is all an agent needs — no per-folder
   # flatten, no global install required. `sploit install` (optional) adds Claude Code
@@ -112,6 +137,8 @@ You are in an **authorized** engagement workspace. The SploitAgent skill library
   (skim \`./skills\`), read that SKILL.md and follow it.
 - **Load \`tradecraft-scope-roe\` first**, obey \`scope.txt\` / \`roe.md\`, never touch anything out of scope.
 - Keep the running log in \`notes.md\`; write confirmed findings into \`findings/\`.
+- Write your strategy to \`plan.md\` and append one JSON line per step to \`.sploit/activity.jsonl\`
+  (see \`AGENTS.md\` → *Show your work*) so it can be followed live in the \`sploit watch\` console.
 EOF
   printf 'repo=%s\ncreated=%s\ntarget=%s\nmode=%s\n' \
     "$REPO_DIR" "$(date '+%Y-%m-%dT%H:%M:%S')" "$target" "$([ "$copy" -eq 1 ] && echo copy || echo link)" > "$dest/.sploitagent"
@@ -140,7 +167,7 @@ EOF
 
   say ""
   say "${G}✔${R} Engagement ready: ${B}$dest${R}"
-  say "   ${D}scope.txt roe.md notes.md findings/ loot/ START-HERE.md  +  skills wired in ($([ "$copy" -eq 1 ] && echo copied || echo linked))${R}"
+  say "   ${D}scope.txt roe.md plan.md notes.md findings/ loot/ START-HERE.md  +  skills wired in ($([ "$copy" -eq 1 ] && echo copied || echo linked))${R}"
   say ""
   say "Next:"
   say "  ${G}1.${R} edit ${B}$dest/scope.txt${R}  — your authorized targets + authorization"

@@ -45,12 +45,25 @@ For each target, work inside its own folder so notes and loot never mix or leak:
 
 ```
 engagements/<target>/
-  scope.txt      # authorized targets — the hard boundary
-  roe.md         # bug-bounty rules of engagement (rate limits, don'ts, disclosure)
-  notes.md       # timestamped running log — the source of truth for the report
-  findings/      # confirmed findings + evidence, one file per finding
-  loot/          # captured data / artifacts
+  scope.txt              # authorized targets — the hard boundary
+  roe.md                 # bug-bounty rules of engagement (rate limits, don'ts, disclosure)
+  plan.md                # your living strategy — what you'll test, in what order, why
+  notes.md               # timestamped running log — the source of truth for the report
+  findings/              # confirmed findings + evidence, one file per finding
+  loot/                  # captured data / artifacts
+  .sploit/activity.jsonl # one JSON line per step, so a human/console can follow you
 ```
+
+## Show your work (plan + activity log)
+So anyone — a teammate, or the read-only `sploit watch` console — can follow your reasoning across
+*any* tool (Claude Code, OpenCode, Codex, Gemini, an API script), externalise it into the workspace:
+
+- **`plan.md`** — write it up front and keep it current: the objective, an ordered strategy as a
+  checkbox list (tick items as you go), and a one-line "current focus". This is your thinking, on disk.
+- **`.sploit/activity.jsonl`** — append one JSON line at each meaningful step:
+  `{"ts":"<ISO-8601>","event":"plan|skill_load|command|result|finding|decision|note","detail":"…","skill":"<slug>","severity":"<sev>"}`
+  Only `ts`, `event`, and `detail` are required. This is how the console shows what you loaded, ran,
+  found, and decided — with no dependency on which agent is running.
 
 These paths are git-ignored, so an engagement run inside a clone never pollutes the repo. Keep
 `notes.md` to the teach-the-mechanism standard in `methodology.md` (goal · command · result ·
