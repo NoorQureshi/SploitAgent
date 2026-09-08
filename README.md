@@ -108,6 +108,11 @@ Enforce object-level authorization: check the order's owner == the caller on eve
 That's the whole point: **you describe the task, the agent does the work and hands you evidence.**
 See a fully annotated run → **[How it works](https://noorqureshi.github.io/SploitAgent/interact.html)**.
 
+**Watch it live (optional).** Run `sploit watch` for a small read-only local dashboard
+(`http://127.0.0.1:8787`) that shows the agent's **plan**, a live **activity timeline** (skills
+loaded → commands → results → findings), and the findings — for every engagement on your machine.
+It reads the workspace on disk, so it works the same with Claude Code, OpenCode, Codex, or Gemini.
+
 ## Common requests
 
 | You type… | The agent loads |
@@ -200,9 +205,10 @@ Wanted skills: [ROADMAP.md](ROADMAP.md) · full guide: [CONTRIBUTING.md](CONTRIB
 ## Repository layout
 
 ```text
-sploit                            front door: new <target> [dir] · install · list
+sploit                            front door: new <target> [dir] · install · watch · list
 install.sh                        link skills into ~/.claude/skills (Claude Code)
 skills/<domain>/<slug>/SKILL.md   the library
+tools/console/                    the read-only `sploit watch` dashboard (stdlib, local)
 AGENTS.md · CLAUDE.md             operating guide read by any in-repo agent
 methodology.md                    engagement loop, scope rule, note-taking standard
 tools/catalog.py                  validation + index generation (schema in schemas/)

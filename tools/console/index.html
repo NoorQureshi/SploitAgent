@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SploitAgent Console</title>
+<style>
+  :root{--bg:#0d1117;--panel:#131a24;--panel2:#161b22;--border:#2a3038;--text:#e6edf3;--muted:#9aa4b2;
+    --green:#39d353;--purple:#a371f7;--blue:#58a6ff;--red:#ff6b6b;--yellow:#ffbd2e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  a{color:var(--green);text-decoration:none} code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  header{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--panel2)}
+  header .b{font-weight:700} header .b .a{color:var(--green)}
+  header .tag{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:2px 10px}
+  header .sp{margin-left:auto;font-size:12px;color:var(--muted)}
+  .wrap{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 49px)}
+  aside{border-right:1px solid var(--border);overflow:auto;background:var(--panel2)}
+  .tabs{display:flex;border-bottom:1px solid var(--border)}
+  .tabs button{flex:1;background:none;border:0;color:var(--muted);padding:10px;cursor:pointer;font-size:13px}
+  .tabs button.on{color:var(--text);box-shadow:inset 0 -2px 0 var(--green)}
+  .item{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer}
+  .item:hover{background:var(--panel)} .item.on{background:var(--panel);box-shadow:inset 3px 0 0 var(--green)}
+  .item .t{font-weight:600} .item .m{font-size:12px;color:var(--muted);margin-top:2px}
+  main{overflow:auto;padding:20px 24px}
+  h2{font-size:16px;margin:22px 0 8px} h2:first-child{margin-top:0}
+  .muted{color:var(--muted)} .empty{color:var(--muted);padding:40px 0;text-align:center}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin:8px 0}
+  pre{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;overflow:auto;font-size:12.5px}
+  .md h1{font-size:17px;margin:.4em 0} .md h2{font-size:15px} .md h3{font-size:14px;color:var(--muted)}
+  .md ul{margin:.3em 0;padding-left:20px} .md code{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:0 5px}
+  .chk{color:var(--green)} .unchk{color:var(--muted)}
+  .tl{list-style:none;margin:0;padding:0}
+  .tl li{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+  .tl .ts{color:var(--muted);font-size:11px;white-space:nowrap;font-family:ui-monospace,monospace;min-width:74px}
+  .tl .ev{font-size:11px;text-transform:uppercase;letter-spacing:.4px;min-width:92px}
+  .tl .dt{flex:1}
+  .ev.plan,.ev.skill_load{color:var(--purple)} .ev.command{color:var(--blue)} .ev.result{color:var(--green)}
+  .ev.finding{color:var(--red)} .ev.decision{color:var(--yellow)} .ev.note{color:var(--muted)}
+  .sev{font-size:11px;border:1px solid var(--border);border-radius:999px;padding:1px 8px;margin-left:8px}
+  .sev.critical,.sev.high{color:var(--red);border-color:var(--red)} .sev.medium{color:var(--yellow)}
+  .sev.low,.sev.info{color:var(--muted)}
+  .find{cursor:pointer} .find:hover{background:var(--panel2)}
+  #skillq{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;margin-bottom:10px}
+  .srow{padding:8px 10px;border-bottom:1px solid var(--border)} .srow .n{font-family:ui-monospace,monospace;color:var(--text)}
+  .srow .d{font-size:12px;color:var(--muted)} .pill{color:var(--purple);font-family:ui-monospace,monospace;font-size:12px;margin-left:6px}
+</style>
+</head>
+<body>
+<header>
+  <span class="b">Sploit<span class="a">Agent</span></span>
+  <span class="tag">Console</span>
+  <span class="tag">read-only · local</span>
+  <span class="sp" id="clock"></span>
+</header>
+<div class="wrap">
+  <aside>
+    <div class="tabs">
+      <button id="tab-eng" class="on" onclick="showTab('eng')">Engagements</button>
+      <button id="tab-sk" onclick="showTab('sk')">Skills</button>
+    </div>
+    <div id="englist"></div>
+    <div id="sklist" hidden style="padding:12px">
+      <input id="skillq" placeholder="Search skills…" autocomplete="off">
+      <div id="skrows"></div>
+    </div>
+  </aside>
+  <main id="main"><div class="empty">Select an engagement, or run <code>sploit new &lt;target&gt;</code> to create one.</div></main>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>(s||"").replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let CUR=null, SKILLS=[];
+
+function md(t){ // tiny markdown → html (headings, checkboxes, bullets, bold, code)
+  const lines=(t||"").split("\n"); let h="",inUl=false;
+  const inline=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`(.+?)`/g,"<code>$1</code>");
+  const closeUl=()=>{ if(inUl){h+="</ul>";inUl=false;} };
+  for(const ln of lines){
+    let m;
+    if(m=ln.match(/^###\s+(.*)/)){closeUl();h+=`<h3>${inline(m[1])}</h3>`;continue;}
+    if(m=ln.match(/^##\s+(.*)/)){closeUl();h+=`<h2>${inline(m[1])}</h2>`;continue;}
+    if(m=ln.match(/^#\s+(.*)/)){closeUl();h+=`<h1>${inline(m[1])}</h1>`;continue;}
+    if(m=ln.match(/^\s*-\s+\[( |x|X)\]\s+(.*)/)){ if(!inUl){h+="<ul>";inUl=true;}
+      const on=m[1].toLowerCase()==="x"; h+=`<li><span class="${on?'chk':'unchk'}">${on?'☑':'☐'}</span> ${inline(m[2])}</li>`;continue;}
+    if(m=ln.match(/^\s*-\s+(.*)/)){ if(!inUl){h+="<ul>";inUl=true;} h+=`<li>${inline(m[1])}</li>`;continue;}
+    closeUl();
+    if(ln.trim()==="") h+=""; else h+=`<p>${inline(ln)}</p>`;
+  }
+  closeUl(); return h;
+}
+function shortTs(ts){ if(!ts) return ""; return ts.replace("T"," ").replace("Z","").slice(5,16); }
+
+async function loadEngagements(){
+  const d=await fetch("/api/engagements").then(r=>r.json()).catch(()=>({engagements:[]}));
+  const el=$("#englist");
+  if(!d.engagements.length){ el.innerHTML=`<div class="empty" style="padding:24px 14px">No engagements yet.</div>`; return; }
+  el.innerHTML=d.engagements.map(e=>`<div class="item ${CUR===e.path?'on':''}" onclick="openEng('${encodeURIComponent(e.path)}')">
+    <div class="t">${esc(e.target)}</div>
+    <div class="m">${e.findings} finding${e.findings==1?'':'s'} · ${e.events} steps · ${shortTs(e.last)||'—'}</div></div>`).join("");
+}
+async function openEng(enc){
+  const path=decodeURIComponent(enc); CUR=path;
+  await loadEngagements();
+  await refreshDetail();
+}
+async function refreshDetail(){
+  if(!CUR) return;
+  const d=await fetch("/api/engagement?path="+encodeURIComponent(CUR)).then(r=>r.json()).catch(()=>null);
+  if(!d||d.error){ return; }
+  const scope=(d.scope||"").split("\n").filter(l=>l.trim()&&!l.trim().startsWith("#"));
+  const acts=(d.activity||[]);
+  const tl=acts.map(a=>`<li><span class="ts">${shortTs(a.ts)}</span>
+      <span class="ev ${esc(a.event||'note')}">${esc(a.event||'note')}${a.skill?` ${esc(a.skill)}`:''}</span>
+      <span class="dt">${esc(a.detail||'')}${a.severity?`<span class="sev ${esc(a.severity)}">${esc(a.severity)}</span>`:''}</span></li>`).reverse().join("");
+  const finds=(d.findings||[]).map(f=>`<div class="card find" onclick="openFinding('${esc(f.file)}')">
+      <b>${esc(f.title)}</b>${f.severity?`<span class="sev ${esc(f.severity)}">${esc(f.severity)}</span>`:''}
+      <div class="muted mono" style="font-size:12px">${esc(f.file)}</div></div>`).join("") || `<div class="muted">No confirmed findings yet.</div>`;
+  $("#main").innerHTML=`
+    <h2>${esc(d.target)} <span class="muted mono" style="font-size:12px;font-weight:400">${esc(d.path)}</span></h2>
+    <div class="muted" style="font-size:12px;margin-bottom:6px">Scope: ${scope.map(s=>`<code>${esc(s)}</code>`).join(" ")||'<span class="muted">not set</span>'}</div>
+    <h2># Plan</h2><div class="card md">${md(d.plan)||'<span class="muted">No plan.md yet.</span>'}</div>
+    <h2># Activity</h2><ul class="tl">${tl||'<li class="muted">No steps logged yet.</li>'}</ul>
+    <h2># Findings</h2>${finds}
+    <div id="findmodal"></div>`;
+}
+async function openFinding(file){
+  const d=await fetch(`/api/finding?path=${encodeURIComponent(CUR)}&file=${encodeURIComponent(file)}`).then(r=>r.json()).catch(()=>null);
+  if(!d||!d.markdown) return;
+  $("#findmodal").innerHTML=`<h2># ${esc(file)}</h2><div class="card md">${md(d.markdown)}</div>`;
+  $("#findmodal").scrollIntoView({behavior:"smooth"});
+}
+
+function showTab(t){
+  $("#tab-eng").classList.toggle("on",t==='eng'); $("#tab-sk").classList.toggle("on",t==='sk');
+  $("#englist").hidden=t!=='eng'; $("#sklist").hidden=t!=='sk';
+  if(t==='sk'&&!SKILLS.length) loadSkills();
+}
+async function loadSkills(){
+  const d=await fetch("/api/skills").then(r=>r.json()).catch(()=>({skills:[]}));
+  SKILLS=d.skills||[]; renderSkills();
+}
+function renderSkills(){
+  const q=($("#skillq").value||"").toLowerCase();
+  const rows=SKILLS.filter(s=>!q||(s.name+" "+s.domain+" "+(s.summary||"")+" "+(s.tags||[]).join(" ")).toLowerCase().includes(q));
+  $("#skrows").innerHTML=rows.slice(0,300).map(s=>`<div class="srow"><span class="n">${esc(s.name)}</span><span class="pill">${esc(s.domain)}</span>
+     <div class="d">${esc(s.summary||"")}</div></div>`).join("") || `<div class="muted">No matches.</div>`;
+  $("#skrows").insertAdjacentHTML("afterbegin",`<div class="muted" style="font-size:12px;margin-bottom:6px">${rows.length} skills</div>`);
+}
+
+document.addEventListener("input",e=>{ if(e.target.id==="skillq") renderSkills(); });
+setInterval(()=>{ $("#clock").textContent=new Date().toLocaleTimeString(); },1000);
+loadEngagements();
+setInterval(loadEngagements, 4000);   // refresh the list
+setInterval(refreshDetail, 2000);     // live-refresh the open engagement
+</script>
+</body>
+</html>
