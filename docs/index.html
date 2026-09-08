@@ -28,8 +28,9 @@
   <div class="mask">🥷</div>
   <h1>Sploit<span class="a">Agent</span></h1>
   <p class="tagline">Security skills for AI agents.</p>
-  <p class="sub">127 trigger-loaded skills across 20 domains — offensive and defensive.
-     Point any agent at it and it works a target from recon to report.</p>
+  <p class="sub">Give your AI agent the exact know-how for the job. You describe the task in plain
+     English; it grabs the right technique, runs it, proves the bug, and writes it up —
+     and never goes outside the scope you set.</p>
   <div class="badges">
     <span class="badge"><b>127</b> skills</span>
     <span class="badge"><b>20</b> domains</span>
@@ -49,9 +50,21 @@
   <section style="border-top:0">
     <img class="demo" src="terminal.svg" alt="A Claude Code terminal session: describe a task in plain English and the matching SploitAgent skill loads to work an authorized target from recon to report">
     <p class="lead" style="text-align:center;margin:22px auto 0">
-      Not a scanner or a framework — the operating knowledge of the work itself, captured as small,
-      trigger-tagged <code>SKILL.md</code> files in the standard Agent-Skills format. Plain Markdown:
-      no runtime, no build step, no lock-in.</p>
+      Think of it as a binder of 127 short "how to do this one technique" pages your agent flips to
+      when it needs one. It's not a scanner and not a framework — just the know-how, as plain
+      Markdown. No runtime, no build step, no lock-in.</p>
+  </section>
+
+  <section>
+    <h2><span class="hash">#</span> A few words you'll see</h2>
+    <table>
+      <tr><th>Term</th><th>Plain meaning</th></tr>
+      <tr><td><b>skill</b></td><td>one Markdown file that teaches one technique</td></tr>
+      <tr><td><b>workspace</b></td><td>a folder for one target — holds your scope, notes, and findings</td></tr>
+      <tr><td><b>scope</b></td><td>the targets you're allowed to test — the hard boundary the agent won't cross</td></tr>
+      <tr><td><b>lead</b></td><td>one thing worth trying (e.g. "the login's JWT"); the agent works one at a time</td></tr>
+      <tr><td><b>console</b></td><td>the optional local web page (<code>sploit watch</code>) that shows what the agent is doing</td></tr>
+    </table>
   </section>
 
   <section>

@@ -32,16 +32,30 @@ $ cd ~/work/acme && claude
   ✔ wrote findings/idor-orders.md
 ```
 
-## What it is
+## The idea in one minute
 
-Each skill is a Markdown file (`skills/<domain>/<slug>/SKILL.md`) with a trigger line and a method
-(when it applies · why it works · exact commands · gotchas · how to verify). Your agent reads the
-trigger, loads the one skill that fits your request, and follows it. No runtime, no lock-in — just
-knowledge the agent didn't have.
+Your AI agent is a strong generalist, but it doesn't know the *exact method* for a specific job —
+say, testing an API for access-control bugs. **SploitAgent is that missing know-how:** a binder of
+127 short "how to do this one technique" pages the agent flips to when it needs one.
 
-- **Input:** plain English — *"test this API for access-control bugs."*
-- **Output:** the agent runs the technique, proves impact, and writes findings + a report to disk.
-- **Guardrail:** it confirms authorization first and refuses anything outside your defined scope.
+You describe the task in plain English. The agent picks the page that fits, follows it, proves the
+bug, and writes it up — and it never touches anything outside the scope you set.
+
+- **You give it:** plain English — *"test this API for access-control bugs, I'm authorized."*
+- **You get back:** the technique run for real, impact proven, and findings + a report saved to a folder.
+- **The guardrail:** it confirms authorization first and refuses anything outside your scope.
+
+**A few words you'll see:**
+
+| Term | Plain meaning |
+|---|---|
+| **skill** | one Markdown file that teaches one technique — `skills/<domain>/<slug>/SKILL.md` |
+| **workspace** | a folder for one target; holds your `scope.txt`, notes, and findings |
+| **scope** | the targets you're allowed to test — the hard boundary the agent won't cross |
+| **lead** | one thing worth trying (e.g. "the login's JWT"); the agent works one lead at a time |
+| **console** | the optional local web page from `sploit watch` that shows what the agent is doing |
+
+No runtime, no build step, no lock-in — the skills are just Markdown the agent reads.
 
 ## Install
 
