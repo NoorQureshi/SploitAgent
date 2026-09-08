@@ -2,8 +2,8 @@
 
 # SploitAgent
 
-**Security skills for AI agents.**
-Turn Claude Code (or any AI agent) into a capable security operator — 127 ready-to-use skills, offensive and defensive, for **authorized** pentesting, bug-bounty, and blue-team work.
+**Security skills for AI agents.** A library of 127 security techniques (offensive + defensive) that
+Claude Code — or any AI agent — loads on demand to work an **authorized** target from recon to report.
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
 ![skills](https://img.shields.io/badge/skills-127-334155?style=flat-square)
@@ -19,85 +19,107 @@ Turn Claude Code (or any AI agent) into a capable security operator — 127 read
 
 ---
 
-## The idea in one line
+## What it is
 
-Your AI agent is smart, but it doesn't *know security*. **SploitAgent is that missing knowledge** — a
-library of proven techniques your agent pulls up exactly when a task needs them. Think of it as handing
-your agent a senior pentester's playbook.
+Each skill is a Markdown file (`skills/<domain>/<slug>/SKILL.md`) with a trigger line and a method
+(when it applies · why it works · exact commands · gotchas · how to verify). Your agent reads the
+trigger, loads the one skill that fits your request, and follows it. No runtime, no lock-in — just
+knowledge the agent didn't have.
 
-## What you get
+- **Input:** plain English — *"test this API for access-control bugs."*
+- **Output:** the agent runs the technique, proves impact, and writes findings + a report to disk.
+- **Guardrail:** it confirms authorization first and refuses anything outside your defined scope.
 
-- **Just describe the task.** Nothing to memorize. Say *"test this API for access-control bugs"* and the
-  agent loads the right skill and follows its method.
-- **127 skills across 20 domains** — web, API, cloud, Active Directory, mobile, crypto, reversing, recon,
-  reporting, defense, and more (full list [below](#whats-inside)).
-- **Works with your agent.** Claude Code, Codex, Gemini, or a local model. It's plain Markdown — no
-  runtime, nothing to build, no lock-in.
-- **Safe by design.** Every engagement confirms you're authorized first and refuses anything out of scope.
+## Install
 
-## Before you start
-
-You'll need three things:
-
-1. **An AI coding agent** — [Claude Code](https://claude.com/claude-code) (recommended), or Codex / Gemini / a local model.
-2. **`git`** and a terminal.
-3. **A target you're allowed to test** — your own app, a signed pentest engagement, or a bug-bounty program that lists it in scope.
-
-## Get started — 3 steps
+**Requirements:** an AI coding agent ([Claude Code](https://claude.com/claude-code) recommended; Codex/Gemini/local also work), `git`, a terminal.
 
 ```bash
-# 1) Install once — makes the skills available to Claude Code everywhere
 git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
 ./sploit install
-
-# 2) Create a workspace for your target — put it anywhere you like
-sploit new acme.com ~/work/acme
-
-# 3) Open your agent in that folder
-cd ~/work/acme && claude          # or: codex · gemini
 ```
 
-Now just tell it what you want, in plain English:
+`./sploit install` does two things: links all 127 skills into `~/.claude/skills/` (so Claude Code
+finds them in **any** directory) and puts the `sploit` command on your `PATH`. Undo anytime with
+`./install.sh --uninstall`.
 
-> **"Start an authorized assessment of acme.com. Confirm scope, then recon."**
+## Use
 
-The agent reads your `scope.txt`, loads the matching skills, and gets to work.
-Want to watch a full run first? → **[How it works](https://noorqureshi.github.io/SploitAgent/interact.html)**
+```bash
+sploit new acme.com ~/work/acme     # 1. make a workspace for the target (put it anywhere)
+cd ~/work/acme                      # 2. edit scope.txt with your authorized targets
+claude                              # 3. open your agent here (or: codex · gemini)
+```
 
-## Just talk to it — examples
+Then type your goal:
+
+```
+Start an authorized assessment of acme.com. Confirm scope, then recon.
+```
+
+## What it does — example run
+
+The agent confirms scope, then loads skills as the target reveals leads. Abridged session:
+
+```text
+> Start an authorized assessment of acme.com. Confirm scope, then recon.
+
+● tradecraft-scope-roe             scope confirmed · *.acme.tld (bug-bounty, in scope)
+● recon-subdomain-enum             41 hosts found · api.acme.tld is live
+● recon-techstack-fingerprinting   Django REST Framework · Cloudflare WAF · /api/v1
+● api-bola                         testing object references on /api/v1/orders
+    ✓ GET /api/v1/orders/1044  (account B's token)  → returns account A's order
+    ✓ IDs are sequential → ~20k orders enumerable (not hoarded)
+● web-idor                         confirmed cross-tenant read with 2 accounts
+● reporting-triage-validation      reproduced from a clean session · CVSS 8.1 (High) · not a dup
+✔ wrote findings/idor-orders.md
+```
+
+**What you get on disk** — the workspace, updated as it works:
+
+```text
+~/work/acme/
+  scope.txt                 your authorized targets (the hard boundary)
+  notes.md                  timestamped log of every step (goal · command · result · why · next)
+  findings/idor-orders.md   the confirmed finding, ready to submit
+```
+
+`findings/idor-orders.md` looks like this:
+
+```markdown
+# IDOR → cross-tenant order access on /api/v1/orders/{id}
+
+Severity: High (CVSS 8.1 — AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)
+Asset:    https://api.acme.tld/api/v1/orders/{id}
+
+## Steps to reproduce
+1. Log in as attacker (account B) and capture the bearer token.
+2. Request another tenant's order:  GET /api/v1/orders/1044  with B's token.
+3. Response returns account A's order (name, address, line items).
+
+## Impact
+Any authenticated user can read any other tenant's orders by changing a sequential id
+(~20k records enumerable). Cross-tenant confidentiality breach.
+
+## Fix
+Enforce object-level authorization: check the order's owner == the caller on every read.
+```
+
+That's the whole point: **you describe the task, the agent does the work and hands you evidence.**
+See a fully annotated run → **[How it works](https://noorqureshi.github.io/SploitAgent/interact.html)**.
+
+## Common requests
 
 | You type… | The agent loads |
 |---|---|
 | "recon acme.com and map the attack surface" | `recon-*` |
 | "test this API for IDOR / BOLA (I'm authorized)" | `api-bola`, `web-idor` |
 | "is this login's JWT forgeable?" | `web-auth-jwt` |
-| "review ./src for injection bugs before we ship" | `code-review-*` |
+| "review ./src for injection bugs" | `code-review-*` |
 | "I got a shell — what now?" | `privesc-enumeration` |
 | "kerberoast the domain controller (authorized pentest)" | `ad-kerberoasting` |
 | "turn this finding into a report" | `reporting-*` |
 | "write a Sigma rule to detect this" | `defense-detection-sigma` |
-
-## What happens under the hood
-
-The agent always follows the same simple loop — the target decides which skills fire at each step:
-
-1. **Scope** — confirm you're authorized · `tradecraft-scope-roe`
-2. **Recon** — map the target · `recon-*`
-3. **Attack** — by area: web · API · cloud · AD · wireless… · `web-*`, `api-*`, `cloud-*`, …
-4. **Escalate & pivot** — go deeper · `privesc-*`, `ad-*`, `network-*`
-5. **Report** — validate, then write it up · `reporting-*`
-6. **Defend** *(optional)* — turn findings into detections · `defense-*`
-
-Everything for one target lives in its own folder (`sploit new` creates it — **anywhere**, with the
-skills wired in, so any agent opened there can use them):
-
-```
-<your target folder>/
-  scope.txt  roe.md  notes.md  findings/  loot/  START-HERE.md
-  skills/   CLAUDE.md   AGENTS.md
-```
-
-<a id="whats-inside"></a>
 
 ## What's inside
 
@@ -138,46 +160,31 @@ skills wired in, so any agent opened there can use them):
 ## FAQ
 
 <details>
-<summary><b>Do I need to install a bunch of security tools?</b></summary>
+<summary><b>Do I need to install security tools?</b></summary>
 
-No — the skills are *knowledge*, not the tools themselves. They teach the method and name the standard
-tools each step uses (nmap, ffuf, sqlmap, etc.). Install whatever a given skill calls for, when you
-need it. Many skills need nothing beyond what the agent already has.
+The skills are the *method* and name the standard tools each step uses (nmap, ffuf, sqlmap, impacket…).
+Install what a given skill calls for when you need it; the agent runs them in your terminal.
 </details>
 
 <details>
-<summary><b>Which agents work?</b></summary>
+<summary><b>Which agents work, and does the workspace have to be in this repo?</b></summary>
 
-Claude Code works best (it auto-loads the right skill). Codex, Gemini, and other agents work too — they
-read `AGENTS.md` and the skill files. Local models work as well; see [docs/USING.md](docs/USING.md).
+Claude Code works best (it auto-loads the matching skill). Codex, Gemini, and local models work too —
+they read `AGENTS.md` and the skill files. Workspaces can live **anywhere**: `sploit new <target> <path>`
+wires the skills in; add `--copy` to make the folder fully standalone.
 </details>
 
 <details>
 <summary><b>Will it attack things on its own?</b></summary>
 
-No. Every engagement starts with `tradecraft-scope-roe`, which makes the agent confirm authorization
+No. The first skill in every engagement, `tradecraft-scope-roe`, makes the agent confirm authorization
 and refuse anything not in your `scope.txt`. You stay in control.
-</details>
-
-<details>
-<summary><b>Does the workspace have to be inside this repo?</b></summary>
-
-No — `sploit new <target> <path>` puts it wherever you want and wires the skills in. Add `--copy` to
-make it fully standalone (it keeps working even if you move or delete the repo).
-</details>
-
-<details>
-<summary><b>How do I update it?</b></summary>
-
-`git pull` in the repo. If you ran `./sploit install`, re-run it to refresh the links.
 </details>
 
 ## Authorized use only
 
-SploitAgent is for security work you're **permitted** to do: a signed pentest scope, a bug-bounty
-program whose scope covers the target, or systems you own. The first skill in every engagement,
-`tradecraft-scope-roe`, requires an explicit authorization before anything runs. Don't point it at
-systems you aren't authorized to test.
+For security work you're **permitted** to do — a signed pentest scope, a bug-bounty program that lists
+the target, or systems you own. Don't point it at anything you aren't authorized to test.
 
 ## Contribute
 
@@ -188,8 +195,7 @@ cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
 python3 tools/catalog.py            # validate + regenerate the indexes
 ```
 
-Wanted skills are in [ROADMAP.md](ROADMAP.md); the full guide and house style are in
-[CONTRIBUTING.md](CONTRIBUTING.md). Every pull request is schema-validated by CI.
+Wanted skills: [ROADMAP.md](ROADMAP.md) · full guide: [CONTRIBUTING.md](CONTRIBUTING.md). Every PR is schema-validated by CI.
 
 ## Repository layout
 
