@@ -56,6 +56,9 @@ def activity(path, tail=800):
 def findings(path):
     out = []
     for f in sorted(glob.glob(os.path.join(path, "findings", "*.md"))):
+        base = os.path.basename(f)
+        if base.startswith("_") or base.lower() in ("readme.md", "template.md"):
+            continue                       # skip templates / readmes, not real findings
         txt = _read(f, 6000)
         m = re.search(r'^#\s+(.+)$', txt, re.M)
         title = m.group(1).strip() if m else os.path.basename(f)
@@ -107,6 +110,7 @@ class H(BaseHTTPRequestHandler):
                 "path": path,
                 "scope": _read(os.path.join(path, "scope.txt"), 20000),
                 "plan": _read(os.path.join(path, "plan.md"), 60000),
+                "notes": _read(os.path.join(path, "notes.md"), 120000),
                 "activity": activity(path),
                 "findings": findings(path),
             })

@@ -97,11 +97,24 @@ EOF
 EOF
   cat > "$dest/notes.md" <<EOF
 # Notes — $target
-# Running log. One entry per lead: goal · command · result · why it worked · next lead.
 
-## $(date '+%Y-%m-%d %H:%M')  engagement created
-goal:   set scope and begin recon
-next:   confirm authorization in scope.txt / roe.md, then run recon
+Running log, written so a human can follow and re-do the work. One dated block per lead,
+newest at the bottom. Keep each block to: **goal · command · result · why · next**.
+
+---
+
+## $(date '+%Y-%m-%d %H:%M')  ·  engagement created
+- **goal:**   set scope and begin recon
+- **next:**   confirm authorization in scope.txt / roe.md, then recon the attack surface
+
+<!-- template for each lead — copy this block:
+## <date time>  ·  <lead name>
+- **goal:**    what I'm trying to prove
+- **command:** the exact request/command run
+- **result:**  what came back (verbatim, trimmed)
+- **why:**     why it worked / didn't — the mechanism
+- **next:**    the next lead this opens, or why this one is closed/blocked
+-->
 EOF
 
   # --- plan + activity log (tool-agnostic; drives the `sploit watch` console) ---
@@ -125,6 +138,29 @@ _—_
 EOF
   local now; now="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
   printf '{"ts":"%s","event":"note","detail":"engagement created for %s"}\n' "$now" "$target" > "$dest/.sploit/activity.jsonl"
+
+  # --- Claude Code auto-capture: log tool calls into activity.jsonl with no manual effort ---
+  # Ships a per-workspace copy of the hook so it works even if the repo moves (or --copy is used),
+  # and registers it as a PostToolUse hook. Other agents fall back to the agent-written log.
+  if [ -f "$REPO_DIR/tools/hooks/cc-activity-hook.py" ]; then
+    cp "$REPO_DIR/tools/hooks/cc-activity-hook.py" "$dest/.sploit/cc-activity-hook.py"
+    mkdir -p "$dest/.claude"
+    cat > "$dest/.claude/settings.json" <<EOF
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash|WebFetch|WebSearch",
+        "hooks": [
+          { "type": "command", "command": "python3 '$dest/.sploit/cc-activity-hook.py'" }
+        ]
+      }
+    ]
+  }
+}
+EOF
+  fi
+
   # register this workspace machine-wide so `sploit watch` can find it wherever it lives
   mkdir -p "$HOME/.sploit"
   printf '{"ts":"%s","target":"%s","path":"%s"}\n' "$now" "$target" "$dest" >> "$HOME/.sploit/engagements.jsonl"
@@ -167,8 +203,12 @@ loads \`tradecraft-scope-roe\` first and refuses anything not listed.
 \`\`\`bash
 claude          # or: opencode · codex · gemini — whatever you use
 \`\`\`
-Optional: run \`sploit watch\` first (it runs in the background) to see the plan and live
-activity in your browser while the agent works.
+Optional: run \`sploit watch\` first (it runs in the background) to see the plan, live
+activity, and the **Attack Map** in your browser while the agent works.
+
+Under **Claude Code**, every shell command and web request is captured automatically
+(a PostToolUse hook in \`.claude/settings.json\` → \`.sploit/cc-activity-hook.py\`), so the
+console fills in even if the agent forgets to log. Delete \`.claude/settings.json\` to turn it off.
 
 ## 3. Describe the task — the right skill loads itself
 > Start an authorized assessment of **$target**. Confirm scope from scope.txt, then recon the

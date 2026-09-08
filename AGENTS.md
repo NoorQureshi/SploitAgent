@@ -54,20 +54,67 @@ engagements/<target>/
   .sploit/activity.jsonl # one JSON line per step, so a human/console can follow you
 ```
 
-## Show your work (plan + activity log)
-So anyone — a teammate, or the read-only `sploit watch` console — can follow your reasoning across
-*any* tool (Claude Code, OpenCode, Codex, Gemini, an API script), externalise it into the workspace:
+## Show your work — so a human can follow *and* audit you
+Externalise your reasoning into the workspace as you go, so anyone — a teammate, or the read-only
+`sploit watch` console — can see not just *what* you did but *why*, across **any** tool (Claude Code,
+OpenCode, Codex, Gemini, an API script). Three files carry it:
 
-- **`plan.md`** — write it up front and keep it current: the objective, an ordered strategy as a
-  checkbox list (tick items as you go), and a one-line "current focus". This is your thinking, on disk.
-- **`.sploit/activity.jsonl`** — append one JSON line at each meaningful step:
-  `{"ts":"<ISO-8601>","event":"plan|skill_load|command|result|finding|decision|note","detail":"…","skill":"<slug>","severity":"<sev>"}`
-  Only `ts`, `event`, and `detail` are required. This is how the console shows what you loaded, ran,
-  found, and decided — with no dependency on which agent is running.
+### 1. `plan.md` — the living strategy
+Write it up front and keep it current: the objective, an ordered strategy as a checkbox list (tick
+items as you go), and a one-line "current focus". This is your thinking, on disk.
 
-These paths are git-ignored, so an engagement run inside a clone never pollutes the repo. Keep
-`notes.md` to the teach-the-mechanism standard in `methodology.md` (goal · command · result ·
-why it worked · next lead).
+### 2. `.sploit/activity.jsonl` — one JSON line per meaningful step
+This is the spine of the console's **Attack Map** and timeline. Append a line whenever you decide
+something, try something, or learn something:
+
+```
+{"ts":"<ISO-8601 UTC>","event":"<type>","detail":"…","lead":"<slug>","surface":"<name>",
+ "status":"<status>","rationale":"why","skill":"<slug>","severity":"<sev>","refs":"<finding-file>"}
+```
+
+- **Required:** `ts`, `event`, `detail`.
+- **`event`** — one of `plan · decision · skill_load · command · result · finding · note`.
+- **`lead`** — *the most important optional field.* A short slug for the attack lead this step
+  belongs to (`command-injection`, `lfi`, `jwt-none-alg`, `s3-public-bucket`). Steps that share a
+  `lead` are grouped into one branch of the Attack Map. Pick the slug when you open a lead and reuse
+  it for every step on it.
+- **`surface`** — the higher grouping the lead sits under (`DVWA web app`, `REST API`, `AD domain`).
+- **`status`** — for `decision`/`finding` steps, where the lead stands: `open` (identified, not
+  started) · `trying` · `confirmed` · `failed` (tried, not vulnerable) · `blocked` (can't proceed —
+  say why in `rationale`) · `skipped` / `not-attempted` (say why). This is how the map shows what you
+  **proved, ruled out, and deliberately left** — including anything you couldn't get to.
+- **`rationale`** — *why* you made this decision or what a result means. This is the reasoning a
+  manual investigator needs. Always set it on `decision` steps.
+- **`skill`** on `skill_load`; **`severity`** (`critical|high|medium|low|info`) + **`refs`** (the
+  `findings/*.md` filename) on `finding`.
+
+**Log the reasoning layer religiously:** a `decision` with `lead` + `rationale` + `status` every time
+you open, rule out, or park a lead; a `finding` with `severity` + `refs` when you confirm one. If you
+are running under **Claude Code**, the auto-capture hook (`.sploit/cc-activity-hook.py`, wired in
+`.claude/settings.json`) already records your shell commands and web requests, so you don't need to
+log routine `command`/`result` lines by hand — spend your logging on decisions, leads, and findings.
+Under any other tool, also log the key `command`/`result` steps yourself.
+
+### 3. `notes.md` + `findings/*.md` — written for a human to read
+Keep `notes.md` as a running log to the teach-the-mechanism standard in `methodology.md`
+(**goal · command · result · why it worked · next lead**) — one dated block per lead. Write each
+confirmed issue as its own `findings/<nn>-<slug>.md` in this structure (the console renders it, and
+it drops straight into a report):
+
+```
+# <Vuln class> on <asset> — <one-line impact>
+
+**Severity:** <Critical|High|Medium|Low|Info>
+**Endpoint:** `<method + path / component>`
+
+## Summary            <!-- what, where, why it matters, in 2–3 sentences -->
+## Steps to reproduce <!-- numbered, copy-pasteable, exact requests -->
+## Proof              <!-- minimal evidence that proves impact -->
+## Impact             <!-- realistic business consequence, tied to what you proved -->
+## Remediation        <!-- the correct fix -->
+```
+
+These paths are git-ignored, so an engagement run inside a clone never pollutes the repo.
 
 ## House rules
 - Teach the mechanism, don't just paste payloads. Prove impact with the least data/action needed.

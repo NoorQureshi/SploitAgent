@@ -166,6 +166,51 @@
   .md th{background:var(--panel2);color:var(--text);font-weight:600}
   .md .chk{color:var(--accent)} .md .unchk{color:var(--muted)}
   .md strong{color:var(--text)}
+
+  /* ---- attack map ---- */
+  .scopeline{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--dim);margin-bottom:10px}
+  .scopeline .chip{margin-left:4px}
+  .maplegend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin:0 0 6px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  .maplegend span{display:flex;align-items:center;gap:6px}
+  .maplegend i{font-style:normal;font-size:13px}
+  .surface{margin:22px 0 4px;font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);
+    display:flex;align-items:center;gap:10px}
+  .surface::after{content:"";flex:1;height:1px;background:var(--border)}
+  .lead{border:1px solid var(--border);border-left:3px solid var(--border2);border-radius:10px;margin:8px 0;
+    background:var(--panel);overflow:hidden}
+  .lead>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px}
+  .lead>summary::-webkit-details-marker{display:none}
+  .lead>summary::before{content:"▸";color:var(--muted);font-size:11px;transition:transform .15s;flex:0 0 auto}
+  .lead[open]>summary::before{transform:rotate(90deg)}
+  .lead>summary:hover{background:var(--panel2)}
+  .lead .nm{font-weight:600;font-size:14px;color:var(--text)}
+  .lead .rat{color:var(--muted);font-size:12.5px;margin-left:auto;max-width:46%;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+  .lead .body{padding:2px 16px 14px 34px}
+  .lead .ratfull{color:var(--dim);font-size:13px;margin:12px 0;padding:8px 0 8px 12px;border-left:2px solid var(--border2)}
+  .lead .ratfull b{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;display:block;margin-bottom:3px}
+  .lead ol.steps{margin:8px 0;padding-left:18px} .lead ol.steps li{margin:4px 0;color:var(--dim);font-size:13px}
+  .lead ol.steps li.res{color:var(--muted);list-style:none;margin-left:-14px}
+  .lead .cmd{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--text)}
+  .lead .flink{display:block;margin-top:8px;font-size:13px}
+  .lead .flink .sev{margin-left:0;margin-right:8px}
+  .st{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-radius:999px;
+    padding:2px 9px;border:1px solid;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+  .st .ic{font-size:9px}
+  .st-confirmed{color:var(--red);border-color:var(--red);background:rgba(255,107,107,.09)}
+  .st-trying{color:var(--blue);border-color:var(--blue);background:rgba(90,169,255,.09)}
+  .st-blocked{color:var(--orange);border-color:var(--orange);background:rgba(255,159,67,.09)}
+  .st-failed{color:var(--green);border-color:var(--border2)}
+  .st-skipped,.st-open{color:var(--muted);border-color:var(--border2);border-style:dashed}
+  .lead.b-confirmed{border-left-color:var(--red)} .lead.b-trying{border-left-color:var(--blue)}
+  .lead.b-blocked{border-left-color:var(--orange)} .lead.b-failed{border-left-color:var(--green)}
+  .recon>summary{cursor:pointer;color:var(--muted);font-size:12.5px;padding:10px 2px;list-style:none}
+  .recon>summary::-webkit-details-marker{display:none}
+  .recon ol{padding-left:18px;color:var(--muted);font-size:12.5px} .recon li{margin:3px 0}
+
+  .tl .rat{display:block;color:var(--muted);font-size:12px;margin-top:3px;font-style:italic}
+  .tl .lead-chip{font-size:10px;color:var(--purple);border:1px solid var(--border2);border-radius:999px;padding:0 8px;margin-left:8px;vertical-align:1px}
+  .tl .hooktag{font-size:9px;color:var(--muted);border:1px solid var(--border2);border-radius:3px;padding:0 4px;margin-left:6px;text-transform:uppercase;letter-spacing:.3px;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -209,8 +254,14 @@ const $=s=>document.querySelector(s);
 const esc=s=>(s||"").replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const SEV_ORDER={critical:0,high:1,medium:2,low:3,info:4,"":5};
 
-let CUR=null, CUROBJ=null, SKILLS=[], SUBTAB="activity";
-let sigEng="", sigDetail={}, prevMaxTs="", curActivity=[], curFindings=[];
+let CUR=null, CUROBJ=null, SKILLS=[], SUBTAB="map";
+let sigEng="", sigDetail={}, prevMaxTs="", curActivity=[], curFindings=[], curScope="", curNotes="";
+const STATUS={confirmed:{ic:"●",cls:"st-confirmed",lab:"confirmed"},trying:{ic:"◐",cls:"st-trying",lab:"trying"},
+  blocked:{ic:"⏸",cls:"st-blocked",lab:"blocked"},failed:{ic:"✕",cls:"st-failed",lab:"ruled out"},
+  skipped:{ic:"○",cls:"st-skipped",lab:"skipped"},"not-attempted":{ic:"○",cls:"st-skipped",lab:"not attempted"},
+  open:{ic:"·",cls:"st-open",lab:"open"}};
+const STATUS_RANK={confirmed:6,trying:4,blocked:3,failed:2,skipped:1,"not-attempted":1,open:0};
+const prettyLead=s=>(s||"").replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 let actFilter=new Set(["command","result","finding","decision","plan","skill_load","note"]);
 let actQuery="";
 
@@ -324,20 +375,31 @@ function buildShell(d){
       </div>
     </div>
     <div class="subtabs">
+      <button data-st="map" onclick="setSub('map')">Attack Map</button>
       <button data-st="activity" onclick="setSub('activity')">Activity</button>
       <button data-st="plan" onclick="setSub('plan')">Plan</button>
+      <button data-st="notes" onclick="setSub('notes')">Notes</button>
       <button data-st="findings" onclick="setSub('findings')">Findings<span class="badge" id="fbadge">${(d.findings||[]).length}</span></button>
     </div>
+    <div class="pane" id="pane-map" hidden></div>
     <div class="pane" id="pane-activity" hidden>
       <div class="filters" id="filters"></div>
       <ul class="tl" id="tl"></ul>
     </div>
     <div class="pane md" id="pane-plan" hidden></div>
+    <div class="pane md" id="pane-notes" hidden></div>
     <div class="pane" id="pane-findings" hidden></div>`;
   $("#pane-plan").innerHTML=(d.plan&&d.plan.trim())?renderMd(d.plan)
     :`<div class="empty" style="padding:40px 0">No <code>plan.md</code> yet. The agent writes its strategy here as it works.</div>`;
+  renderNotes();
   renderFilters();
   applySub();
+}
+function renderNotes(){
+  const p=$("#pane-notes"); if(!p) return;
+  p.innerHTML=(curNotes&&curNotes.trim())?renderMd(curNotes)
+    :`<div class="empty" style="padding:40px 0">No <code>notes.md</code> yet. The agent keeps a running,
+       human-readable log here — one block per lead: goal · command · result · why · next.</div>`;
 }
 function renderFilters(){
   const defs=[["command","commands"],["result","results"],["finding","findings"],["decision","decisions"],["plan","plan/skills"],["note","notes"]];
@@ -357,8 +419,89 @@ function onActQuery(v){ actQuery=v; renderActivity(true); }
 
 function setSub(t){ SUBTAB=t; applySub(); }
 function applySub(){
-  ["activity","plan","findings"].forEach(t=>{ const p=$("#pane-"+t); if(p)p.hidden=(t!==SUBTAB); });
+  ["map","activity","plan","notes","findings"].forEach(t=>{ const p=$("#pane-"+t); if(p)p.hidden=(t!==SUBTAB); });
   document.querySelectorAll(".subtabs button").forEach(b=>b.classList.toggle("on",b.dataset.st===SUBTAB));
+}
+
+/* ---------- attack map (the reasoning graph) ---------- */
+function buildAttackMap(activity){
+  const leads=new Map(); const recon=[];
+  for(const a of activity){
+    if(!a.lead){ recon.push(a); continue; }
+    if(!leads.has(a.lead)) leads.set(a.lead,{slug:a.lead,surface:a.surface||"",steps:[],status:"open",rationale:"",findings:[],severity:""});
+    const L=leads.get(a.lead);
+    if(a.surface&&!L.surface) L.surface=a.surface;
+    L.steps.push(a);
+    if(a.rationale&&(a.event==="decision"||!L.rationale)) L.rationale=a.rationale;
+    const st=(a.status||"").toLowerCase();
+    if(st&&STATUS[st]&&(STATUS_RANK[st]??-1)>(STATUS_RANK[L.status]??-1)) L.status=st;
+    if(a.event==="finding"){ L.status="confirmed";
+      const sv=(a.severity||"info").toLowerCase();
+      L.findings.push({sev:sv,ref:a.refs||"",detail:a.detail||""});
+      if((SEV_ORDER[sv]??5)<(SEV_ORDER[L.severity]??5)) L.severity=sv;
+    }
+  }
+  const surfaces=new Map();
+  for(const L of leads.values()){ const s=L.surface||"Other leads"; if(!surfaces.has(s)) surfaces.set(s,[]); surfaces.get(s).push(L); }
+  for(const arr of surfaces.values())
+    arr.sort((a,b)=>(STATUS_RANK[b.status]-STATUS_RANK[a.status])||((SEV_ORDER[a.severity]??5)-(SEV_ORDER[b.severity]??5)));
+  return {surfaces,recon,leadCount:leads.size};
+}
+function renderMap(){
+  const p=$("#pane-map"); if(!p) return;
+  const map=buildAttackMap(curActivity);
+  const scope=(curScope||"").split("\n").map(l=>l.trim()).filter(l=>l&&!l.startsWith("#"));
+  let html=`<div class="scopeline">scope:${scope.length?scope.map(s=>`<span class="chip">${esc(s)}</span>`).join(""):' <span style="color:var(--muted)">not set</span>'}</div>`;
+  if(!map.leadCount){
+    html+=`<div class="empty" style="padding:40px 0">No attack leads mapped yet.<br><br>
+      The map builds itself as the agent tags steps with a <code>lead</code> and a <code>status</code>
+      in <code>.sploit/activity.jsonl</code> (see <code>AGENTS.md</code> → <i>Show your work</i>).</div>`;
+    if(map.recon.length) html+=reconBlock(map.recon);
+    p.innerHTML=html; return;
+  }
+  html+=`<div class="maplegend">
+    <span><i style="color:var(--red)">●</i> confirmed</span>
+    <span><i style="color:var(--blue)">◐</i> trying</span>
+    <span><i style="color:var(--orange)">⏸</i> blocked</span>
+    <span><i style="color:var(--green)">✕</i> ruled out</span>
+    <span><i style="color:var(--muted)">○</i> skipped / not attempted</span></div>`;
+  for(const [surface,leads] of map.surfaces){
+    html+=`<div class="surface">${esc(surface)}</div>`;
+    for(const L of leads) html+=leadCard(L);
+  }
+  if(map.recon.length) html+=reconBlock(map.recon);
+  p.innerHTML=html;
+}
+function leadCard(L){
+  const meta=STATUS[L.status]||STATUS.open;
+  const open=(L.status==="confirmed"||L.status==="trying")?" open":"";
+  const sev=L.severity?`<span class="sev ${L.severity}">${L.severity}</span>`:"";
+  const ratShort=L.rationale?`<span class="rat">${esc(L.rationale)}</span>`:"";
+  const steps=L.steps.filter(s=>s.event!=="finding").map(s=>{
+    if(s.event==="command") return `<li><span class="cmd">${esc(s.detail||"")}</span></li>`;
+    if(s.event==="result")  return `<li class="res">↳ ${esc(s.detail||"")}</li>`;
+    if(s.event==="decision")return `<li><b style="color:var(--yellow)">decision:</b> ${esc(s.detail||"")}</li>`;
+    return `<li>${esc(s.detail||"")}</li>`;
+  }).join("");
+  const flinks=L.findings.map(f=>f.ref
+    ? `<a class="flink" onclick='openFinding(${JSON.stringify(f.ref)})'><span class="sev ${esc(f.sev)}">${esc(f.sev)}</span>${esc(f.detail||f.ref)} ›</a>`
+    : `<div class="flink"><span class="sev ${esc(f.sev)}">${esc(f.sev)}</span>${esc(f.detail||"")}</div>`).join("");
+  return `<details class="lead b-${L.status}"${open}>
+    <summary><span class="st ${meta.cls}"><span class="ic">${meta.ic}</span>${meta.lab}</span>
+      <span class="nm">${esc(prettyLead(L.slug))}</span>${sev}${ratShort}</summary>
+    <div class="body">
+      ${L.rationale?`<div class="ratfull"><b>reasoning</b>${esc(L.rationale)}</div>`:""}
+      ${steps?`<ol class="steps">${steps}</ol>`:'<div class="muted" style="font-size:12.5px;margin:6px 0">No steps logged for this lead yet.</div>'}
+      ${flinks}
+    </div></details>`;
+}
+function reconBlock(recon){
+  const rows=recon.filter(a=>a.detail).slice(-40).reverse().map(a=>{
+    const cmd=a.event==="command"?`<span class="cmd">${esc(a.detail)}</span>`:esc(a.detail);
+    return `<li>${cmd}</li>`;
+  }).join("");
+  return `<details class="recon"><summary>▸ Recon &amp; setup — ${recon.length} step${recon.length==1?'':'s'} not tied to a specific lead</summary>
+    <ol>${rows}</ol></details>`;
 }
 
 function renderActivity(force){
@@ -374,9 +517,12 @@ function renderActivity(force){
     const fresh=(a.ts&&prevMaxTs&&a.ts>prevMaxTs)?" fresh":"";
     const detail=ev==="command"?`<span class="cmd">${esc(a.detail||"")}</span>`:esc(a.detail||"");
     const sev=a.severity?`<span class="sev ${esc(a.severity.toLowerCase())}">${esc(a.severity)}</span>`:"";
+    const lead=a.lead?`<span class="lead-chip">${esc(a.lead)}</span>`:"";
+    const hook=a.source==="hook"?`<span class="hooktag" title="captured automatically by the Claude Code hook">auto</span>`:"";
+    const rat=a.rationale?`<span class="rat">↳ ${esc(a.rationale)}</span>`:"";
     return `<li class="${fresh.trim()}"><span class="ts">${clockTime(a.ts)}</span>
       <span class="ev ${esc(ev)}">${esc(ev.replace("_"," "))}${a.skill?`<span class="sk">${esc(a.skill)}</span>`:""}</span>
-      <span class="dt">${detail}${sev}</span></li>`;
+      <span class="dt">${detail}${sev}${lead}${hook}${rat}</span></li>`;
   }).join("") || `<li style="color:var(--muted);grid-template-columns:1fr;display:block;padding:22px 0">No steps match the current filter.</li>`;
   if(!force) prevMaxTs=maxTs;
 }
@@ -398,19 +544,20 @@ async function refreshDetail(force){
   // rebuild shell only if structure-affecting bits changed (scope / path / find count / target)
   const shellSig=JSON.stringify([CUROBJ&&CUROBJ.target,d.path,d.scope,(d.findings||[]).map(f=>[f.file,f.severity,f.title])]);
   if(force||shellSig!==sigDetail.shell){
-    curActivity=d.activity||[]; curFindings=d.findings||[];
+    curActivity=d.activity||[]; curFindings=d.findings||[]; curScope=d.scope||""; curNotes=d.notes||"";
     buildShell(d);
-    renderActivity(false); renderFindings();
-    sigDetail.shell=shellSig; sigDetail.act=JSON.stringify(curActivity); sigDetail.plan=d.plan;
+    renderActivity(false); renderFindings(); renderMap();
+    sigDetail.shell=shellSig; sigDetail.act=JSON.stringify(curActivity); sigDetail.plan=d.plan; sigDetail.notes=d.notes;
     return;
   }
   // otherwise just refresh the volatile bits in place (no flicker, keeps drawer + scroll)
   const actSig=JSON.stringify(d.activity||[]);
-  if(actSig!==sigDetail.act){ curActivity=d.activity||[]; renderActivity(false); sigDetail.act=actSig;
+  if(actSig!==sigDetail.act){ curActivity=d.activity||[]; curScope=d.scope||""; renderActivity(false); renderMap(); sigDetail.act=actSig;
     const sc=$("#stepcount"); if(sc) sc.textContent=curActivity.length; }
   if(d.plan!==sigDetail.plan){ sigDetail.plan=d.plan;
     const pp=$("#pane-plan"); if(pp) pp.innerHTML=(d.plan&&d.plan.trim())?renderMd(d.plan)
       :`<div class="empty" style="padding:40px 0">No <code>plan.md</code> yet. The agent writes its strategy here as it works.</div>`; }
+  if(d.notes!==sigDetail.notes){ sigDetail.notes=d.notes; curNotes=d.notes||""; renderNotes(); }
 }
 
 /* ---------- finding drawer ---------- */
