@@ -1,5 +1,5 @@
 {
- "count": 127,
+ "count": 137,
  "generated_by": "tools/catalog.py",
  "skills": [
   {
@@ -710,6 +710,53 @@
    "path": "skills/cryptography/crypto-rsa-attacks"
   },
   {
+   "name": "defense-ad-defense",
+   "domain": "defense",
+   "type": "technique",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Detect and harden against Active Directory attacks \u2014 Kerberoasting, AS-REP roasting, DCSync, ADCS abuse, and delegation/relay.",
+   "tags": [
+    "T1558.003",
+    "T1558.004",
+    "T1003.006",
+    "T1207",
+    "T1649"
+   ],
+   "path": "skills/defense/defense-ad-defense"
+  },
+  {
+   "name": "defense-cloud-detection",
+   "domain": "defense",
+   "type": "technique",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Detect and respond to attacks in cloud control planes \u2014 credential abuse, IMDS theft, persistence, and privilege escalation \u2014 from audit logs.",
+   "tags": [
+    "T1078.004",
+    "T1552.005",
+    "T1078",
+    "T1098"
+   ],
+   "path": "skills/defense/defense-cloud-detection"
+  },
+  {
+   "name": "defense-detection-engineering",
+   "domain": "defense",
+   "type": "methodology",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Build detections as a repeatable pipeline, not one-off alerts.",
+   "tags": [],
+   "path": "skills/defense/defense-detection-engineering"
+  },
+  {
    "name": "defense-detection-sigma",
    "domain": "defense",
    "type": "technique",
@@ -753,6 +800,18 @@
    "path": "skills/defense/defense-hardening-baseline"
   },
   {
+   "name": "defense-incident-response",
+   "domain": "defense",
+   "type": "methodology",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Run an incident end to end \u2014 detect, scope, contain, eradicate, recover, learn.",
+   "tags": [],
+   "path": "skills/defense/defense-incident-response"
+  },
+  {
    "name": "defense-log-analysis",
    "domain": "defense",
    "type": "technique",
@@ -770,6 +829,39 @@
    "path": "skills/defense/defense-log-analysis"
   },
   {
+   "name": "defense-malware-triage",
+   "domain": "defense",
+   "type": "technique",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Safely triage a suspicious file or process \u2014 is it malicious, what does it do, and what IOCs does it yield \u2014 with static then dynamic analysis.",
+   "tags": [
+    "T1204",
+    "T1027",
+    "T1059"
+   ],
+   "path": "skills/defense/defense-malware-triage"
+  },
+  {
+   "name": "defense-network-detection",
+   "domain": "defense",
+   "type": "technique",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Detect attacker activity in network telemetry \u2014 C2 beaconing, DNS tunnelling, data exfil, and lateral movement.",
+   "tags": [
+    "T1071",
+    "T1048",
+    "T1572",
+    "T1021"
+   ],
+   "path": "skills/defense/defense-network-detection"
+  },
+  {
    "name": "defense-purple-team",
    "domain": "defense",
    "type": "methodology",
@@ -784,6 +876,22 @@
     "T1021"
    ],
    "path": "skills/defense/defense-purple-team"
+  },
+  {
+   "name": "defense-threat-hunting",
+   "domain": "defense",
+   "type": "methodology",
+   "modes": [
+    "defense"
+   ],
+   "severity": "info",
+   "summary": "Hunt for intrusions no alert fired on \u2014 hypothesis-driven, ATT&CK-guided searching across EDR and logs.",
+   "tags": [
+    "T1059",
+    "T1055",
+    "T1071"
+   ],
+   "path": "skills/defense/defense-threat-hunting"
   },
   {
    "name": "defense-threat-modeling",
@@ -1431,6 +1539,33 @@
    "path": "skills/social-eng/social-eng-vishing-pretext"
   },
   {
+   "name": "tradecraft-attack-path-mapping",
+   "domain": "tradecraft",
+   "type": "methodology",
+   "modes": [
+    "pentest",
+    "defense"
+   ],
+   "severity": "",
+   "summary": "Model the target as an attack graph \u2014 nodes (assets, identities, trust) and edges (a technique that gets you from one to the next) \u2014 and find the shor\u2026",
+   "tags": [],
+   "path": "skills/tradecraft/tradecraft-attack-path-mapping"
+  },
+  {
+   "name": "tradecraft-attack-scenarios",
+   "domain": "tradecraft",
+   "type": "methodology",
+   "modes": [
+    "pentest",
+    "bugbounty",
+    "defense"
+   ],
+   "severity": "",
+   "summary": "Turn a goal + a scope into a concrete, ordered attack scenario across multiple skills \u2014 not one technique in isolation.",
+   "tags": [],
+   "path": "skills/tradecraft/tradecraft-attack-scenarios"
+  },
+  {
    "name": "tradecraft-complex-engagements",
    "domain": "tradecraft",
    "type": "methodology",
@@ -1442,6 +1577,20 @@
    "summary": "Structure and discipline for complex, multi-stage targets \u2014 where the path is a chain of several bugs across multiple hosts, needs source review / cus\u2026",
    "tags": [],
    "path": "skills/tradecraft/tradecraft-complex-engagements"
+  },
+  {
+   "name": "tradecraft-pivot-decisions",
+   "domain": "tradecraft",
+   "type": "methodology",
+   "modes": [
+    "pentest",
+    "bugbounty",
+    "defense"
+   ],
+   "severity": "",
+   "summary": "Decide what to do next after a result \u2014 the branching logic that turns a single outcome into the next lead.",
+   "tags": [],
+   "path": "skills/tradecraft/tradecraft-pivot-decisions"
   },
   {
    "name": "tradecraft-scope-roe",
