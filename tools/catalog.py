@@ -265,19 +265,20 @@ def _stamp(apply):
         d = s["fm"].get("domain")
         by_domain[d] = by_domain.get(d, 0) + 1
     # total-count substitutions: (pattern, replacement) — \d+ is the only thing replaced
+    # \s+ (not a literal space) between anchor words, so a line-wrap can't hide a stale count.
     total_subs = [
-        (r'(badge/skills-)\d+(-)',              rf'\g<1>{total}\g<2>'),   # README shields badge
-        (r'(<b>)\d+(</b>\s*skills)',            rf'\g<1>{total}\g<2>'),   # docs hero badge
-        (r'(A library of )\d+( security)',      rf'\g<1>{total}\g<2>'),
-        (r'(binder of )\d+( short)',            rf'\g<1>{total}\g<2>'),
-        (r'(links all )\d+( skills)',           rf'\g<1>{total}\g<2>'),
-        (r'(All )\d+( SploitAgent skills)',     rf'\g<1>{total}\g<2>'),
-        (r'(All )\d+( skills across)',          rf'\g<1>{total}\g<2>'),
-        (r'(20 domains, )\d+( skills)',         rf'\g<1>{total}\g<2>'),
-        (r'(Search )\d+( skills)',              rf'\g<1>{total}\g<2>'),
-        (r'(\b)\d+( skills across 20 domains)', rf'\g<1>{total}\g<2>'),
-        (r'(\b)\d+( offensive and defensive)',  rf'\g<1>{total}\g<2>'),
-        (r'(\b)\d+( trigger-loaded)',           rf'\g<1>{total}\g<2>'),
+        (r'(badge/skills-)\d+(-)',                  rf'\g<1>{total}\g<2>'),   # README shields badge
+        (r'(<b>)\d+(</b>\s*skills)',                rf'\g<1>{total}\g<2>'),   # docs hero badge
+        (r'(A\s+library\s+of\s+)\d+(\s+security)',  rf'\g<1>{total}\g<2>'),
+        (r'(binder\s+of\s+)\d+(\s+short)',          rf'\g<1>{total}\g<2>'),
+        (r'(links\s+all\s+)\d+(\s+skills)',         rf'\g<1>{total}\g<2>'),
+        (r'(All\s+)\d+(\s+SploitAgent\s+skills)',   rf'\g<1>{total}\g<2>'),
+        (r'(All\s+)\d+(\s+skills\s+across)',        rf'\g<1>{total}\g<2>'),
+        (r'(20\s+domains,\s+)\d+(\s+skills)',       rf'\g<1>{total}\g<2>'),
+        (r'(Search\s+)\d+(\s+skills)',              rf'\g<1>{total}\g<2>'),
+        (r'\b\d+(\s+skills\s+across\s+20\s+domains)', rf'{total}\g<1>'),
+        (r'\b\d+(\s+offensive\s+and\s+defensive)',  rf'{total}\g<1>'),
+        (r'\b\d+(\s+trigger-loaded)',               rf'{total}\g<1>'),
     ]
     changed = []
     for rel in STAMP_FILES:

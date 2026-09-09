@@ -1,5 +1,5 @@
 {
- "count": 152,
+ "count": 159,
  "generated_by": "tools/catalog.py",
  "skills": [
   {
@@ -588,6 +588,27 @@
    "path": "skills/code-review/code-review-cicd"
   },
   {
+   "name": "code-review-cpp",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "defense",
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "info",
+   "summary": "Security review of C / C++ code \u2014 memory-safety and the classic unsafe-API sinks.",
+   "tags": [
+    "CWE-119",
+    "CWE-787",
+    "CWE-416",
+    "CWE-134",
+    "CWE-190",
+    "CWE-78"
+   ],
+   "path": "skills/code-review/code-review-cpp"
+  },
+  {
    "name": "code-review-dangerous-sinks",
    "domain": "code-review",
    "type": "reference",
@@ -774,6 +795,26 @@
     "CWE-78"
    ],
    "path": "skills/code-review/code-review-ruby"
+  },
+  {
+   "name": "code-review-rust",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "defense",
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "info",
+   "summary": "Security review of Rust code \u2014 where a memory-safe language still has real bugs: `unsafe`, FFI, panics, and the usual injection/logic sinks.",
+   "tags": [
+    "CWE-119",
+    "CWE-248",
+    "CWE-89",
+    "CWE-78",
+    "CWE-22"
+   ],
+   "path": "skills/code-review/code-review-rust"
   },
   {
    "name": "code-review-secrets-detection",
@@ -1554,6 +1595,19 @@
    "path": "skills/reporting/reporting-bug-bounty-writeup"
   },
   {
+   "name": "reporting-cvss-scoring",
+   "domain": "reporting",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Assign a defensible severity to a finding \u2014 build the CVSS 3.1 vector from demonstrated impact and reconcile it with the program's own scale.",
+   "tags": [],
+   "path": "skills/reporting/reporting-cvss-scoring"
+  },
+  {
    "name": "reporting-pentest-report",
    "domain": "reporting",
    "type": "reference",
@@ -1564,6 +1618,18 @@
    "summary": "Structure a professional penetration-test report (engagement deliverable, not a single bug).",
    "tags": [],
    "path": "skills/reporting/reporting-pentest-report"
+  },
+  {
+   "name": "reporting-triage-communication",
+   "domain": "reporting",
+   "type": "reference",
+   "modes": [
+    "bugbounty"
+   ],
+   "severity": "info",
+   "summary": "Work productively with triagers after you submit \u2014 answer follow-ups, and handle duplicate, not-applicable, or severity disputes professionally.",
+   "tags": [],
+   "path": "skills/reporting/reporting-triage-communication"
   },
   {
    "name": "reporting-triage-validation",
@@ -1721,6 +1787,18 @@
    "path": "skills/tradecraft/tradecraft-attack-scenarios"
   },
   {
+   "name": "tradecraft-bugbounty-platforms",
+   "domain": "tradecraft",
+   "type": "reference",
+   "modes": [
+    "bugbounty"
+   ],
+   "severity": "",
+   "summary": "Understand how the major bug-bounty platforms differ \u2014 scope rules, disclosure, triage, and reputation \u2014 so you play each correctly.",
+   "tags": [],
+   "path": "skills/tradecraft/tradecraft-bugbounty-platforms"
+  },
+  {
    "name": "tradecraft-complex-engagements",
    "domain": "tradecraft",
    "type": "methodology",
@@ -1732,6 +1810,18 @@
    "summary": "Structure and discipline for complex, multi-stage targets \u2014 where the path is a chain of several bugs across multiple hosts, needs source review / cus\u2026",
    "tags": [],
    "path": "skills/tradecraft/tradecraft-complex-engagements"
+  },
+  {
+   "name": "tradecraft-duplicate-avoidance",
+   "domain": "tradecraft",
+   "type": "methodology",
+   "modes": [
+    "bugbounty"
+   ],
+   "severity": "",
+   "summary": "Avoid burning time on bugs that will be closed as duplicates.",
+   "tags": [],
+   "path": "skills/tradecraft/tradecraft-duplicate-avoidance"
   },
   {
    "name": "tradecraft-pivot-decisions",
@@ -1760,6 +1850,19 @@
    "summary": "Establish and enforce the authorization envelope before any testing \u2014 the scope rule that governs everything.",
    "tags": [],
    "path": "skills/tradecraft/tradecraft-scope-roe"
+  },
+  {
+   "name": "tradecraft-target-selection",
+   "domain": "tradecraft",
+   "type": "methodology",
+   "modes": [
+    "bugbounty",
+    "pentest"
+   ],
+   "severity": "",
+   "summary": "Choose where to spend effort for the best return \u2014 which program, which asset, which surface.",
+   "tags": [],
+   "path": "skills/tradecraft/tradecraft-target-selection"
   },
   {
    "name": "web-account-takeover",

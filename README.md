@@ -2,11 +2,11 @@
 
 # SploitAgent
 
-**Security skills for AI agents.** A library of 152 security techniques (offensive + defensive) that
+**Security skills for AI agents.** A library of 159 security techniques (offensive + defensive) that
 Claude Code — or any AI agent — loads on demand to work an **authorized** target from recon to report.
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
-![skills](https://img.shields.io/badge/skills-152-334155?style=flat-square)
+![skills](https://img.shields.io/badge/skills-159-334155?style=flat-square)
 ![domains](https://img.shields.io/badge/domains-20-334155?style=flat-square)
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
@@ -44,7 +44,7 @@ $ cd ~/work/acme && claude
 
 Your AI agent is a strong generalist, but it doesn't know the *exact method* for a specific job —
 say, testing an API for access-control bugs. **SploitAgent is that missing know-how:** a binder of
-152 short "how to do this one technique" pages the agent flips to when it needs one.
+159 short "how to do this one technique" pages the agent flips to when it needs one.
 
 You describe the task in plain English. The agent picks the page that fits, follows it, proves the
 bug, and writes it up — and it never touches anything outside the scope you set.
@@ -74,7 +74,7 @@ git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
 ./sploit install
 ```
 
-`./sploit install` does two things: links all 152 skills into `~/.claude/skills/` (so Claude Code
+`./sploit install` does two things: links all 159 skills into `~/.claude/skills/` (so Claude Code
 finds them in **any** directory) and puts the `sploit` command on your `PATH`. Undo anytime with
 `./install.sh --uninstall`.
 
@@ -172,7 +172,7 @@ the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 
 ## What's inside
 
-**152 skills across 20 domains.** [🔎 Search them all](https://noorqureshi.github.io/SploitAgent/catalog.html) · or browse [CATALOG.md](CATALOG.md).
+**159 skills across 20 domains.** [🔎 Search them all](https://noorqureshi.github.io/SploitAgent/catalog.html) · or browse [CATALOG.md](CATALOG.md).
 
 `web` · `api` · `cloud` · `ad` · `network` · `wireless` · `recon` · `mobile` · `ai-ml` ·
 `code-review` · `reverse-engineering` · `cryptography` · `exploit-dev` · `privesc` · `payloads` ·
@@ -189,7 +189,7 @@ the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 | [`api`](skills/api) | 8 | BOLA/BFLA, GraphQL, gRPC, mass assignment, authentication attacks, fuzzing, version drift, NoSQL injection |
 | [`recon`](skills/recon) | 9 | Subdomain enumeration, DNS analysis, content and JS discovery, OSINT, GitHub code-leak discovery, cloud-asset discovery, service enumeration, tech-stack fingerprinting |
 | [`defense`](skills/defense) | 13 | Detection engineering (pipeline + Sigma/ATT&CK), threat hunting, incident response, DFIR triage, network detection (NSM), cloud detection & response, Active Directory defense, malware triage, hardening baselines, threat modeling, log analysis, purple teaming |
-| [`code-review`](skills/code-review) | 13 | Methodology, dangerous-sink catalog, secrets detection, CI/CD security, IaC (Terraform/Ansible/K8s), smart contracts (Solidity), Python, Node.js, PHP, Java/Spring, Go, Ruby/Rails, .NET/C# |
+| [`code-review`](skills/code-review) | 15 | Methodology, dangerous-sink catalog, secrets detection, CI/CD security, IaC (Terraform/Ansible/K8s), smart contracts (Solidity), Python, Node.js, PHP, Java/Spring, Go, Ruby/Rails, .NET/C#, C/C++, Rust |
 | [`mobile`](skills/mobile) | 5 | Android and iOS assessment, certificate-pinning bypass, deep-link abuse, WebView abuse |
 | [`ad`](skills/ad) | 5 | Kerberoasting / AS-REP, ADCS (ESC1–8), ACL/DACL abuse, Kerberos delegation abuse (RBCD / S4U / coercion→relay), pivoting arsenal |
 | [`network`](skills/network) | 6 | Service attacks, pivoting and tunneling, NTLM coercion and relay, password spraying and credential stuffing, perimeter appliance and VPN offensive, hash and credential cracking |
@@ -199,9 +199,9 @@ the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 | [`reverse-engineering`](skills/reverse-engineering) | 3 | Native binary triage, deobfuscation (packed/JS/WASM/JSVMP), firmware extraction and analysis |
 | [`cryptography`](skills/cryptography) | 2 | Weak/textbook RSA (JWT RS256, custom signatures), symmetric oracles (CBC padding, ECB, hash length extension) |
 | [`payloads`](skills/payloads) | 4 | WAF/filter bypass, XSS polyglots, reverse shells and TTY upgrade, file transfers |
-| [`reporting`](skills/reporting) | 3 | Finding triage and validation, bug-bounty write-up, penetration-test report |
+| [`reporting`](skills/reporting) | 5 | Finding triage and validation, bug-bounty write-up, penetration-test report, CVSS/severity scoring, triage communication |
 | [`automation`](skills/automation) | 2 | Recon pipelines, custom nuclei templates |
-| [`tradecraft`](skills/tradecraft) | 5 | Scope and rules of engagement, attack-scenario planning, attack-path mapping, pivot/decision-making across skills, complex multi-stage engagements |
+| [`tradecraft`](skills/tradecraft) | 8 | Scope and rules of engagement, attack-scenario planning, attack-path mapping, pivot/decision-making across skills, target selection, duplicate avoidance, bug-bounty platform intelligence, complex multi-stage engagements |
 | [`social-eng`](skills/social-eng) | 4 | Authorized human-factor testing: methodology, phishing, vishing/pretexting, physical assessment (pentest-only) |
 
 </details>
