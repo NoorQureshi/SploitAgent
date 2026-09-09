@@ -32,6 +32,14 @@ $ cd ~/work/acme && claude
   ✔ wrote findings/idor-orders.md
 ```
 
+<p align="center">
+  <img src="docs/screenshots/attack-map.png" width="880"
+       alt="The SploitAgent console Attack Map: each attack lead with its status, the reasoning behind it, the steps taken, and a link to the confirmed finding">
+  <br>
+  <sub>Run <code>sploit watch</code> and the console turns the engagement into an <b>Attack Map</b> —
+  every lead, its status, <i>why</i> the agent chose it, and the proof. Read-only, runs locally.</sub>
+</p>
+
 ## The idea in one minute
 
 Your AI agent is a strong generalist, but it doesn't know the *exact method* for a specific job —
@@ -127,11 +135,27 @@ Enforce object-level authorization: check the order's owner == the caller on eve
 That's the whole point: **you describe the task, the agent does the work and hands you evidence.**
 See a fully annotated run → **[How it works](https://noorqureshi.github.io/SploitAgent/interact.html)**.
 
-**Watch it live (optional).** `sploit watch` starts a small read-only dashboard
-(`http://127.0.0.1:8787`) **in the background** — your terminal stays free — showing the agent's
-**plan**, a live **activity timeline** (skills loaded → commands → results → findings), and the
-findings, for every engagement on your machine. Stop it with `sploit watch --stop`. It just reads
-the workspace on disk, so it works the same whichever agent you run.
+### Watch it work — the console
+
+`sploit watch` opens a small **read-only** dashboard at `http://127.0.0.1:8787` in the background, so
+your terminal stays free. It just reads the workspace on disk, so it works the same whichever agent
+you run.
+
+<p align="center">
+  <img src="docs/screenshots/finding.png" width="49%"
+       alt="A confirmed finding opened in the console: rendered markdown with steps to reproduce, the request, and an impact table">
+  &nbsp;
+  <img src="docs/screenshots/activity.png" width="49%"
+       alt="The live activity timeline: decisions, commands, results and findings appearing as the agent works, with filters">
+</p>
+
+- **Attack Map** — the whole engagement as a decision graph (shown up top): what was proved, ruled out, blocked, and skipped — and why.
+- **Findings** — each confirmed issue rendered and ready to submit (left).
+- **Activity** — a live, filterable timeline of every step, with the reasoning (right).
+- **Plan · Notes** — the agent's strategy and running log, in readable form.
+
+Under **Claude Code**, a bundled hook records commands automatically, so the console fills in even if
+the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 
 ## Common requests
 

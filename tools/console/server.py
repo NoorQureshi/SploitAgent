@@ -18,6 +18,10 @@ REG  = os.path.join(HOME, ".sploit", "engagements.jsonl")
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))          # tools/console/ -> repo root
 
+def disp(path):
+    """Shorten a workspace path for display (home → ~); the real path stays the key."""
+    return "~" + path[len(HOME):] if path == HOME or path.startswith(HOME + os.sep) else path
+
 def _read(path, limit=400000):
     try:
         with open(path, encoding="utf-8", errors="replace") as f:
@@ -72,7 +76,7 @@ def findings(path):
 
 def summary(path, o):
     ev = activity(path)
-    return {"target": o.get("target") or os.path.basename(path), "path": path,
+    return {"target": o.get("target") or os.path.basename(path), "path": path, "disp": disp(path),
             "findings": len(findings(path)), "events": len(ev),
             "last": (ev[-1].get("ts") if ev else None), "created": o.get("ts")}
 
@@ -108,6 +112,7 @@ class H(BaseHTTPRequestHandler):
             return self._send(200, {
                 "target": os.path.basename(path),
                 "path": path,
+                "disp": disp(path),
                 "scope": _read(os.path.join(path, "scope.txt"), 20000),
                 "plan": _read(os.path.join(path, "plan.md"), 60000),
                 "notes": _read(os.path.join(path, "notes.md"), 120000),

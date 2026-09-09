@@ -367,7 +367,7 @@ function buildShell(d){
   const pill=(k,lab)=>c[k]?`<span class="sevpill"><span class="sq ${k}"></span>${lab} <b>${c[k]}</b></span>`:"";
   $("#main").innerHTML=`
     <div class="summary">
-      <h1>${esc(CUROBJ?CUROBJ.target:d.target)} <span class="path">${esc(d.path)}</span></h1>
+      <h1>${esc(CUROBJ?CUROBJ.target:d.target)} <span class="path">${esc(d.disp||d.path)}</span></h1>
       <div class="scope">scope: ${scope.length?scope.map(s=>`<span class="chip">${esc(s)}</span>`).join(""):'<span style="color:var(--muted)">not set</span>'}</div>
       <div class="sevbar">
         <span class="sevpill"><span class="sq steps"></span>steps <b id="stepcount">${(d.activity||[]).length}</b></span>

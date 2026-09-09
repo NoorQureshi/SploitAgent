@@ -26,6 +26,10 @@ report.json
 !skills/
 !skills/**
 
+# Re-include the project's own doc screenshots (the **/screenshots/ rule is for engagement data)
+!docs/screenshots/
+!docs/screenshots/**
+
 # --- Secrets / local config ---
 .env
 .env.*
