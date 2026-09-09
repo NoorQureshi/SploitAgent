@@ -38,9 +38,13 @@ jobs:
           grep -q "hard rule — scope" methodology.md || { echo "::error::methodology.md missing scope rule"; exit 1; }
           test -f skills/tradecraft/tradecraft-scope-roe/SKILL.md || { echo "::error::scope-roe skill missing"; exit 1; }
 
+      - name: Skill counts are stamped everywhere
+        run: python3 tools/catalog.py check-counts
+
       - name: Generated indexes are up to date
         run: |
-          python3 tools/catalog.py >/dev/null
+          python3 tools/catalog.py catalog >/dev/null
+          python3 tools/catalog.py coverage >/dev/null
           if ! git diff --quiet -- CATALOG.md COVERAGE.md docs/skills.json; then
             echo "::error::Generated files are stale. Run 'python3 tools/catalog.py' and commit CATALOG.md, COVERAGE.md, and docs/skills.json"
             git --no-pager diff -- CATALOG.md COVERAGE.md docs/skills.json

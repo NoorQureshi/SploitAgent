@@ -2,9 +2,12 @@
 """SploitAgent skills maintenance script.
 
 Scans skills/<domain>/<slug>/SKILL.md, then:
-  validate  -> check every skill's frontmatter against the schema keys/enums
-  catalog   -> write CATALOG.md (browsable) + data/skills_index.json (machine)
-  all       -> validate + catalog  (default)
+  validate      -> check every skill's frontmatter against the schema keys/enums
+  catalog       -> write CATALOG.md (browsable) + data/skills_index.json + docs/skills.json
+  coverage      -> write COVERAGE.md (standards mapping)
+  stamp         -> rewrite hardcoded skill counts (total + per-domain) in README/docs
+  check-counts  -> non-mutating guard: fail if any hardcoded count is stale (for CI)
+  all           -> validate + catalog + coverage + stamp  (default)
 
 No third-party deps: a minimal frontmatter parser handles our controlled files.
 Run: python3 tools/catalog.py [validate|catalog|all]
@@ -245,11 +248,78 @@ def cmd_coverage():
     print(f"  wrote COVERAGE.md")
     return 0
 
+# Files that hardcode the skill count(s) in prose/markup. The stamper keeps them
+# in sync with the actual library so the numbers can never go stale (see cmd_stamp).
+STAMP_FILES = ["README.md", "AGENTS.md", "docs/index.html", "docs/catalog.html",
+               "docs/skills.html", "tools/console/index.html"]
+
+def _stamp(apply):
+    """Rewrite hardcoded skill counts (total + per-domain) from the real library.
+    Each substitution is anchored on stable surrounding text so only the number
+    changes. Returns the list of files whose counts were (or would be) updated.
+    apply=False is a dry run for the CI/check consistency guard."""
+    skills = collect()
+    total = len(skills)
+    by_domain = {}
+    for s in skills:
+        d = s["fm"].get("domain")
+        by_domain[d] = by_domain.get(d, 0) + 1
+    # total-count substitutions: (pattern, replacement) — \d+ is the only thing replaced
+    total_subs = [
+        (r'(badge/skills-)\d+(-)',              rf'\g<1>{total}\g<2>'),   # README shields badge
+        (r'(<b>)\d+(</b>\s*skills)',            rf'\g<1>{total}\g<2>'),   # docs hero badge
+        (r'(A library of )\d+( security)',      rf'\g<1>{total}\g<2>'),
+        (r'(binder of )\d+( short)',            rf'\g<1>{total}\g<2>'),
+        (r'(links all )\d+( skills)',           rf'\g<1>{total}\g<2>'),
+        (r'(All )\d+( SploitAgent skills)',     rf'\g<1>{total}\g<2>'),
+        (r'(All )\d+( skills across)',          rf'\g<1>{total}\g<2>'),
+        (r'(20 domains, )\d+( skills)',         rf'\g<1>{total}\g<2>'),
+        (r'(Search )\d+( skills)',              rf'\g<1>{total}\g<2>'),
+        (r'(\b)\d+( skills across 20 domains)', rf'\g<1>{total}\g<2>'),
+        (r'(\b)\d+( offensive and defensive)',  rf'\g<1>{total}\g<2>'),
+        (r'(\b)\d+( trigger-loaded)',           rf'\g<1>{total}\g<2>'),
+    ]
+    changed = []
+    for rel in STAMP_FILES:
+        p = os.path.join(ROOT, rel)
+        if not os.path.exists(p):
+            continue
+        orig = open(p, encoding="utf-8").read()
+        txt = orig
+        for pat, rep in total_subs:
+            txt = re.sub(pat, rep, txt)
+        for d, n in by_domain.items():
+            de = re.escape(d)
+            txt = re.sub(rf'(\| \[`{de}`\]\(skills/{de}\) \| )\d+( \|)', rf'\g<1>{n}\g<2>', txt)  # README table
+            txt = re.sub(rf'(<b>{de}</b> <span class="n">)\d+(</span>)', rf'\g<1>{n}\g<2>', txt)   # skills.html chip
+            txt = re.sub(rf'(<td><code>{de}</code></td><td>)\d+(</td>)', rf'\g<1>{n}\g<2>', txt)    # skills.html row
+        if txt != orig:
+            changed.append(rel)
+            if apply:
+                open(p, "w", encoding="utf-8").write(txt)
+    return changed
+
+def cmd_stamp():
+    changed = _stamp(apply=True)
+    print(f"  stamped counts into {len(changed)} file(s)" + (": " + ", ".join(changed) if changed else " (already current)"))
+    return 0
+
+def cmd_check_counts():
+    stale = _stamp(apply=False)
+    if stale:
+        print("COUNT CHECK FAILED — stale skill counts in:", file=sys.stderr)
+        for f in stale:
+            print("  - " + f + "  (run: python3 tools/catalog.py stamp)", file=sys.stderr)
+        return 1
+    print("counts consistent")
+    return 0
+
 def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
     if cmd == "all":
-        return cmd_validate() or cmd_catalog() or cmd_coverage()
-    return {"catalog":cmd_catalog,"validate":cmd_validate,"coverage":cmd_coverage}.get(cmd, lambda:2)()
+        return cmd_validate() or cmd_catalog() or cmd_coverage() or cmd_stamp()
+    return {"catalog":cmd_catalog,"validate":cmd_validate,"coverage":cmd_coverage,
+            "stamp":cmd_stamp,"check-counts":cmd_check_counts}.get(cmd, lambda:2)()
 
 if __name__ == "__main__":
     sys.exit(main())

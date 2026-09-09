@@ -26,7 +26,10 @@ ok "skill schema is valid JSON"
 
 python3 tools/catalog.py validate
 
-python3 tools/catalog.py >/dev/null
+python3 tools/catalog.py check-counts
+
+python3 tools/catalog.py catalog >/dev/null
+python3 tools/catalog.py coverage >/dev/null
 if ! git diff --quiet -- CATALOG.md COVERAGE.md docs/skills.json; then
   echo "  ✗ generated files are stale — commit these:"
   git --no-pager diff --stat -- CATALOG.md COVERAGE.md docs/skills.json
