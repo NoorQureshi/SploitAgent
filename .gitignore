@@ -2,6 +2,7 @@
 # If you run engagements from a clone, keep findings/loot/notes local.
 
 # --- Engagement working data (any engagement dir you create here) ---
+engagements/
 **/loot/
 **/screenshots/
 **/hosts/
