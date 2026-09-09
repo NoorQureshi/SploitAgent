@@ -1,5 +1,5 @@
 {
- "count": 137,
+ "count": 152,
  "generated_by": "tools/catalog.py",
  "skills": [
   {
@@ -607,6 +607,84 @@
    "path": "skills/code-review/code-review-dangerous-sinks"
   },
   {
+   "name": "code-review-dotnet",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "defense",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Security review of .NET / C# code \u2014 dangerous sinks and ASP.NET pitfalls.",
+   "tags": [
+    "CWE-502",
+    "CWE-89",
+    "CWE-78",
+    "CWE-611",
+    "CWE-79"
+   ],
+   "path": "skills/code-review/code-review-dotnet"
+  },
+  {
+   "name": "code-review-go",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "defense",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Security review of Go code \u2014 dangerous sinks and web-framework pitfalls.",
+   "tags": [
+    "CWE-78",
+    "CWE-89",
+    "CWE-79",
+    "CWE-22",
+    "CWE-918"
+   ],
+   "path": "skills/code-review/code-review-go"
+  },
+  {
+   "name": "code-review-iac",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "defense",
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "info",
+   "summary": "Security review of infrastructure-as-code \u2014 Terraform, CloudFormation, Ansible, Kubernetes/Helm manifests.",
+   "tags": [
+    "CWE-16",
+    "CWE-732",
+    "CWE-798"
+   ],
+   "path": "skills/code-review/code-review-iac"
+  },
+  {
+   "name": "code-review-java",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "defense",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Security review of Java code \u2014 dangerous sinks and Spring pitfalls.",
+   "tags": [
+    "CWE-502",
+    "CWE-611",
+    "CWE-78",
+    "CWE-89",
+    "CWE-917"
+   ],
+   "path": "skills/code-review/code-review-java"
+  },
+  {
    "name": "code-review-methodology",
    "domain": "code-review",
    "type": "methodology",
@@ -639,6 +717,26 @@
    "path": "skills/code-review/code-review-nodejs"
   },
   {
+   "name": "code-review-php",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "defense",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Security review of PHP code \u2014 dangerous sinks and framework pitfalls (Laravel/Symfony/WordPress).",
+   "tags": [
+    "CWE-94",
+    "CWE-89",
+    "CWE-78",
+    "CWE-98",
+    "CWE-502"
+   ],
+   "path": "skills/code-review/code-review-php"
+  },
+  {
    "name": "code-review-python",
    "domain": "code-review",
    "type": "reference",
@@ -658,6 +756,26 @@
    "path": "skills/code-review/code-review-python"
   },
   {
+   "name": "code-review-ruby",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "defense",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Security review of Ruby code \u2014 dangerous sinks and Rails pitfalls.",
+   "tags": [
+    "CWE-94",
+    "CWE-89",
+    "CWE-502",
+    "CWE-915",
+    "CWE-78"
+   ],
+   "path": "skills/code-review/code-review-ruby"
+  },
+  {
    "name": "code-review-secrets-detection",
    "domain": "code-review",
    "type": "technique",
@@ -673,6 +791,24 @@
     "CWE-540"
    ],
    "path": "skills/code-review/code-review-secrets-detection"
+  },
+  {
+   "name": "code-review-solidity",
+   "domain": "code-review",
+   "type": "reference",
+   "modes": [
+    "bugbounty",
+    "defense",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "Security review of Solidity / EVM smart contracts \u2014 reentrancy, access control, arithmetic, and DeFi economic bugs.",
+   "tags": [
+    "CWE-841",
+    "CWE-284",
+    "CWE-682"
+   ],
+   "path": "skills/code-review/code-review-solidity"
   },
   {
    "name": "crypto-oracle-attacks",
@@ -1326,6 +1462,25 @@
    "path": "skills/recon/recon-dns-analysis"
   },
   {
+   "name": "recon-github-code-leaks",
+   "domain": "recon",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "high",
+   "summary": "Find secrets and internal detail an organisation leaked to public code \u2014 GitHub/GitLab repos, gists, and commit history.",
+   "tags": [
+    "A07",
+    "T1213",
+    "T1552.001",
+    "CWE-798",
+    "CWE-540"
+   ],
+   "path": "skills/recon/recon-github-code-leaks"
+  },
+  {
    "name": "recon-js-analysis",
    "domain": "recon",
    "type": "technique",
@@ -1685,6 +1840,22 @@
    "path": "skills/web/web-business-logic"
   },
   {
+   "name": "web-cache-deception",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "high",
+   "summary": "Trick a CDN/cache into storing a victim's authenticated response at a public URL, then read it.",
+   "tags": [
+    "A05",
+    "CWE-525"
+   ],
+   "path": "skills/web/web-cache-deception"
+  },
+  {
    "name": "web-cache-poisoning",
    "domain": "web",
    "type": "technique",
@@ -1733,6 +1904,23 @@
    "path": "skills/web/web-client-side-signing-bypass"
   },
   {
+   "name": "web-command-injection",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "critical",
+   "summary": "Turn user input that reaches a shell into arbitrary OS command execution.",
+   "tags": [
+    "A03",
+    "T1059",
+    "CWE-78"
+   ],
+   "path": "skills/web/web-command-injection"
+  },
+  {
    "name": "web-cors",
    "domain": "web",
    "type": "technique",
@@ -1746,6 +1934,22 @@
     "CWE-942"
    ],
    "path": "skills/web/web-cors"
+  },
+  {
+   "name": "web-csp-bypass",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "medium",
+   "summary": "Get script to run despite a Content-Security-Policy \u2014 the step after finding an injection that CSP is blocking.",
+   "tags": [
+    "A05",
+    "CWE-1021"
+   ],
+   "path": "skills/web/web-csp-bypass"
   },
   {
    "name": "web-csrf",
@@ -1815,6 +2019,22 @@
    "path": "skills/web/web-deserialization"
   },
   {
+   "name": "web-dom-clobbering",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "medium",
+   "summary": "Overwrite a page's JavaScript variables using only injected HTML \u2014 no script needed.",
+   "tags": [
+    "A03",
+    "CWE-79"
+   ],
+   "path": "skills/web/web-dom-clobbering"
+  },
+  {
    "name": "web-file-upload",
    "domain": "web",
    "type": "technique",
@@ -1846,6 +2066,22 @@
     "CWE-644"
    ],
    "path": "skills/web/web-host-header"
+  },
+  {
+   "name": "web-http-parameter-pollution",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "medium",
+   "summary": "Send the same parameter more than once so the WAF/validator and the backend disagree on which value wins \u2014 bypassing filters, access control, or business logic.",
+   "tags": [
+    "A03",
+    "CWE-235"
+   ],
+   "path": "skills/web/web-http-parameter-pollution"
   },
   {
    "name": "web-idor",
@@ -1902,6 +2138,22 @@
    "path": "skills/web/web-lfi-path-traversal"
   },
   {
+   "name": "web-mfa-bypass",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "high",
+   "summary": "Defeat a second authentication factor \u2014 OTP/TOTP, SMS, push, or backup codes.",
+   "tags": [
+    "A07",
+    "CWE-287"
+   ],
+   "path": "skills/web/web-mfa-bypass"
+  },
+  {
    "name": "web-oauth",
    "domain": "web",
    "type": "technique",
@@ -1931,6 +2183,22 @@
     "CWE-601"
    ],
    "path": "skills/web/web-open-redirect"
+  },
+  {
+   "name": "web-postmessage",
+   "domain": "web",
+   "type": "technique",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "high",
+   "summary": "Exploit insecure cross-window messaging (`window.postMessage`) \u2014 handlers that trust `event.data` without checking `event.origin`, leading to XSS, tok\u2026",
+   "tags": [
+    "A03",
+    "CWE-346"
+   ],
+   "path": "skills/web/web-postmessage"
   },
   {
    "name": "web-prototype-pollution",
