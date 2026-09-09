@@ -59,12 +59,60 @@ $ nano scope.txt                     # your authorized target(s) — nothing els
 # 3 · (optional) watch the agent work, live, in your browser
 $ sploit watch                       # runs in the background · stop: sploit watch --stop
 
-# 4 · open your agent and just describe the task
-$ claude                             # or: opencode · codex · gemini
-> Start an authorized assessment of acme.com. Confirm scope, then recon.
+# 4 · open your agent in the workspace and describe the task   ↓ (Claude Code / OpenCode below)
 ```
 
 **How the pieces fit:** your **terminal** runs the agent; **`sploit watch`** shows its plan and live progress in your **browser**; everything lands in the **workspace folder** (`scope.txt · plan.md · notes.md · findings/`) — the source of truth, and what the console reads. Same flow with any agent; none of it is Claude-specific.
+
+## Run it with your agent
+
+Open your agent **inside the workspace** and describe the task in plain English — the matching skill loads itself.
+
+<details open>
+<summary><b>Claude Code</b></summary>
+
+```console
+~/work/acme $ claude          # skills are already in ~/.claude/skills — auto-discovered everywhere
+
+> Start an authorized assessment of acme.com. Confirm scope, then recon.
+
+  ● tradecraft-scope-roe        loaded · scope confirmed (*.acme.tld)
+  ● recon-subdomain-enum        14 hosts · api.acme.tld live
+  ● api-bola                    testing object references on /api/v1/orders
+      ✓ cross-tenant read confirmed with 2 accounts
+  ✔ wrote findings/idor-orders.md
+```
+
+`./sploit install` linked the skills into `~/.claude/skills/`, so Claude Code finds them in **any** folder and loads the one that fits your request.
+</details>
+
+<details>
+<summary><b>OpenCode</b></summary>
+
+```console
+~/work/acme $ opencode        # launches the TUI in this folder, using your own model/API key
+
+> Use the SploitAgent skills in ./skills. Start an authorized assessment of
+  acme.com — confirm scope from scope.txt, then recon the attack surface.
+
+  → reads AGENTS.md + ./skills · loads recon-* then routes by what it finds
+```
+
+No install step: OpenCode reads `AGENTS.md` and the `./skills` folder in the workspace automatically. (First time: `opencode auth login` to set your provider/API key.)
+</details>
+
+<details>
+<summary><b>Codex · Gemini · any other agent / your own API script</b></summary>
+
+```console
+~/work/acme $ codex           # or: gemini  — run inside the workspace
+
+> Use the SploitAgent skills here. Start an authorized assessment of acme.com,
+  confirm scope from scope.txt, then recon.
+```
+
+Any agent works: point it at the workspace with read access to `AGENTS.md` and `./skills`, or paste a single `SKILL.md` into the chat for a one-off. Nothing to wire up.
+</details>
 
 ## Watch it work — the console
 
