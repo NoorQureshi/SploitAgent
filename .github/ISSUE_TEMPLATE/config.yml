@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Report a security vulnerability in SploitAgent
+    url: https://github.com/NoorQureshi/SploitAgent/security/advisories/new
+    about: For flaws in the tooling itself (console, installer, launcher). Please report privately, not as a public issue.
+  - name: 💬 Questions & ideas
+    url: https://github.com/NoorQureshi/SploitAgent/discussions
+    about: Ask how to use it, or propose a direction. Not for "help me attack <target>" — that will be closed.

@@ -234,6 +234,8 @@ and refuse anything not in your `scope.txt`. You stay in control.
 
 For security work you're **permitted** to do — a signed pentest scope, a bug-bounty program that lists
 the target, or systems you own. Don't point it at anything you aren't authorized to test.
+See **[SECURITY.md](SECURITY.md)** for the full policy and how to privately report a vulnerability in
+SploitAgent itself.
 
 ## Contribute
 
@@ -241,10 +243,12 @@ A contribution is a single Markdown file — no code:
 
 ```bash
 cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
-python3 tools/catalog.py            # validate + regenerate the indexes
+python3 tools/catalog.py            # regenerate CATALOG.md, COVERAGE.md, docs/skills.json
+./tools/check.sh                    # run everything CI runs, before you push
 ```
 
-Wanted skills: [ROADMAP.md](ROADMAP.md) · full guide: [CONTRIBUTING.md](CONTRIBUTING.md). Every PR is schema-validated by CI.
+Wanted skills: [ROADMAP.md](ROADMAP.md) · full guide: [CONTRIBUTING.md](CONTRIBUTING.md) ·
+[Code of Conduct](CODE_OF_CONDUCT.md). Every PR is schema-validated by CI.
 
 ## Repository layout
 

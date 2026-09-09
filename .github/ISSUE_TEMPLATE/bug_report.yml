@@ -1,0 +1,42 @@
+name: 🐛 Bug report
+description: Something in the tooling (sploit, install.sh, the console, catalog.py) is broken.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! This is for bugs in the **tooling**. For a wrong or unclear
+        **skill**, use the "Skill fix" template. For a security flaw, use the private advisory link.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran and what went wrong. Paste the exact command and output.
+      placeholder: |
+        $ sploit new acme.com ~/work/acme
+        cp: /Users/me/.local/bin/AGENTS.md: No such file or directory
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS + shell
+      placeholder: macOS 14 / zsh · Ubuntu 22.04 / bash
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent (if relevant)
+      placeholder: Claude Code · OpenCode · Codex · Gemini · API script
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      description: Output of `sploit version`, or the commit you're on (`git rev-parse --short HEAD`).

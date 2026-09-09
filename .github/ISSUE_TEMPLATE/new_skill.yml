@@ -1,0 +1,75 @@
+name: 🧩 New skill or skill fix
+description: Propose a new technique skill, or fix/correct an existing one.
+labels: [skill]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A skill is a single `skills/<domain>/<slug>/SKILL.md` that **teaches one technique** —
+        when it applies · why it works · exact commands · gotchas · how to verify. See
+        [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) and `skills/_templates/technique.md`.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Is this a new skill or a fix?
+      options: [New skill, Fix / correction to an existing skill]
+    validations:
+      required: true
+  - type: input
+    id: slug
+    attributes:
+      label: Proposed slug (or existing one)
+      placeholder: web-request-smuggling
+    validations:
+      required: true
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domain
+      options:
+        - web
+        - api
+        - cloud
+        - ad
+        - network
+        - wireless
+        - recon
+        - mobile
+        - ai-ml
+        - code-review
+        - reverse-engineering
+        - cryptography
+        - exploit-dev
+        - privesc
+        - payloads
+        - defense
+        - reporting
+        - automation
+        - tradecraft
+        - social-eng
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: When should the agent load it? (the trigger)
+      description: The situation/signals that should make an agent reach for this skill.
+      placeholder: When a request is reflected across two hops with differing Content-Length handling…
+    validations:
+      required: true
+  - type: textarea
+    id: mechanism
+    attributes:
+      label: The mechanism (why it works + the method)
+      description: Teach it. Exact commands are welcome. Generalize real-world technique — no CTF/box branding, flags, or real client data.
+    validations:
+      required: true
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Ground rules
+      options:
+        - label: This teaches a general technique — no CTF/HTB branding, box names, flags, or real targets/credentials.
+          required: true
+        - label: It's for authorized security work (pentest / bug bounty / defense).
+          required: true

@@ -22,15 +22,19 @@ one script, `tools/catalog.py`, validates skills and regenerates the catalog.
 
 ## Add a skill (the common PR)
 
-Domains: `recon web api mobile cloud network ad ai-ml code-review exploit-dev privesc defense
-payloads reporting automation tradecraft`.
+Domains: `recon web api mobile cloud network wireless ad ai-ml code-review reverse-engineering
+cryptography exploit-dev privesc defense payloads reporting automation tradecraft social-eng`.
 
 ```bash
 cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
 # (arsenal.md / methodology.md templates also available)
 python3 tools/catalog.py validate   # schema-check your frontmatter
-python3 tools/catalog.py            # validate + regenerate CATALOG.md
+python3 tools/catalog.py            # regenerate CATALOG.md, COVERAGE.md, docs/skills.json
+./tools/check.sh                    # run everything CI runs, before you push
 ```
+
+Commit the regenerated `CATALOG.md`, `COVERAGE.md`, and `docs/skills.json` along with your skill —
+CI fails if they're stale.
 
 Fill it in:
 - **Frontmatter** — required: `name` (domain-prefixed kebab-case, e.g. `web-ssrf`), `description`,

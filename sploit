@@ -26,6 +26,7 @@ while [ -h "$__src" ]; do
   case "$__src" in /*) ;; *) __src="$__dir/$__src" ;; esac
 done
 REPO_DIR="$(cd -P "$(dirname "$__src")" && pwd)"
+SPLOIT_VERSION="$(cat "$REPO_DIR/VERSION" 2>/dev/null || echo dev)"
 G=$'\033[32m'; P=$'\033[35m'; D=$'\033[2m'; B=$'\033[1m'; R=$'\033[0m'
 say(){ printf '%s\n' "$*"; }
 
@@ -40,6 +41,7 @@ ${B}SploitAgent${R} — security skills for AI agents (authorized use only)
       ${D}--stop${R}                  stop the background console      ${D}--fg${R}  run it in the foreground
   ${G}sploit install${R}              expose skills to Claude Code everywhere + put 'sploit' on PATH
   ${G}sploit list${R}                 list engagement workspaces under the current directory
+  ${G}sploit version${R}              show the installed version
   ${G}sploit help${R}                 show this help
 
 Quick start:
@@ -304,6 +306,7 @@ case "$cmd" in
   install)     shift || true; do_install "$@" ;;
   watch|ui|console) shift || true; do_watch "$@" ;;
   list|ls)     list_engagements ;;
+  version|--version|-v) say "SploitAgent ${B}$SPLOIT_VERSION${R}"; say "  ${D}repo: $REPO_DIR${R}" ;;
   help|-h|--help|"") usage ;;
   *) say "unknown command: $cmd"; say ""; usage; exit 2 ;;
 esac

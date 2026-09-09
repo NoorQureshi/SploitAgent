@@ -4,19 +4,33 @@ on:
   push:
   pull_request:
 
+# Least privilege: this workflow only reads the repo.
+permissions:
+  contents: read
+
+# Don't pile up runs on the same ref — cancel the older one.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Maintenance script compiles
-        run: python3 -m py_compile tools/catalog.py
+      - name: Python files compile
+        run: python3 -m py_compile tools/catalog.py tools/console/server.py tools/hooks/cc-activity-hook.py
+
+      - name: Shell scripts — syntax + lint (real errors only)
+        run: |
+          bash -n sploit install.sh
+          shellcheck --severity=error sploit install.sh
 
       - name: Skill schema is valid JSON
         run: python3 -c "import json; json.load(open('schemas/skill.schema.json'))"
 
-      - name: Every skill passes schema validation
+      - name: Every skill passes schema validation (+ cross-references)
         run: python3 tools/catalog.py validate
 
       - name: Scope rule is present
@@ -27,8 +41,8 @@ jobs:
       - name: Generated indexes are up to date
         run: |
           python3 tools/catalog.py >/dev/null
-          if ! git diff --quiet -- CATALOG.md COVERAGE.md; then
-            echo "::error::CATALOG.md / COVERAGE.md are stale. Run: python3 tools/catalog.py"
-            git --no-pager diff -- CATALOG.md COVERAGE.md
+          if ! git diff --quiet -- CATALOG.md COVERAGE.md docs/skills.json; then
+            echo "::error::Generated files are stale. Run 'python3 tools/catalog.py' and commit CATALOG.md, COVERAGE.md, and docs/skills.json"
+            git --no-pager diff -- CATALOG.md COVERAGE.md docs/skills.json
             exit 1
           fi
