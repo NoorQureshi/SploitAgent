@@ -1,5 +1,5 @@
 ---
-name: tools-recon
+name: recon-arsenal
 description: >
   One line: port/host/service discovery tool arsenal for authorized engagements. Pack in trigger
   signals so it auto-loads: "new target", "enumerate", "scan", an in-scope target,
@@ -11,7 +11,7 @@ modes: [pentest, bugbounty]
 schema_version: 1
 ---
 
-# tools-recon — Recon / Enumeration Arsenal
+# Recon / enumeration arsenal
 
 Tool selection for port/host/service discovery on **authorized lab targets only**
 (in-scope hosts recorded in `scope.txt`). Pick the tool, run the exact command,

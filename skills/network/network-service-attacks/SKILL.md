@@ -18,7 +18,7 @@ schema_version: 1
 
 ## When it applies
 Recon exposed non-web services. Each is its own attack surface: anonymous access, default/weak
-creds, known-CVE versions, and info leaks that feed the next step. (See `tools-recon` for the
+creds, known-CVE versions, and info leaks that feed the next step. (See `recon-arsenal` for the
 discovery arsenal; this is the exploit routing per service.)
 
 ## Why it works

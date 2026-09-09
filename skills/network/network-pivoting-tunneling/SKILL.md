@@ -54,4 +54,4 @@ Your attack host reaches an internal-only host/service through the tunnel (a sca
 was impossible directly now works).
 
 ## References
-ligolo-ng & chisel docs; `tools-ad-pivot` (this library) for the AD-focused arsenal.
+ligolo-ng & chisel docs; `ad-pivot-arsenal` (this library) for the AD-focused arsenal.

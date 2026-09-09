@@ -1,5 +1,5 @@
 ---
-name: tools-web
+name: web-arsenal
 description: >
   One line: web enumeration + exploitation tool arsenal for authorized engagements. Trigger signals:
   port 80/443/8080/8443 open, "web", a URL to a lab target, an HTTP service surfaced by recon.
@@ -11,7 +11,7 @@ modes: [pentest, bugbounty]
 schema_version: 1
 ---
 
-# tools-web — web enum & exploitation arsenal
+# Web enumeration & exploitation arsenal
 
 Authorized, in-scope targets only. Add `target.tld` to `/etc/hosts` first; many
 apps only respond to their vhost name, not the raw IP.

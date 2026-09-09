@@ -8,6 +8,7 @@ For authorized security work only — pentest engagements, bug-bounty programs, 
 
 | skill | type | modes | severity | summary |
 |---|---|---|---|---|
+| `recon-arsenal` | arsenal | pentest,bugbounty |  | port/host/service discovery tool arsenal for authorized engagements. |
 | `recon-cloud-assets` | technique | bugbounty,pentest | info | Discover an organization's cloud footprint — buckets, blobs, apps, IP ranges, and services across AWS/GCP/Azure. |
 | `recon-content-discovery` | technique | pentest,bugbounty | info | Discover hidden paths, endpoints, params, and JS-exposed routes on a web target. |
 | `recon-dns-analysis` | technique | bugbounty,pentest | info | Deep DNS analysis for attack surface — record mining, zone transfers, DNSSEC/NSEC walking, and dangling records. |
@@ -15,14 +16,13 @@ For authorized security work only — pentest engagements, bug-bounty programs, 
 | `recon-osint` | technique | bugbounty | info | Passive OSINT to expand attack surface without touching the target: dorks, code/secret leaks, Shodan/Censys, cloud assets, employees. |
 | `recon-subdomain-enum` | technique | bugbounty | info | Enumerate subdomains and live hosts to build the attack surface for a bug-bounty program or external assessment. |
 | `recon-techstack-fingerprinting` | methodology | pentest,bugbounty | info | Passively identify a target's full technology stack — frontend framework, backend runtime, server, CMS, CDN/WAF, cloud, and versions — from public sig… |
-| `tools-recon` | arsenal | pentest,bugbounty |  | port/host/service discovery tool arsenal for authorized engagements. |
 
 ## Web application (`web`)
 
 | skill | type | modes | severity | summary |
 |---|---|---|---|---|
-| `tools-web` | arsenal | pentest,bugbounty |  | web enumeration + exploitation tool arsenal for authorized engagements. |
 | `web-account-takeover` | technique | bugbounty | critical | Systematic account-takeover hunting — password reset, email change, session, and linking flaws that seize another user's account. |
+| `web-arsenal` | arsenal | pentest,bugbounty |  | web enumeration + exploitation tool arsenal for authorized engagements. |
 | `web-auth-jwt` | technique | pentest,bugbounty | high | Attack JWT/session authentication. |
 | `web-auth-session-handling` | methodology | pentest,bugbounty | info | Legitimately acquire and KEEP an authenticated session (through MFA/OTP) so you can test the post-auth attack surface, and hand that session to your t… |
 | `web-business-logic` | technique | bugbounty | high | Find business-logic flaws — abusing intended functionality in unintended ways. |
@@ -121,7 +121,7 @@ For authorized security work only — pentest engagements, bug-bounty programs, 
 | `ad-dacl-abuse` | technique | pentest | high | Abuse Active Directory object ACLs/DACLs for lateral movement and escalation — GenericAll, WriteDACL, GenericWrite, WriteOwner, AddMember, ForceChange… |
 | `ad-delegation-abuse` | technique | pentest | critical | Abuse Kerberos delegation to impersonate users and take over hosts — unconstrained, constrained (S4U2Self/S4U2Proxy), and resource-based (RBCD), inclu… |
 | `ad-kerberoasting` | technique | pentest | high | Kerberoasting & AS-REP roasting — request/crack Kerberos tickets to recover service/user passwords offline. |
-| `tools-ad-pivot` | arsenal | pentest,bugbounty |  | Active Directory, pivoting/tunneling, and password-cracking arsenal for authorized engagements. |
+| `ad-pivot-arsenal` | arsenal | pentest,bugbounty |  | Active Directory, pivoting/tunneling, and password-cracking arsenal for authorized engagements. |
 
 ## AI / LLM (`ai-ml`)
 
@@ -175,10 +175,10 @@ For authorized security work only — pentest engagements, bug-bounty programs, 
 
 | skill | type | modes | severity | summary |
 |---|---|---|---|---|
+| `privesc-arsenal` | arsenal | pentest,bugbounty |  | Linux + Windows local privilege-escalation tool arsenal for authorized engagements. |
 | `privesc-enumeration` | methodology | pentest | info | Systematic post-foothold host enumeration and credential/loot hunting on Linux and Windows — build situational awareness and find the lead that escala… |
 | `privesc-linux-gtfobins` | technique | pentest | high | Linux privilege escalation via sudo rules, SUID/SGID binaries, and capabilities using GTFOBins techniques. |
 | `privesc-windows-tokens` | technique | pentest | high | Windows privilege escalation via token impersonation privileges — SeImpersonate/SeAssignPrimaryToken (the Potato family) and related token abuse to SYSTEM. |
-| `tools-privesc` | arsenal | pentest,bugbounty |  | Linux + Windows local privilege-escalation tool arsenal for authorized engagements. |
 
 ## Defense / blue-team (`defense`)
 

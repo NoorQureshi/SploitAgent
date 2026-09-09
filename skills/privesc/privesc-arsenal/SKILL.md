@@ -1,5 +1,5 @@
 ---
-name: tools-privesc
+name: privesc-arsenal
 description: >
   One line: Linux + Windows local privilege-escalation tool arsenal for authorized engagements.
   Trigger signals: "privesc", "got a shell", "escalate", "root", "SYSTEM", initial access gained

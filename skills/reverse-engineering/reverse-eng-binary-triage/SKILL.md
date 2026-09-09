@@ -3,7 +3,7 @@ name: reverse-eng-binary-triage
 description: >
   Triage a native binary you can run or read — find the vulnerable logic, the dangerous sinks, and
   the input path — with static + dynamic analysis. Load when handed an ELF/PE/Mach-O, a thick
-  client, a CTF-style binary, or a service whose source you don't have. Signals: a compiled
+  client, a standalone or obfuscated binary, or a service whose source you don't have. Signals: a compiled
   executable in scope, "reverse this binary", a crash/segfault to understand, custom protocol,
   strings that hint at auth/secrets, a setuid binary during privesc.
 domain: reverse-engineering

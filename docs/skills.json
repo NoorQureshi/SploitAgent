@@ -72,7 +72,7 @@
    "path": "skills/ad/ad-kerberoasting"
   },
   {
-   "name": "tools-ad-pivot",
+   "name": "ad-pivot-arsenal",
    "domain": "ad",
    "type": "arsenal",
    "modes": [
@@ -1093,6 +1093,19 @@
    "path": "skills/payloads/payloads-xss-polyglots"
   },
   {
+   "name": "privesc-arsenal",
+   "domain": "privesc",
+   "type": "arsenal",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "",
+   "summary": "Linux + Windows local privilege-escalation tool arsenal for authorized engagements.",
+   "tags": [],
+   "path": "skills/privesc/privesc-arsenal"
+  },
+  {
    "name": "privesc-enumeration",
    "domain": "privesc",
    "type": "methodology",
@@ -1146,17 +1159,17 @@
    "path": "skills/privesc/privesc-windows-tokens"
   },
   {
-   "name": "tools-privesc",
-   "domain": "privesc",
+   "name": "recon-arsenal",
+   "domain": "recon",
    "type": "arsenal",
    "modes": [
     "pentest",
     "bugbounty"
    ],
    "severity": "",
-   "summary": "Linux + Windows local privilege-escalation tool arsenal for authorized engagements.",
+   "summary": "port/host/service discovery tool arsenal for authorized engagements.",
    "tags": [],
-   "path": "skills/privesc/privesc-arsenal"
+   "path": "skills/recon/recon-arsenal"
   },
   {
    "name": "recon-cloud-assets",
@@ -1264,19 +1277,6 @@
     "T1595"
    ],
    "path": "skills/recon/recon-techstack-fingerprinting"
-  },
-  {
-   "name": "tools-recon",
-   "domain": "recon",
-   "type": "arsenal",
-   "modes": [
-    "pentest",
-    "bugbounty"
-   ],
-   "severity": "",
-   "summary": "port/host/service discovery tool arsenal for authorized engagements.",
-   "tags": [],
-   "path": "skills/recon/recon-arsenal"
   },
   {
    "name": "reporting-bug-bounty-writeup",
@@ -1458,19 +1458,6 @@
    "path": "skills/tradecraft/tradecraft-scope-roe"
   },
   {
-   "name": "tools-web",
-   "domain": "web",
-   "type": "arsenal",
-   "modes": [
-    "pentest",
-    "bugbounty"
-   ],
-   "severity": "",
-   "summary": "web enumeration + exploitation tool arsenal for authorized engagements.",
-   "tags": [],
-   "path": "skills/web/web-arsenal"
-  },
-  {
    "name": "web-account-takeover",
    "domain": "web",
    "type": "technique",
@@ -1485,6 +1472,19 @@
     "CWE-287"
    ],
    "path": "skills/web/web-account-takeover"
+  },
+  {
+   "name": "web-arsenal",
+   "domain": "web",
+   "type": "arsenal",
+   "modes": [
+    "pentest",
+    "bugbounty"
+   ],
+   "severity": "",
+   "summary": "web enumeration + exploitation tool arsenal for authorized engagements.",
+   "tags": [],
+   "path": "skills/web/web-arsenal"
   },
   {
    "name": "web-auth-jwt",

@@ -1,5 +1,5 @@
 ---
-name: tools-ad-pivot
+name: ad-pivot-arsenal
 description: >
   One line: Active Directory, pivoting/tunneling, and password-cracking arsenal for authorized engagements.
   Trigger signals: "Active Directory", "domain", "kerberos", "kerberoast", "AS-REP", "BloodHound",
@@ -11,7 +11,7 @@ modes: [pentest, bugbounty]
 schema_version: 1
 ---
 
-# tools-ad-pivot — AD attack, pivot & cracking arsenal
+# Active Directory, pivoting & cracking arsenal
 
 Loads on domain-joined targets, or once you hold a foothold/creds and need to reach
 Domain Admin. Authorized, in-scope engagements only. Add the DC
