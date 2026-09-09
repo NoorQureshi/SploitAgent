@@ -1,9 +1,9 @@
 <div align="center">
 
-# SploitAgent
+# 🥷 SploitAgent
 
-**Security skills for AI agents.** A library of 159 security techniques (offensive + defensive) that
-Claude Code — or any AI agent — loads on demand to work an **authorized** target from recon to report.
+**Security skills for AI agents.**
+159 offensive + defensive techniques your AI agent loads on demand to work an **authorized** target — from recon to report.
 
 [![CI](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/NoorQureshi/SploitAgent/actions/workflows/ci.yml)
 ![skills](https://img.shields.io/badge/skills-159-334155?style=flat-square)
@@ -11,17 +11,14 @@ Claude Code — or any AI agent — loads on demand to work an **authorized** ta
 ![mapped](https://img.shields.io/badge/mapped-OWASP%20%C2%B7%20MITRE%20ATT%26CK-334155?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-334155?style=flat-square)
 
-<sub>[Docs & site](https://noorqureshi.github.io/SploitAgent/) · [How it works](https://noorqureshi.github.io/SploitAgent/interact.html) · [Search skills](https://noorqureshi.github.io/SploitAgent/catalog.html) · [Contributing](CONTRIBUTING.md)</sub>
+<sub>[Docs](https://noorqureshi.github.io/SploitAgent/) · [How it works](https://noorqureshi.github.io/SploitAgent/interact.html) · [Search skills](https://noorqureshi.github.io/SploitAgent/catalog.html) · [Contributing](CONTRIBUTING.md)</sub>
 
 </div>
 
 ```console
-$ git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
-$ ./sploit install                     # links the skills into Claude Code + sploit on PATH
-$ sploit new acme.com ~/work/acme       # scaffold a workspace for your target (anywhere)
-$ cd ~/work/acme && claude
+~/work/acme $ claude
 
-  > Start an authorized assessment of acme.com. Confirm scope, then recon.
+> Start an authorized assessment of acme.com. Confirm scope, then recon.
 
   ● tradecraft-scope-roe             scope confirmed · *.acme.tld (in scope)
   ● recon-techstack-fingerprinting   Django REST Framework · Cloudflare WAF
@@ -32,132 +29,65 @@ $ cd ~/work/acme && claude
   ✔ wrote findings/idor-orders.md
 ```
 
-<p align="center">
-  <img src="docs/screenshots/attack-map.png" width="880"
-       alt="The SploitAgent console Attack Map: each attack lead with its status, the reasoning behind it, the steps taken, and a link to the confirmed finding">
-  <br>
-  <sub>Run <code>sploit watch</code> and the console turns the engagement into an <b>Attack Map</b> —
-  every lead, its status, <i>why</i> the agent chose it, and the proof. Read-only, runs locally.</sub>
-</p>
+## What it is
 
-## The idea in one minute
+Your AI agent is a strong generalist, but it doesn't know the *exact method* for a specific job — say, testing an API for access-control bugs. **SploitAgent is that missing know-how:** a binder of 159 short "how to do this one technique" pages the agent flips to when it needs one.
 
-Your AI agent is a strong generalist, but it doesn't know the *exact method* for a specific job —
-say, testing an API for access-control bugs. **SploitAgent is that missing know-how:** a binder of
-159 short "how to do this one technique" pages the agent flips to when it needs one.
+You describe the task in plain English → it picks the right page, runs it, proves the bug, and writes it up → and it never touches anything outside the scope you set.
 
-You describe the task in plain English. The agent picks the page that fits, follows it, proves the
-bug, and writes it up — and it never touches anything outside the scope you set.
-
-- **You give it:** plain English — *"test this API for access-control bugs, I'm authorized."*
-- **You get back:** the technique run for real, impact proven, and findings + a report saved to a folder.
-- **The guardrail:** it confirms authorization first and refuses anything outside your scope.
-
-**A few words you'll see:**
-
-| Term | Plain meaning |
+| Word | What it means |
 |---|---|
-| **skill** | one Markdown file that teaches one technique — `skills/<domain>/<slug>/SKILL.md` |
-| **workspace** | a folder for one target; holds your `scope.txt`, notes, and findings |
+| **skill** | one Markdown file that teaches one technique |
+| **workspace** | a folder for one target — holds your scope, notes, and findings |
 | **scope** | the targets you're allowed to test — the hard boundary the agent won't cross |
-| **lead** | one thing worth trying (e.g. "the login's JWT"); the agent works one lead at a time |
-| **console** | the optional local web page from `sploit watch` that shows what the agent is doing |
+| **console** | the optional local page (`sploit watch`) that shows what the agent is doing |
 
-No runtime, no build step, no lock-in — the skills are just Markdown the agent reads.
+## Quickstart
 
-## Install
+> **Need:** an AI agent — [Claude Code](https://claude.com/claude-code), [OpenCode](https://opencode.ai), Codex, Gemini, or your own API script — plus `git` and a terminal. `python3` only for the optional console.
 
-**Requirements:** an AI coding agent — [Claude Code](https://claude.com/claude-code) or [OpenCode](https://opencode.ai) (Codex, Gemini, or your own API script also work) — plus `git`, a terminal, and `python3` (only for the optional console).
+```console
+# 1 · install once — links the skills into your agent + puts `sploit` on PATH
+$ git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
+$ ./sploit install
 
-```bash
-git clone https://github.com/NoorQureshi/SploitAgent && cd SploitAgent
-./sploit install
+# 2 · make a workspace for your target (anywhere) and set the boundary
+$ sploit new acme.com ~/work/acme
+$ cd ~/work/acme
+$ nano scope.txt                     # your authorized target(s) — nothing else gets touched
+
+# 3 · (optional) watch the agent work, live, in your browser
+$ sploit watch                       # runs in the background · stop: sploit watch --stop
+
+# 4 · open your agent and just describe the task
+$ claude                             # or: opencode · codex · gemini
+> Start an authorized assessment of acme.com. Confirm scope, then recon.
 ```
 
-`./sploit install` does two things: links all 159 skills into `~/.claude/skills/` (so Claude Code
-finds them in **any** directory) and puts the `sploit` command on your `PATH`. Undo anytime with
-`./install.sh --uninstall`.
+**How the pieces fit:** your **terminal** runs the agent; **`sploit watch`** shows its plan and live progress in your **browser**; everything lands in the **workspace folder** (`scope.txt · plan.md · notes.md · findings/`) — the source of truth, and what the console reads. Same flow with any agent; none of it is Claude-specific.
 
-## Use
+## Watch it work — the console
 
-```bash
-sploit new acme.com ~/work/acme     # 1. scaffold a workspace (put it anywhere)
-cd ~/work/acme                      # 2. edit scope.txt with your authorized target(s)
-sploit watch                        # 3. (optional) console in your browser — runs in the background
-claude                              # 4. open your agent here: claude · opencode · codex · gemini
-```
+`sploit watch` opens a small **read-only** dashboard at `http://127.0.0.1:8787` (in the background, so your terminal stays free). It just reads the workspace on disk, so it works the same whichever agent you run.
 
-Then type your goal to the agent:
-
-```
-Start an authorized assessment of acme.com. Confirm scope, then recon.
-```
-
-**How the pieces fit — one terminal is enough:**
-
-- Your **terminal** runs the agent. It's an interactive session, so it holds that tab while you work — that's normal for `claude`, `opencode`, etc.
-- **`sploit watch` runs the console in the background** and opens it in your **browser**, so the same terminal stays free. Stop it with `sploit watch --stop`.
-- Everything the agent does lands in the **workspace folder** — `scope.txt`, `plan.md`, `notes.md`, `findings/`. That folder is the source of truth, and what the console reads.
-- Same flow with **Claude Code, OpenCode, Codex, Gemini, or your own API script** — they all read `AGENTS.md` and the skills; none of it is Claude-specific.
-
-## What you get on disk
-
-As the agent works (see the session up top), it writes everything into the workspace:
-
-```text
-~/work/acme/
-  scope.txt                 your authorized targets (the hard boundary)
-  notes.md                  timestamped log of every step (goal · command · result · why · next)
-  findings/idor-orders.md   the confirmed finding, ready to submit
-```
-
-`findings/idor-orders.md` looks like this:
-
-```markdown
-# IDOR → cross-tenant order access on /api/v1/orders/{id}
-
-Severity: High (CVSS 8.1 — AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)
-Asset:    https://api.acme.tld/api/v1/orders/{id}
-
-## Steps to reproduce
-1. Log in as attacker (account B) and capture the bearer token.
-2. Request another tenant's order:  GET /api/v1/orders/1044  with B's token.
-3. Response returns account A's order (name, address, line items).
-
-## Impact
-Any authenticated user can read any other tenant's orders by changing a sequential id
-(~20k records enumerable). Cross-tenant confidentiality breach.
-
-## Fix
-Enforce object-level authorization: check the order's owner == the caller on every read.
-```
-
-That's the whole point: **you describe the task, the agent does the work and hands you evidence.**
-See a fully annotated run → **[How it works](https://noorqureshi.github.io/SploitAgent/interact.html)**.
-
-### Watch it work — the console
-
-`sploit watch` opens a small **read-only** dashboard at `http://127.0.0.1:8787` in the background, so
-your terminal stays free. It just reads the workspace on disk, so it works the same whichever agent
-you run.
-
+<p align="center">
+  <img src="docs/screenshots/attack-map.png" width="820"
+       alt="The console Attack Map: each attack lead with its status, the reasoning behind it, the steps taken, and a link to the confirmed finding">
+</p>
 <p align="center">
   <img src="docs/screenshots/finding.png" width="49%"
-       alt="A confirmed finding opened in the console: rendered markdown with steps to reproduce, the request, and an impact table">
+       alt="A confirmed finding rendered in the console: steps to reproduce, the request, and an impact table">
   &nbsp;
   <img src="docs/screenshots/activity.png" width="49%"
-       alt="The live activity timeline: decisions, commands, results and findings appearing as the agent works, with filters">
+       alt="The live activity timeline: decisions, commands, results and findings as the agent works">
 </p>
 
-- **Attack Map** — the whole engagement as a decision graph (shown up top): what was proved, ruled out, blocked, and skipped — and why.
-- **Findings** — each confirmed issue rendered and ready to submit (left).
-- **Activity** — a live, filterable timeline of every step, with the reasoning (right).
-- **Plan · Notes** — the agent's strategy and running log, in readable form.
+- **Attack Map** — the whole engagement as a decision graph: what was proved, ruled out, blocked, and skipped — and *why*.
+- **Findings** — each confirmed issue rendered and ready to submit · **Activity** — a live, filterable timeline with the reasoning · **Plan / Notes** — the strategy and running log.
 
-Under **Claude Code**, a bundled hook records commands automatically, so the console fills in even if
-the agent doesn't log by hand. Stop it with `sploit watch --stop`.
+Under Claude Code a bundled hook records commands automatically, so the console fills in even if the agent doesn't log by hand.
 
-## Common requests
+## Ask it anything
 
 | You type… | The agent loads |
 |---|---|
@@ -166,7 +96,6 @@ the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 | "is this login's JWT forgeable?" | `web-auth-jwt` |
 | "review ./src for injection bugs" | `code-review-*` |
 | "I got a shell — what now?" | `privesc-enumeration` |
-| "kerberoast the domain controller (authorized pentest)" | `ad-kerberoasting` |
 | "turn this finding into a report" | `reporting-*` |
 | "write a Sigma rule to detect this" | `defense-detection-sigma` |
 
@@ -174,9 +103,7 @@ the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 
 **159 skills across 20 domains.** [🔎 Search them all](https://noorqureshi.github.io/SploitAgent/catalog.html) · or browse [CATALOG.md](CATALOG.md).
 
-`web` · `api` · `cloud` · `ad` · `network` · `wireless` · `recon` · `mobile` · `ai-ml` ·
-`code-review` · `reverse-engineering` · `cryptography` · `exploit-dev` · `privesc` · `payloads` ·
-`defense` · `reporting` · `automation` · `tradecraft` · `social-eng`
+`web` · `api` · `cloud` · `ad` · `network` · `wireless` · `recon` · `mobile` · `ai-ml` · `code-review` · `reverse-engineering` · `cryptography` · `exploit-dev` · `privesc` · `payloads` · `defense` · `reporting` · `automation` · `tradecraft` · `social-eng`
 
 <details>
 <summary><b>See what each domain covers</b></summary>
@@ -206,63 +133,21 @@ the agent doesn't log by hand. Stop it with `sploit watch --stop`.
 
 </details>
 
-## FAQ
-
-<details>
-<summary><b>Do I need to install security tools?</b></summary>
-
-The skills are the *method* and name the standard tools each step uses (nmap, ffuf, sqlmap, impacket…).
-Install what a given skill calls for when you need it; the agent runs them in your terminal.
-</details>
-
-<details>
-<summary><b>Which agents work, and does the workspace have to be in this repo?</b></summary>
-
-Claude Code works best (it auto-loads the matching skill). Codex, Gemini, and local models work too —
-they read `AGENTS.md` and the skill files. Workspaces can live **anywhere**: `sploit new <target> <path>`
-wires the skills in; add `--copy` to make the folder fully standalone.
-</details>
-
-<details>
-<summary><b>Will it attack things on its own?</b></summary>
-
-No. The first skill in every engagement, `tradecraft-scope-roe`, makes the agent confirm authorization
-and refuse anything not in your `scope.txt`. You stay in control.
-</details>
-
 ## Authorized use only
 
-For security work you're **permitted** to do — a signed pentest scope, a bug-bounty program that lists
-the target, or systems you own. Don't point it at anything you aren't authorized to test.
-See **[SECURITY.md](SECURITY.md)** for the full policy and how to privately report a vulnerability in
-SploitAgent itself.
+For security work you're **permitted** to do — a signed pentest scope, a bug-bounty program that lists the target, or systems you own. The first skill every engagement loads is `tradecraft-scope-roe`: it confirms authorization and refuses anything not in your `scope.txt`. See [SECURITY.md](SECURITY.md) to report a vulnerability in SploitAgent itself.
 
 ## Contribute
 
 A contribution is a single Markdown file — no code:
 
-```bash
-cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
-python3 tools/catalog.py            # regenerate CATALOG.md, COVERAGE.md, docs/skills.json
-./tools/check.sh                    # run everything CI runs, before you push
+```console
+$ cp skills/_templates/technique.md skills/<domain>/<slug>/SKILL.md
+$ python3 tools/catalog.py     # regenerate the indexes + stamp counts
+$ ./tools/check.sh             # run everything CI runs, before you push
 ```
 
-Wanted skills: [ROADMAP.md](ROADMAP.md) · full guide: [CONTRIBUTING.md](CONTRIBUTING.md) ·
-[Code of Conduct](CODE_OF_CONDUCT.md). Every PR is schema-validated by CI.
-
-## Repository layout
-
-```text
-sploit                            front door: new <target> [dir] · install · watch · list
-install.sh                        link skills into ~/.claude/skills (Claude Code)
-skills/<domain>/<slug>/SKILL.md   the library
-tools/console/                    the read-only `sploit watch` dashboard (stdlib, local)
-AGENTS.md · CLAUDE.md             operating guide read by any in-repo agent
-methodology.md                    engagement loop, scope rule, note-taking standard
-tools/catalog.py                  validation + index generation (schema in schemas/)
-CATALOG.md · COVERAGE.md          generated indexes
-docs/                             usage guide and project site
-```
+Wanted skills: [ROADMAP.md](ROADMAP.md) · full guide: [CONTRIBUTING.md](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 

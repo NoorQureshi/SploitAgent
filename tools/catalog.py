@@ -277,7 +277,7 @@ def _stamp(apply):
         (r'(20\s+domains,\s+)\d+(\s+skills)',       rf'\g<1>{total}\g<2>'),
         (r'(Search\s+)\d+(\s+skills)',              rf'\g<1>{total}\g<2>'),
         (r'\b\d+(\s+skills\s+across\s+20\s+domains)', rf'{total}\g<1>'),
-        (r'\b\d+(\s+offensive\s+and\s+defensive)',  rf'{total}\g<1>'),
+        (r'\b\d+(\s+offensive\b)',                  rf'{total}\g<1>'),
         (r'\b\d+(\s+trigger-loaded)',               rf'{total}\g<1>'),
     ]
     changed = []
