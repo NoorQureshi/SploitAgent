@@ -131,7 +131,8 @@ These paths are git-ignored, so an engagement run inside a clone never pollutes 
   Use the skill's `cheatsheet.md` (where present) as the checklist — try the set, not the first line.
   `failed` means *ruled out after covering these*; record in `rationale` **what you actually tried**
   so a human can trust the "clean". If you only ran a couple of tests, the honest status is `open`,
-  not `failed`.
+  not `failed`. (Under Claude Code this is **enforced**: a Stop hook won't let you end the turn while
+  a lead is marked `failed` with no coverage rationale — it sends you back to go deeper.)
 - Teach the mechanism, don't just paste payloads. Prove impact with the least data/action needed.
 - Minimize footprint; clean up test artifacts (accounts, uploads).
 - Authorized use only — this library is for pentest engagements, bug-bounty programs, and defense.

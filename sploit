@@ -146,6 +146,8 @@ EOF
   # and registers it as a PostToolUse hook. Other agents fall back to the agent-written log.
   if [ -f "$REPO_DIR/tools/hooks/cc-activity-hook.py" ]; then
     cp "$REPO_DIR/tools/hooks/cc-activity-hook.py" "$dest/.sploit/cc-activity-hook.py"
+    [ -f "$REPO_DIR/tools/hooks/cc-thoroughness-hook.py" ] && \
+      cp "$REPO_DIR/tools/hooks/cc-thoroughness-hook.py" "$dest/.sploit/cc-thoroughness-hook.py"
     mkdir -p "$dest/.claude"
     cat > "$dest/.claude/settings.json" <<EOF
 {
@@ -155,6 +157,13 @@ EOF
         "matcher": "Bash|WebFetch|WebSearch",
         "hooks": [
           { "type": "command", "command": "python3 '$dest/.sploit/cc-activity-hook.py'" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 '$dest/.sploit/cc-thoroughness-hook.py'" }
         ]
       }
     ]
@@ -208,9 +217,13 @@ claude          # or: opencode · codex · gemini — whatever you use
 Optional: run \`sploit watch\` first (it runs in the background) to see the plan, live
 activity, and the **Attack Map** in your browser while the agent works.
 
-Under **Claude Code**, every shell command and web request is captured automatically
-(a PostToolUse hook in \`.claude/settings.json\` → \`.sploit/cc-activity-hook.py\`), so the
-console fills in even if the agent forgets to log. Delete \`.claude/settings.json\` to turn it off.
+Under **Claude Code**, two hooks are wired in \`.claude/settings.json\`:
+- **auto-capture** (\`.sploit/cc-activity-hook.py\`) records every shell command and web request,
+  so the console fills in even if the agent forgets to log.
+- **persistence** (\`.sploit/cc-thoroughness-hook.py\`) blocks the agent from ending while any lead
+  is marked \`failed\` without a coverage rationale — so it can't give up early and pivot away.
+
+Delete \`.claude/settings.json\` to turn both off.
 
 ## 3. Describe the task — the right skill loads itself
 > Start an authorized assessment of **$target**. Confirm scope from scope.txt, then recon the
