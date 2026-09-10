@@ -28,10 +28,14 @@ Work one lead at a time; load the next skill as new leads appear.
    scaffold it; write `scope.txt` (+ `roe.md` for bug bounty). Then load `tradecraft-attack-scenarios`
    to turn the objective + scope into an ordered plan, and re-plan as evidence comes in.
 2. **Recon** — `recon-*` (subdomains, DNS, content/JS discovery, OSINT, services).
-3. **Attack surface** — route by domain: web → `web-*`, APIs → `api-*`, cloud → `cloud-*`,
-   mobile → `mobile-*`, Active Directory → `ad-*`, perimeter/appliances → `network-*`,
-   Wi-Fi → `wireless-*`, LLM/AI targets → `ai-ml/*`, source → `code-review-*`,
+3. **Attack surface** — first identify *what you're looking at*, then **load that surface's
+   methodology/checklist and work it top-to-bottom** as your coverage map (don't pivot off it until
+   each phase is genuinely done): web app → `web-testing-checklist`, API → `api-testing-checklist`,
+   source → `code-review-methodology`. Each phase routes into the domain's deep technique skills:
+   web → `web-*`, APIs → `api-*`, cloud → `cloud-*`, mobile → `mobile-*`, Active Directory → `ad-*`,
+   perimeter/appliances → `network-*`, Wi-Fi → `wireless-*`, LLM/AI targets → `ai-ml/*`,
    binaries/firmware → `reverse-engineering-*`, weak crypto / encrypted tokens → `cryptography-*`.
+   (No surface checklist yet for host/cloud/mobile/AD/LLM — route by domain and cover systematically.)
 4. **Foothold** — drive a weakness to proven impact; combine small bugs with `exploit-chaining`.
 5. **Escalate & pivot** — after every result, use `tradecraft-pivot-decisions` to choose the next
    lead; `privesc-*`, `ad-*`, `network-pivoting-tunneling`; map multi-step routes with
