@@ -83,7 +83,8 @@ something, try something, or learn something:
   it for every step on it.
 - **`surface`** — the higher grouping the lead sits under (`DVWA web app`, `REST API`, `AD domain`).
 - **`status`** — for `decision`/`finding` steps, where the lead stands: `open` (identified, not
-  started) · `trying` · `confirmed` · `failed` (tried, not vulnerable) · `blocked` (can't proceed —
+  started) · `trying` · `confirmed` · `failed` (ruled out **after working the variation matrix** —
+  see House rules; one failed payload is `open`, not `failed`) · `blocked` (can't proceed —
   say why in `rationale`) · `skipped` / `not-attempted` (say why). This is how the map shows what you
   **proved, ruled out, and deliberately left** — including anything you couldn't get to.
 - **`rationale`** — *why* you made this decision or what a result means. This is the reasoning a
@@ -120,6 +121,17 @@ it drops straight into a report):
 These paths are git-ignored, so an engagement run inside a clone never pollutes the repo.
 
 ## House rules
+- **Be thorough — don't quit a lead after one payload.** A single failed test does *not* mean
+  "not vulnerable". Before you mark a class clean (`status:"failed"`), work the **variation matrix**:
+  - every **injection point** (each param, plus headers, cookies, JSON fields, path segments),
+  - every **context** (e.g. XSS: HTML body / attribute / JS string / URL / event handler; SQLi:
+    numeric vs string vs order-by vs second-order),
+  - **encodings & filter bypasses** (URL/double/unicode/case, comment-splitting, the skill's WAF list),
+  - **blind / out-of-band** variants when there's no visible response (time, boolean, OOB callback).
+  Use the skill's `cheatsheet.md` (where present) as the checklist — try the set, not the first line.
+  `failed` means *ruled out after covering these*; record in `rationale` **what you actually tried**
+  so a human can trust the "clean". If you only ran a couple of tests, the honest status is `open`,
+  not `failed`.
 - Teach the mechanism, don't just paste payloads. Prove impact with the least data/action needed.
 - Minimize footprint; clean up test artifacts (accounts, uploads).
 - Authorized use only — this library is for pentest engagements, bug-bounty programs, and defense.

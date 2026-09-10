@@ -28,6 +28,10 @@ literal and append your own SQL, which the engine parses as instructions. Blind 
 leak data one bit at a time via truthy/falsy responses or timing.
 
 ## Method
+> **Exact per-DB payloads, blind/error/time variants, and WAF bypasses:** see
+> [`cheatsheet.md`](cheatsheet.md) next to this file. Work the *whole* variation set for a
+> parameter before concluding it isn't injectable — one failed quote is not a clean param.
+
 1. **Detect** — send `'`, `"`, `)`, then a self-true vs self-false pair:
    `id=1 AND 1=1` vs `id=1 AND 1=2` (numeric); `x' AND '1'='1` vs `x' AND '1'='2` (string).
    Different responses = injectable. Error text = fast win; identical = try blind/time.
