@@ -27,6 +27,7 @@ while the dangerous behaviour is downstream: the web server executes `.php` in t
 dir, a parser follows external entities, or the file is served with an HTML content-type.
 
 ## Method
+> **Payloads & full variation set:** [`cheatsheet.md`](cheatsheet.md) next to this file — work the set, not the first line.
 1. **Find the after-upload behaviour**: where is it stored, what URL serves it, what parses it?
 2. **RCE via executable extension** when uploads are under a script-executing webroot:
    upload `shell.php`; if blocked, try `.phtml .php5 .phar`, double ext `shell.php.jpg`,

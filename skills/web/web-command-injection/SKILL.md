@@ -30,6 +30,7 @@ meaning: `;`, `|`, `&&`, `$()`, and backticks all start a new command in the sam
 the web user). The app never intended a second command — the shell can't tell the difference.
 
 ## Method
+> **Payloads & full variation set:** [`cheatsheet.md`](cheatsheet.md) next to this file — work the set, not the first line.
 1. **In-band test**: inject `; id`, `| id`, `$(id)`, `` `id` ``, and newline (`%0a id`). A `uid=…`
    in the response confirms execution.
 2. **Blind (no output)** — pick one channel:

@@ -28,6 +28,7 @@ confuse algorithms, or trust attacker-controlled key hints (`kid`, `jku`, `x5u`)
 make the server accept a signature you produced, you own every claim.
 
 ## Method
+> **Payloads & full variation set:** [`cheatsheet.md`](cheatsheet.md) next to this file — work the set, not the first line.
 1. **Decode & read claims**: `jwt_tool <token>` — look for `role`, `admin`, `sub`, weak `exp`.
 2. **alg=none**: strip the signature and set header `{"alg":"none"}`; some libs accept it.
 3. **Algorithm confusion RS256→HS256**: if the server verifies RS256 with the *public* key,

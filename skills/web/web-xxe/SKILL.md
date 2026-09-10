@@ -27,6 +27,7 @@ local files or fetch URLs. If the parser doesn't disable external entities (the 
 default in many libs), your entity is expanded server-side.
 
 ## Method
+> **Payloads & full variation set:** [`cheatsheet.md`](cheatsheet.md) next to this file — work the set, not the first line.
 1. **Detect**: inject a DOCTYPE with an external entity and reference it:
    `<!DOCTYPE r [<!ENTITY x SYSTEM "file:///etc/passwd">]>` then `<r>&x;</r>` — file contents in the response = in-band XXE.
 2. **Blind / OOB**: no reflection → use an external DTD on your server that exfils via a

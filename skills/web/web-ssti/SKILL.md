@@ -29,6 +29,7 @@ Template engines execute expressions. If attacker input becomes part of the temp
 introspection that reaches OS command execution.
 
 ## Method
+> **Payloads & full variation set:** [`cheatsheet.md`](cheatsheet.md) next to this file — work the set, not the first line.
 1. **Detect** with a polyglot and engine-specific probes:
    `${7*7}` `{{7*7}}` `<%= 7*7 %>` `#{7*7}` `{7*7}` — a rendered `49` (not literal text) confirms.
 2. **Identify the engine** by which syntax evaluated and by error messages, then branch:

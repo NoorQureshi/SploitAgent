@@ -27,6 +27,7 @@ Deserialization reconstructs objects and can invoke their methods (magic methods
 to reach a dangerous sink — command execution — during/after deserialization.
 
 ## Method
+> **Payloads & full variation set:** [`cheatsheet.md`](cheatsheet.md) next to this file — work the set, not the first line.
 1. **Spot the blob & format**: Java `rO0AB`/`AC ED 00 05`, PHP `O:8:"...":`, .NET
    `__VIEWSTATE`/`AAEAAAD`, Python pickle, Ruby Marshal `\x04\x08`.
 2. **Confirm it's deserialized untrusted**: tamper a byte → parse error/behaviour change.
