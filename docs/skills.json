@@ -1,5 +1,5 @@
 {
- "count": 159,
+ "count": 160,
  "generated_by": "tools/catalog.py",
  "skills": [
   {
@@ -360,6 +360,19 @@
     "CWE-943"
    ],
    "path": "skills/api/api-mongo-agg-facet-bypass"
+  },
+  {
+   "name": "api-testing-checklist",
+   "domain": "api",
+   "type": "checklist",
+   "modes": [
+    "bugbounty",
+    "pentest"
+   ],
+   "severity": "info",
+   "summary": "A fast, ordered methodology for assessing an API end to end \u2014 REST/GraphQL/gRPC/SOAP \u2014 so nothing gets skipped.",
+   "tags": [],
+   "path": "skills/api/api-testing-checklist"
   },
   {
    "name": "api-versioning",
